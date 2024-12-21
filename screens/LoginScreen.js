@@ -1,22 +1,30 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+
+import React,{useState} from 'react';
 import {
   View,
   Text,
-  Button,
   SafeAreaView,
   TextInput,
   TouchableOpacity,
   Pressable,
   Image,
+  StyleSheet,
 } from 'react-native';
-
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const LoginScreen = ({navigation}) => {
+
+ 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isPasswordShown, setIsPasswordShown] = useState(false);
+
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-      <View style={{flex: 1, marginHorizontal: 22}}>
-        <View style={{marginVertical: 22}}>
+      <View style={{flex: 1, marginHorizontal: 22,}}>
+        <View style={{marginVertical: 22,}}>
           <Text
             style={{
               fontSize: 22,
@@ -76,7 +84,7 @@ const LoginScreen = ({navigation}) => {
             <TextInput
               placeholder="Contrasenya"
               //placeholderTextColor={COLORS.black}
-              //secureTextEntry={!isPasswordShown}
+              secureTextEntry={!isPasswordShown}
               style={{
                 width: '100%',
               }}
@@ -86,16 +94,16 @@ const LoginScreen = ({navigation}) => {
             />
 
             <TouchableOpacity
-              //onPress={() => setIsPasswordShown(!isPasswordShown)}
+              onPress={() => setIsPasswordShown(!isPasswordShown)}
               style={{
                 position: 'absolute',
                 right: 12,
               }}>
-              {/* {isPasswordShown == false ? (
-              <Ionicons name="eye-off" size={40} color={COLORS.black} />
+              {isPasswordShown == false ? (
+              <Ionicons name="eye-off" size={40} color={"black"} />
             ) : (
-              <Ionicons name="eye" size={40} color={COLORS.black} />
-            )} */}
+              <Ionicons name="eye" size={40} color={"black"} />
+            )}
             </TouchableOpacity>
           </View>
         </View>
@@ -110,7 +118,7 @@ const LoginScreen = ({navigation}) => {
             <Text
               style={{
                 fontSize: 19,
-                color: 'black',
+                color: '#007260',
                 fontWeight: 'bold',
                 marginLeft: 6,
               }}>
@@ -119,16 +127,18 @@ const LoginScreen = ({navigation}) => {
           </Pressable>
         </View>
 
-        <Button
-          title="Inicia sessió"
-          filled
-          //isLoading={isLoading}
-          //onPress={loginMethod}
-          style={{
-            marginTop: 18,
-            marginBottom: 4,
-          }}
-        />
+    <View style={{ justifyContent: 'center',alignItems: 'center',}}>
+                <TouchableOpacity style={styles.Button} >
+                    <Text style={{color:'white'}}>Inicia sessió</Text>
+                </TouchableOpacity>
+    </View>
+       
+
+
+
+
+
+
 
         <View
           style={{
@@ -136,6 +146,7 @@ const LoginScreen = ({navigation}) => {
             alignItems: 'center',
             marginVertical: 20,
           }}>
+
           <View
             style={{
               flex: 1,
@@ -154,6 +165,9 @@ const LoginScreen = ({navigation}) => {
             }}
           />
         </View>
+
+
+
         <View
           style={{
             flexDirection: 'row',
@@ -207,7 +221,7 @@ const LoginScreen = ({navigation}) => {
             <Text
               style={{
                 fontSize: 16,
-                color: 'black',
+                color: '#007260',
                 fontWeight: 'bold',
                 marginLeft: 6,
               }}>
@@ -220,4 +234,18 @@ const LoginScreen = ({navigation}) => {
   );
 };
 
+const styles = StyleSheet.create({
+  Button:{
+    backgroundColor: '#5c10b2',
+    borderRadius: 8,
+    paddingVertical: 13,
+    alignItems: 'center',
+    marginBottom: 20,
+    marginTop: 20,
+    width:350,
+    marginTop: 18,
+    marginBottom: 4,
+   
+  }
+})
 export default LoginScreen;
