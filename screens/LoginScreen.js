@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable react-native/no-inline-styles */
 
 import React,{useState} from 'react';
@@ -11,7 +12,8 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-import Ionicons from "react-native-vector-icons/Ionicons";
+
+//import Ionicons from "react-native-vector-icons/Ionicons";
 
 const LoginScreen = ({navigation}) => {
 
@@ -69,6 +71,13 @@ const LoginScreen = ({navigation}) => {
           </View>
         </View>
 
+
+
+
+
+
+
+
         <View style={{marginBottom: 12, marginTop: 20}}>
           <View
             style={{
@@ -88,11 +97,8 @@ const LoginScreen = ({navigation}) => {
               style={{
                 width: '100%',
               }}
-              //value={password}
-              //onChangeText={(text) => setPassword(text)}
-              //onSubmitEditing={loginMethod}
             />
-
+{/* 
             <TouchableOpacity
               onPress={() => setIsPasswordShown(!isPasswordShown)}
               style={{
@@ -100,12 +106,18 @@ const LoginScreen = ({navigation}) => {
                 right: 12,
               }}>
               {isPasswordShown == false ? (
-              <Ionicons name="eye-off" size={40} color={"black"} />
+              <Ionicons name="eye-off" size={40} color={"red"} />
             ) : (
-              <Ionicons name="eye" size={40} color={"black"} />
+              <Ionicons name="eye" size={40} color={"blue"} />
             )}
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
+
+
+
+
+
+
         </View>
 
         <View
@@ -124,6 +136,7 @@ const LoginScreen = ({navigation}) => {
               }}>
               Restablir la contrasenya
             </Text>
+            
           </Pressable>
         </View>
 
