@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 
-const DetailsScreen = ({navigation}) => {
+const LoginScreen = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
       <View style={{flex: 1, marginHorizontal: 22}}>
@@ -106,7 +106,7 @@ const DetailsScreen = ({navigation}) => {
             justifyContent: 'center',
             marginVertical: 22,
           }}>
-          <Pressable onPress={() => navigation.navigate('ResetPassword')}>
+          <Pressable>
             <Text
               style={{
                 fontSize: 19,
@@ -205,7 +205,6 @@ const DetailsScreen = ({navigation}) => {
           <Text style={{fontSize: 16, color: 'black'}}>No tens compte</Text>
           <Pressable>
             <Text
-              // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 fontSize: 16,
                 color: 'black',
@@ -221,4 +220,4 @@ const DetailsScreen = ({navigation}) => {
   );
 };
 
-export default DetailsScreen;
+export default LoginScreen;
