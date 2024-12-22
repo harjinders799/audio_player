@@ -11,6 +11,7 @@ import {
   StatusBar,
   SafeAreaView,
   ScrollView,
+  Pressable,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 
@@ -28,9 +29,12 @@ const HomeScreen = ({ navigation }) => {
           <Text style={{ fontSize: 22, color: "#ffffff", fontWeight: "500" }}>
             Medistoris.cat
           </Text>
-          <Text style={{ fontSize: 16, color: "#ffffff", fontWeight: "500" }}>
-            Tancar sessió
-          </Text>
+          <Pressable onPress={()=> navigation.navigate("Login")}>
+            <Text style={{ fontSize: 16, color: "#ffffff", fontWeight: "500" }}>
+              Tancar sessió
+            </Text>
+          </Pressable>
+          
         </View>
 
 

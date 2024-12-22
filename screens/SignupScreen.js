@@ -91,6 +91,9 @@ const SignupScreen = ({ navigation, route }) =>{
           </View>
         </View>
 
+
+
+
         <View style={{ marginBottom: 12, marginTop: 20 }}>
           <View
             style={{
@@ -122,14 +125,20 @@ const SignupScreen = ({ navigation, route }) =>{
                 right: 12,
               }}
             >
-              {isPasswordShown == true ? (
-                <Ionicons name="eye-off" size={40} color={"black"} />
-              ) : (
-                <Ionicons name="eye" size={40} color={"black"} />
-              )}
+              <Ionicons
+            name={isPasswordShown ? "eye-off" : "eye"}
+            size={24}
+            color={"black"}
+          />
             </TouchableOpacity>
           </View>
         </View>
+
+
+
+
+
+
 
         <View
           style={{
@@ -139,14 +148,15 @@ const SignupScreen = ({ navigation, route }) =>{
           }}
         >
           <Checkbox
-            style={{ marginRight: 4, width: 4, height: 5 }}
+            style={{ marginRight: 5, transform: [{ scaleX: 0.9 }, { scaleY: 0.9 }] }}
             value={isChecked}
             onValueChange={setIsChecked}
             color={isChecked ? "red" : undefined}
+            
           />
 
           <Text
-            style={{ width: 80 }}
+            style={{ width: 350 }}
             onPress={() =>
               navigation.navigate("Privacy", { isChecked: isChecked })
             }
@@ -155,22 +165,23 @@ const SignupScreen = ({ navigation, route }) =>{
             política i acord d'usuari
           </Text>
         </View>
-        {/* <TouchableOpacity onPress={() => navigation.navigate('Politica')}>
-          <Text style={{color: COLORS.primary}}>Política de privacitat</Text>
-        </TouchableOpacity> */}
 
-        <Button
-          title="Registra't"
-          filled
-          //   onPress={signUp}
-          //onPress={() => validateEmail(email)}
-          isLoading={isLoading}
-          style={{
-            marginTop: 18,
-            marginBottom: 4,
-          }}
-          disabled={!isChecked}
-        />
+
+
+
+
+        <TouchableOpacity
+      style={{
+        backgroundColor: '#5c10b2',
+        borderRadius: 8,
+        paddingVertical: 13,
+        alignItems: 'center',
+        marginBottom: 20,
+        marginTop: 20,
+      }}
+     >
+     <Text style={{color:"white"}}>Registra't</Text>
+    </TouchableOpacity>
 
         <View
           style={{
@@ -206,9 +217,8 @@ const SignupScreen = ({ navigation, route }) =>{
             justifyContent: "center",
           }}
         >
-          {Platform.OS == "android" && (
+        
             <TouchableOpacity
-              //onPress={() => loginWithGoogle()}
               style={{
                 flex: 1,
                 alignItems: "center",
@@ -244,7 +254,7 @@ const SignupScreen = ({ navigation, route }) =>{
                 Entra amb google
               </Text>
             </TouchableOpacity>
-          )}
+         
 
         </View>
 
@@ -262,7 +272,7 @@ const SignupScreen = ({ navigation, route }) =>{
             <Text
               style={{
                 fontSize: 16,
-                color: "red",
+                color: "#007260",
                 fontWeight: "bold",
                 marginLeft: 6,
               }}
