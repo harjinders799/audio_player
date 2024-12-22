@@ -1,3 +1,5 @@
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable no-dupe-keys */
 /* eslint-disable quotes */
 /* eslint-disable react-native/no-inline-styles */
 
@@ -13,13 +15,10 @@ import {
   StyleSheet,
 } from 'react-native';
 
-//import Ionicons from "react-native-vector-icons/Ionicons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const LoginScreen = ({navigation}) => {
 
- 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [isPasswordShown, setIsPasswordShown] = useState(false);
 
 
@@ -98,7 +97,7 @@ const LoginScreen = ({navigation}) => {
                 width: '100%',
               }}
             />
-{/* 
+
             <TouchableOpacity
               onPress={() => setIsPasswordShown(!isPasswordShown)}
               style={{
@@ -110,23 +109,21 @@ const LoginScreen = ({navigation}) => {
             ) : (
               <Ionicons name="eye" size={40} color={"blue"} />
             )}
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
-
-
-
-
-
 
         </View>
 
+
+
+       
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
             marginVertical: 22,
           }}>
-          <Pressable>
+           <TouchableOpacity onPress={()=> navigation.navigate("ResetPassword")}>
             <Text
               style={{
                 fontSize: 19,
@@ -136,9 +133,14 @@ const LoginScreen = ({navigation}) => {
               }}>
               Restablir la contrasenya
             </Text>
-            
-          </Pressable>
+            </TouchableOpacity>
         </View>
+
+
+
+
+
+
 
     <View style={{ justifyContent: 'center',alignItems: 'center',}}>
                 <TouchableOpacity style={styles.Button} >
@@ -230,7 +232,7 @@ const LoginScreen = ({navigation}) => {
             marginVertical: 22,
           }}>
           <Text style={{fontSize: 16, color: 'black'}}>No tens compte</Text>
-          <Pressable>
+          <Pressable onPress={() => navigation.navigate("Signup")}>
             <Text
               style={{
                 fontSize: 16,
@@ -259,6 +261,6 @@ const styles = StyleSheet.create({
     marginTop: 18,
     marginBottom: 4,
    
-  }
-})
+  },
+});
 export default LoginScreen;
