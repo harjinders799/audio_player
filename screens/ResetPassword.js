@@ -34,7 +34,7 @@ const ResetPassword = ({navigation}) => {
           title="Continuar"
           filled
           isLoading={loading}
-          //onPress={handleResetPassword}
+          onPress={()=> navigation.navigate("Login")}
           style={styles.button}
         />
       </View>

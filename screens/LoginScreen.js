@@ -143,7 +143,7 @@ const LoginScreen = ({navigation}) => {
 
 
     <View style={{ justifyContent: 'center',alignItems: 'center',}}>
-                <TouchableOpacity style={styles.Button} >
+                <TouchableOpacity style={styles.Button} onPress={()=>navigation.navigate("HomeScreen")} >
                     <Text style={{color:'white'}}>Inicia sessió</Text>
                 </TouchableOpacity>
     </View>
