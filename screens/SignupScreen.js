@@ -158,7 +158,7 @@ const SignupScreen = ({ navigation, route }) =>{
           <Text
             style={{ width: 350 }}
             onPress={() =>
-              navigation.navigate("Privacy", { isChecked: isChecked })
+              navigation.navigate("PrivacyScreen", { isChecked: isChecked })
             }
           >
             En fer clic a Registre, accepteu els nostres termes, privadesa i

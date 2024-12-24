@@ -50,7 +50,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.boxContainer}>
 
 
-        <TouchableOpacity
+        <TouchableOpacity 
             activeOpacity={0.6}
             style={[styles.box, { backgroundColor: "#ba7900" }]}>
             <View style={[styles.imageContainer, styles.shadowProp]}>
@@ -62,14 +62,14 @@ const HomeScreen = ({ navigation }) => {
             <View>
               <Text style={styles.boxText}>Històries immersives</Text>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Image
+                {/* <Image
                   source={require("../images/flag-333.webp")}
                   style={styles.flag}
                 />
                 <Image
                   source={require("../images/flag-777.webp")}
                   style={styles.flag}
-                />
+                /> */}
               </View>
             </View>
         </TouchableOpacity>

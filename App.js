@@ -6,6 +6,8 @@ import WellcomeScreen from './screens/WellcomeScreen';
 import SignupScreen from './screens/SignupScreen';
 import ResetPassword from './screens/ResetPassword';
 import HomeScreen from './screens/HomeScreen';
+import PrivacyScreen from './screens/PrivacyScreen';
+
 
 
 const Stack = createStackNavigator();
@@ -17,6 +19,7 @@ const App = () => {
         <Stack.Screen name="Wellcome" component={WellcomeScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }}/>
+       <Stack.Screen name="PrivacyScreen" component={PrivacyScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }}/>
         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }}/>
       </Stack.Navigator>
