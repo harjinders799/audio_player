@@ -70,13 +70,6 @@ const LoginScreen = ({navigation}) => {
           </View>
         </View>
 
-
-
-
-
-
-
-
         <View style={{marginBottom: 12, marginTop: 20}}>
           <View
             style={{
@@ -91,13 +84,11 @@ const LoginScreen = ({navigation}) => {
             }}>
             <TextInput
               placeholder="Contrasenya"
-              //placeholderTextColor={COLORS.black}
               secureTextEntry={!isPasswordShown}
               style={{
                 width: '100%',
               }}
             />
-
             <TouchableOpacity
               onPress={() => setIsPasswordShown(!isPasswordShown)}
               style={{
@@ -111,12 +102,8 @@ const LoginScreen = ({navigation}) => {
             )}
             </TouchableOpacity>
           </View>
-
         </View>
 
-
-
-       
         <View
           style={{
             flexDirection: 'row',
@@ -136,24 +123,11 @@ const LoginScreen = ({navigation}) => {
             </TouchableOpacity>
         </View>
 
-
-
-
-
-
-
     <View style={{ justifyContent: 'center',alignItems: 'center',}}>
                 <TouchableOpacity style={styles.Button} onPress={()=>navigation.navigate("HomeScreen")} >
                     <Text style={{color:'white'}}>Inicia sessió</Text>
                 </TouchableOpacity>
     </View>
-       
-
-
-
-
-
-
 
         <View
           style={{
@@ -180,8 +154,6 @@ const LoginScreen = ({navigation}) => {
             }}
           />
         </View>
-
-
 
         <View
           style={{

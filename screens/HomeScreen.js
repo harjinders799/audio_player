@@ -1,3 +1,4 @@
+/* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable quotes */
 /* eslint-disable no-trailing-spaces */
@@ -10,21 +11,17 @@ import {
   StyleSheet,
   StatusBar,
   SafeAreaView,
-  ScrollView,
   Pressable,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 
-
 const HomeScreen = ({ navigation }) => {
-  
   return (
 
     <SafeAreaView style={{ flex: 1 }}>
       <LinearGradient colors={["#d9d600", "#760075"]} style={styles.container}>
         <StatusBar translucent backgroundColor={"transparent"} />
-                
-        
+                  
         <View style={styles.headerContainer}>
           <Text style={{ fontSize: 22, color: "#ffffff", fontWeight: "500" }}>
             Medistoris.cat
@@ -33,23 +30,16 @@ const HomeScreen = ({ navigation }) => {
             <Text style={{ fontSize: 16, color: "#ffffff", fontWeight: "500" }}>
               Tancar sessió
             </Text>
-          </Pressable>
-          
+          </Pressable>     
         </View>
-
 
         <View style={styles.logoContainer}>
           <Image
             source={require("../images/logo-medi.webp")}
             style={styles.logoImg}
-            resizeMode={"contain"}
-          />
+            resizeMode={"contain"}/>
         </View>
-
-
         <View style={styles.boxContainer}>
-
-
         <TouchableOpacity 
             activeOpacity={0.6}
             style={[styles.box, { backgroundColor: "#ba7900" }]}>
@@ -62,19 +52,9 @@ const HomeScreen = ({ navigation }) => {
             <View>
               <Text style={styles.boxText}>Històries immersives</Text>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                {/* <Image
-                  source={require("../images/flag-333.webp")}
-                  style={styles.flag}
-                />
-                <Image
-                  source={require("../images/flag-777.webp")}
-                  style={styles.flag}
-                /> */}
               </View>
             </View>
         </TouchableOpacity>
-
-
 
           <TouchableOpacity
             activeOpacity={0.6}
@@ -90,7 +70,6 @@ const HomeScreen = ({ navigation }) => {
             </View>
         </TouchableOpacity>
 
-
           <TouchableOpacity
             activeOpacity={0.6}
             style={[styles.box, { backgroundColor: "#001d9a" }]}  >
@@ -103,7 +82,6 @@ const HomeScreen = ({ navigation }) => {
             <Text style={styles.boxText}>Dites</Text>
           </TouchableOpacity>
 
-
           <TouchableOpacity    
           activeOpacity={0.6}   
           style={[styles.box, { backgroundColor: "#8d00b4" }]}>
@@ -115,10 +93,7 @@ const HomeScreen = ({ navigation }) => {
             </View>
             <Text style={styles.boxText}>Cançons populars Catalanes</Text>
           </TouchableOpacity>
-
-
         </View>
-
 
         <View style={styles.totalContainer}>
           <TouchableOpacity activeOpacity={0.5}>
@@ -130,7 +105,6 @@ const HomeScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-
       </LinearGradient>    
     </SafeAreaView>
     
@@ -141,15 +115,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
-    //paddingTop: 40,
-    //paddingBottom: 20,
   },
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    //marginBottom: 20,
   },
   logoContainer: {
     height: 100,
