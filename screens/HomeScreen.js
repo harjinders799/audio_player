@@ -40,7 +40,7 @@ const HomeScreen = ({ navigation }) => {
             resizeMode={"contain"}/>
         </View>
         <View style={styles.boxContainer}>
-        <TouchableOpacity 
+        <TouchableOpacity onPress={()=> navigation.navigate("HistoriesScreen")}
             activeOpacity={0.6}
             style={[styles.box, { backgroundColor: "#ba7900" }]}>
             <View style={[styles.imageContainer, styles.shadowProp]}>

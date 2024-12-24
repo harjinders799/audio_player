@@ -7,6 +7,7 @@ import SignupScreen from './screens/SignupScreen';
 import ResetPassword from './screens/ResetPassword';
 import HomeScreen from './screens/HomeScreen';
 import PrivacyScreen from './screens/PrivacyScreen';
+import HistoriesScreen from './screens/HistoriesScreen';
 
 
 
@@ -22,6 +23,7 @@ const App = () => {
        <Stack.Screen name="PrivacyScreen" component={PrivacyScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }}/>
         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }}/>
+      <Stack.Screen name="HistoriesScreen" component={HistoriesScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
