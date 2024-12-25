@@ -10,6 +10,7 @@ import PrivacyScreen from './screens/PrivacyScreen';
 import HistoriesScreen from './screens/HistoriesScreen';
 import LegendsScreens from './screens/LegendsScreens';
 import DitesScreen from './screens/DitesScreen';
+import CanConsScreen from './screens/CanConsScreen';
 
 
 
@@ -28,6 +29,7 @@ const App = () => {
         <Stack.Screen name="HistoriesScreen" component={HistoriesScreen} options={{ headerShown: false }} />
         <Stack.Screen name="LegendsScreen" component={LegendsScreens} options={{ headerShown: false }}    />
         <Stack.Screen name="DitesScreen" component={DitesScreen} options={{ headerShown: false }}  />
+        <Stack.Screen name="CanConsScreen" component={CanConsScreen}  options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

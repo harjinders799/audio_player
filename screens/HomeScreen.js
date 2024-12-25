@@ -82,7 +82,7 @@ const HomeScreen = ({ navigation }) => {
             <Text style={styles.boxText}>Dites</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity    
+          <TouchableOpacity    onPress={()=> navigation.navigate("CanConsScreen")}
           activeOpacity={0.6}   
           style={[styles.box, { backgroundColor: "#8d00b4" }]}>
             <View style={[styles.imageContainer, styles.shadowProp]}>
