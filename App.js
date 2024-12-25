@@ -9,6 +9,7 @@ import HomeScreen from './screens/HomeScreen';
 import PrivacyScreen from './screens/PrivacyScreen';
 import HistoriesScreen from './screens/HistoriesScreen';
 import LegendsScreens from './screens/LegendsScreens';
+import DitesScreen from './screens/DitesScreen';
 
 
 
@@ -25,7 +26,8 @@ const App = () => {
         <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }}/>
         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="HistoriesScreen" component={HistoriesScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="LegendsScreen" component={LegendsScreens} options={{ headerShown: false }}/>
+        <Stack.Screen name="LegendsScreen" component={LegendsScreens} options={{ headerShown: false }}    />
+        <Stack.Screen name="DitesScreen" component={DitesScreen} options={{ headerShown: false }}  />
       </Stack.Navigator>
     </NavigationContainer>
   );
