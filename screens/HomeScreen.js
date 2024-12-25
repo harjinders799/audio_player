@@ -96,7 +96,7 @@ const HomeScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.totalContainer}>
-          <TouchableOpacity activeOpacity={0.5}>
+          <TouchableOpacity activeOpacity={0.5} onPress={()=> navigation.navigate("TotalSongsScreen")}>
             <View style={styles.totalButton}>
               <Text style={styles.totalBtnText}>
                 Escolta tots els àudios

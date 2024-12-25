@@ -11,8 +11,7 @@ import HistoriesScreen from './screens/HistoriesScreen';
 import LegendsScreens from './screens/LegendsScreens';
 import DitesScreen from './screens/DitesScreen';
 import CanConsScreen from './screens/CanConsScreen';
-
-
+import TotalSongsScreen from './screens/TotalSongsScreen';
 
 const Stack = createStackNavigator();
 
@@ -26,10 +25,11 @@ const App = () => {
         <Stack.Screen name="PrivacyScreen" component={PrivacyScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }}/>
         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="HistoriesScreen" component={HistoriesScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="LegendsScreen" component={LegendsScreens} options={{ headerShown: false }}    />
-        <Stack.Screen name="DitesScreen" component={DitesScreen} options={{ headerShown: false }}  />
-        <Stack.Screen name="CanConsScreen" component={CanConsScreen}  options={{ headerShown: false }} />
+        <Stack.Screen name="HistoriesScreen" component={HistoriesScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="LegendsScreen" component={LegendsScreens} options={{ headerShown: false }}/>
+        <Stack.Screen name="DitesScreen" component={DitesScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="CanConsScreen" component={CanConsScreen}  options={{ headerShown: false }}/>
+        <Stack.Screen name="TotalSongsScreen" component={TotalSongsScreen} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
