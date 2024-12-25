@@ -56,7 +56,7 @@ const HomeScreen = ({ navigation }) => {
             </View>
         </TouchableOpacity>
 
-          <TouchableOpacity
+          <TouchableOpacity onPress={()=>navigation.navigate("LegendsScreen")}
             activeOpacity={0.6}
             style={[styles.box, { backgroundColor: "#bd008a" }]}>
             <View style={[styles.imageContainer, styles.shadowProp]}>
