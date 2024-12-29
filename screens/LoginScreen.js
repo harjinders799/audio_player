@@ -14,13 +14,32 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
 
 const LoginScreen = ({navigation}) => {
-
   const [isPasswordShown, setIsPasswordShown] = useState(false);
 
+
+  async function onGoogleButtonPress() {
+  GoogleSignin.configure({
+      webClientId: '964940426884-e18dsdv6f6j6cafgohnoi9lcmkvcln02.apps.googleusercontent.com',
+    });
+  await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    const response = await GoogleSignin.signIn();
+    const googleCredential = auth.GoogleAuthProvider.credential(
+      response?.data?.idToken,
+    );
+    console.log(auth().signInWithCredential(googleCredential));
+    return auth().signInWithCredential(googleCredential);
+}
+
+  async function _signInWithGoogle() {
+    const user = await onGoogleButtonPress();
+    console.log(user);
+    navigation.navigate("HomeScreen");
+  }
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
@@ -161,6 +180,7 @@ const LoginScreen = ({navigation}) => {
             justifyContent: 'center',
           }}>
           <TouchableOpacity
+           onPress={() => _signInWithGoogle()}
             style={{
               flex: 1,
               alignItems: 'center',
