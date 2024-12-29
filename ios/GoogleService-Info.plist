@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>964940426884-c369up2hpn68phivfia319kbu8ullm4j.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.964940426884-c369up2hpn68phivfia319kbu8ullm4j</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>964940426884-dfgvkn265cp51rc7bmb46m8ii5unamcd.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAp96FBY9WHEDEPef83VaHiGAlm-BUUSNM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>964940426884</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.reactjs.native.example.songplayer</string>
+	<key>PROJECT_ID</key>
+	<string>medistoris-1dba2</string>
+	<key>STORAGE_BUCKET</key>
+	<string>medistoris-1dba2.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:964940426884:ios:3a1b53f149249c29d11cd1</string>
+</dict>
+</plist>
