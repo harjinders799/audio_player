@@ -18,7 +18,7 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Wellcome">
+      <Stack.Navigator initialRouteName="HomeScreen">
         <Stack.Screen name="Wellcome" component={WellcomeScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }}/>
@@ -29,7 +29,7 @@ const App = () => {
         <Stack.Screen name="LegendsScreen" component={LegendsScreens} options={{ headerShown: false }}/>
         <Stack.Screen name="DitesScreen" component={DitesScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="CanConsScreen" component={CanConsScreen}  options={{ headerShown: false }}/>
-        <Stack.Screen name="TotalSongsScreen" component={TotalSongsScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="TotalSongsScreen" component={TotalSongsScreen} options={{ headerShown: false }}/>      
       </Stack.Navigator>
     </NavigationContainer>
   );
