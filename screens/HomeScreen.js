@@ -18,7 +18,8 @@ import LinearGradient from "react-native-linear-gradient";
 const HomeScreen = ({ navigation }) => {
   return (
 
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 , backgroundColor:'#d9d600'}}>
+      
       <LinearGradient colors={["#d9d600", "#760075"]} style={styles.container}>
         <StatusBar translucent backgroundColor={"transparent"} />
                   

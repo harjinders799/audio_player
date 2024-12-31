@@ -1,12 +1,57 @@
-import { Dimensions, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Dimensions, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View,FlatList, Animated } from 'react-native'
+import React,{useState,useEffect,useRef,} from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 const {width,height} = Dimensions.get('window');
 import Silder from '@react-native-community/slider';
-
+import { songsList } from '../ScreenSongs/Histories';
 
 const HistoriesScreen = () => {
+
+
+  const scrollX = useRef (new Animated.Value(0)).current;
+  const [songIndex, setSongIndex ]=useState(0);
+const songSlider = useRef(null);
+
+  useEffect(()=>{
+    scrollX.addListener(({value})=>{
+      //console.log("scrol x" , scrollX)
+      //console.log('device width', width)
+      const index =Math.round(value/width);
+      //console.log('index', index)
+      setSongIndex(index)
+    });
+
+    return()=>{
+      scrollX.removeAllListeners();
+    }
+
+
+  },[])
+
+
+  const skipToNext=()=>{
+    songSlider.current.scrollToOffset({
+      offset:(songIndex+1)*width,
+    });
+  }
+
+  const skipToPrevious=()=>{
+    songSlider.current.scrollToOffset({
+      offset:(songIndex-1)*width,
+    });
+  }
+
+  const renderSongs =({index,item})=>{
+    return(
+      <Animated.View style={{width:width,justifyContent:'center',alignItems:'center'}}>
+               <View style={styles.artworkWrapper}>
+                   <Image source={item.artwork} style={styles.artworkimage}/>
+              </View>
+      </Animated.View >
+     
+    );
+  }
   return (
     <View style={styles.container}>
       <StatusBar barStyle='light-content'/>
@@ -14,13 +59,27 @@ const HistoriesScreen = () => {
         <SafeAreaView style={{flex:1,backgroundColor:'#9f5ae8'}}>
             
             <View style={styles.mainContainer}>
-              <View style={styles.artworkWrapper}>
-                <Image source={require("../images/30Trementinairefoto.webp")} style={styles.artworkimage}/>
-              </View>
+
+            <View style={{width:width}}>
+              <Animated.FlatList
+              ref={songSlider}
+              data={songsList}
+              renderItem={renderSongs}
+              keyExtractor={(item)=>item.id}
+              horizontal 
+              pagingEnabled 
+              showsHorizontalScrollIndicator={false} 
+              scrollEventThrottle={16}
+          onScroll={Animated.event(
+            [{nativeEvent:{contentOffset:{x:scrollX}}}],
+            {useNativeDriver:true}
+          )}
+          />
+            </View> 
 
               <View>
-              <Text style={styles.title}>SongTitle</Text>
-              <Text style={styles.artist}>Songartist</Text>
+              <Text style={styles.title}>{songsList[songIndex].title}</Text>
+              <Text style={styles.artist}>{songsList[songIndex].artist}</Text>
             </View>
 
             <View>
@@ -37,7 +96,7 @@ const HistoriesScreen = () => {
             </View>
 
             <View style={styles.musicControls}>
-              <TouchableOpacity onPress={()=>{}}>
+              <TouchableOpacity onPress={skipToPrevious}>
                   <Ionicons name="play-skip-back-outline" size={35} color="white" style={{marginTop:25}}/>
                 </TouchableOpacity>
 
@@ -45,7 +104,7 @@ const HistoriesScreen = () => {
                   <Ionicons name="pause-circle" size={75} color="white"/>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={()=>{}}>
+                <TouchableOpacity onPress={skipToNext}>
                   <Ionicons name="play-skip-forward-outline" size={35} color="white" style={{marginTop:25}} />
                 </TouchableOpacity>
             </View>
