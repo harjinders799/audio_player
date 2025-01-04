@@ -18,7 +18,7 @@ import { CanconsSongList } from "../ScreenSongs/CanconsSongList";
 const CanconsSongsListScreen = ({navigation}) => {
   return (
     <LinearGradient
-      colors={["#fcfe19", "#b47404", "#de5c19"]}
+    colors={["#fe01bf", "#ca30df", "#885ce9"]}
       style={{ flex: 1, paddingBottom: 20 }}
     >
       <View

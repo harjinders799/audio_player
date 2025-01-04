@@ -18,7 +18,7 @@ import { LegendsongsList } from "../ScreenSongs/LegendsongsList";
 const LegendsSongsListScreen = ({navigation}) => {
   return (
     <LinearGradient
-      colors={["#fcfe19", "#b47404", "#de5c19"]}
+    colors={["rgba(189,0,138,0.49)", "#bd008a"]}
       style={{ flex: 1, paddingBottom: 20 }}
     >
       <View

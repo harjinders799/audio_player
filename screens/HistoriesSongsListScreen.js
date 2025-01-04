@@ -18,7 +18,7 @@ import { songsList } from "../ScreenSongs/Histories";
 const HistoriesSongsListScreen = ({navigation}) => {
   return (
     <LinearGradient
-      colors={["#fcfe19", "#b47404", "#de5c19"]}
+    colors={["#fcfe19", "#b47404", "#de5c19"]}
       style={{ flex: 1, paddingBottom: 20 }}
     >
       <View

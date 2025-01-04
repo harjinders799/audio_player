@@ -18,7 +18,7 @@ import { DitesSongsList } from "../ScreenSongs/DitesSongList";
 const DitesSongsListScreen = ({navigation}) => {
   return (
     <LinearGradient
-      colors={["#fcfe19", "#b47404", "#de5c19"]}
+    colors={["#9840a9", "#24056f", "#532cab"]}
       style={{ flex: 1, paddingBottom: 20 }}
     >
       <View
