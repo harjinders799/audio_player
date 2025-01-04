@@ -198,7 +198,7 @@ const CanConsSongsPlayScreen = ({ navigation }) => {
     <Ionicons name="play-skip-forward-outline" size={35} color="black" />
   </TouchableOpacity>      
 
-  <TouchableOpacity style={styles.queueIconContainer} onPress={()=>navigation.navigate('TotalSongsScreen')}>
+  <TouchableOpacity style={styles.queueIconContainer} onPress={()=>navigation.navigate('AllSongsListScreen')}>
     <MaterialIcons name={"queue-music"} size={35} color={"#000000"} />
   </TouchableOpacity>
 </View>
