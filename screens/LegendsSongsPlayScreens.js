@@ -5,23 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const { width, height } = Dimensions.get('window');
 import Slider from '@react-native-community/slider';
 import LinearGradient from "react-native-linear-gradient";
-//import { AllsongsList } from '../ScreenSongs/AllSongs';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-
 import { LegendsongsList } from '../ScreenSongs/LegendsongsList'; 
-
-
-
-
-import TrackPlayer, {
-  Capability,
-  Event,
-  RepeatMode,
-  State,
-  usePlaybackState,
-  useProgress,
-  useTrackPlayerEvents,
-} from 'react-native-track-player';
+import TrackPlayer, {Capability,  Event, RepeatMode, State, usePlaybackState, useProgress, useTrackPlayerEvents,} from 'react-native-track-player';
 
 const setupPlayer = async () => {
   await TrackPlayer.setupPlayer();
@@ -41,7 +27,7 @@ const togglePlayback = async (playbackState) => {
   }
 };
 
-const allSongPlayScreen = ({ navigation }) => {
+const LegendsSongsPlayScreens = ({ navigation }) => {
   const playbackState = usePlaybackState();
   const progress = useProgress();
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -214,7 +200,7 @@ const allSongPlayScreen = ({ navigation }) => {
   );
 };
 
-export default allSongPlayScreen;
+export default LegendsSongsPlayScreens;
 
 const styles = StyleSheet.create({
   container: {

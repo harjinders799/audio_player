@@ -7,7 +7,7 @@ import SignupScreen from './screens/SignupScreen';
 import ResetPassword from './screens/ResetPassword';
 import HomeScreen from './screens/HomeScreen';
 import PrivacyScreen from './screens/PrivacyScreen';
-import LegendsScreens from './screens/LegendsScreens';
+import LegendsScreens from './screens/LegendsSongsPlayScreens';
 import DitesScreen from './screens/DitesScreen';
 import CanConsScreen from './screens/CanConsScreen';
 import TotalSongsScreen from './screens/TotalSongsScreen';
@@ -15,6 +15,8 @@ import allSongPlayScreen from './screens/AllSongsPlayScreen';
 
 import HistoriesSongsListScreen from './screens/HistoriesSongsListScreen';
 import HistoriesSongPlayScreen from './screens/HistoriesSongPlayScreen';
+import LegendsSongsListScreen from './screens/LegendsSongsListScreen';
+import LegendsSongsPlayScreens from './screens/LegendsSongsPlayScreens';
 
 
 
@@ -33,17 +35,18 @@ const App = () => {
         
         
         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }}/>
+       
         <Stack.Screen name='HistoriesSongsListScreen' component={HistoriesSongsListScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="HistoriesSongPlayScreen" component={HistoriesSongPlayScreen} options={{ headerShown: false }}/>
 
-
-
-
-
-
-        <Stack.Screen name="LegendsScreen" component={LegendsScreens} options={{ headerShown: false }}/>
+        <Stack.Screen name="LegendsSongsListScreen" component={LegendsSongsListScreen} options={{ headerShown: false }}/>
+       <Stack.Screen  name ='LegendsSongsPlayScreens' component={LegendsSongsPlayScreens} options={{ headerShown: false }}/>
+       
+       
         <Stack.Screen name="DitesScreen" component={DitesScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="CanConsScreen" component={CanConsScreen}  options={{ headerShown: false }}/>
+        
+        
         <Stack.Screen name="TotalSongsScreen" component={TotalSongsScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="allSongPlayScreen" component={allSongPlayScreen} options={{ headerShown: false }}/>
        

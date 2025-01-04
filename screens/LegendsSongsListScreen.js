@@ -15,7 +15,7 @@ import { LegendsongsList } from "../ScreenSongs/LegendsongsList";
 
 
 
-const HistoriesSongsListScreen = ({navigation}) => {
+const LegendsSongsListScreen = ({navigation}) => {
   return (
     <LinearGradient
       colors={["#fcfe19", "#b47404", "#de5c19"]}
@@ -79,7 +79,7 @@ const HistoriesSongsListScreen = ({navigation}) => {
         ItemSeparatorComponent={<View style={{ height: 1 }}></View>}
         renderItem={({ item, index }) => {
           return (
-            <TouchableOpacity onPress={()=>navigation.navigate('HistoriesScreen')}
+            <TouchableOpacity onPress={()=>navigation.navigate('LegendsSongsPlayScreens')}
               style={{
                 width: "100%",
                 height: 110,
@@ -142,7 +142,7 @@ const HistoriesSongsListScreen = ({navigation}) => {
   )
 }
 
-export default LegendScreen
+export default LegendsSongsListScreen
 
 const styles = StyleSheet.create({
     imageContainer: {
