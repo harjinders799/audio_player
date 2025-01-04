@@ -34,12 +34,9 @@ const LoginScreen =  ({navigation}) => {
       Alert.alert('Tots dos, el correu electrònic i la contrasenya, són obligatoris!');
       return;
     }
-  
-    try {
-      
+    try { 
       const userCredential = await auth().signInWithEmailAndPassword(email, password);
       const user = userCredential.user;
-  
       if (user) {
         // Store user token or UID
         await AsyncStorage.setItem('userToken', user.uid);  // Store UID or token

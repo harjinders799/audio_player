@@ -178,4 +178,7 @@ const styles = StyleSheet.create({
         fontWidth: '700',
         color: '#EEEEEEE',
       },
+      firstView:{
+        
+      }
 })
