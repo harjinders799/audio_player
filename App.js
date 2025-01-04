@@ -8,7 +8,7 @@ import ResetPassword from './screens/ResetPassword';
 import HomeScreen from './screens/HomeScreen';
 import PrivacyScreen from './screens/PrivacyScreen';
 import LegendsScreens from './screens/LegendsSongsPlayScreens';
-import DitesScreen from './screens/DitesScreen';
+import DitesScreen from './screens/DitesSongsPlayScreen';
 import CanConsScreen from './screens/CanConsScreen';
 import TotalSongsScreen from './screens/TotalSongsScreen';
 import allSongPlayScreen from './screens/AllSongsPlayScreen';
@@ -17,6 +17,8 @@ import HistoriesSongsListScreen from './screens/HistoriesSongsListScreen';
 import HistoriesSongPlayScreen from './screens/HistoriesSongPlayScreen';
 import LegendsSongsListScreen from './screens/LegendsSongsListScreen';
 import LegendsSongsPlayScreens from './screens/LegendsSongsPlayScreens';
+import DitesSongsListScreen from './screens/DitesSongsListScreen';
+import DitesSongsPlayScreen from './screens/DitesSongsPlayScreen';
 
 
 
@@ -43,7 +45,11 @@ const App = () => {
        <Stack.Screen  name ='LegendsSongsPlayScreens' component={LegendsSongsPlayScreens} options={{ headerShown: false }}/>
        
        
-        <Stack.Screen name="DitesScreen" component={DitesScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="DitesSongsListScreen" component={DitesSongsListScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name='DitesSongsPlayScreen' component={DitesSongsPlayScreen} options={{ headerShown: false }} />
+        
+        
+        
         <Stack.Screen name="CanConsScreen" component={CanConsScreen}  options={{ headerShown: false }}/>
         
         
