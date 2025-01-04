@@ -13,7 +13,7 @@ import { AllsongsList } from "../ScreenSongs/AllSongs";
 const AllSongsListScreen = ({ navigation }) => {
   return (
     <LinearGradient
-      colors={["#b88c08", "#60045f"]}
+    colors={["#b88c08", "#60045f"]}
       style={{ flex: 1, paddingBottom: 20 }}
     >
       <View
