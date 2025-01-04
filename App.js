@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './screens/LoginScreen';
@@ -12,6 +12,10 @@ import LegendsScreens from './screens/LegendsScreens';
 import DitesScreen from './screens/DitesScreen';
 import CanConsScreen from './screens/CanConsScreen';
 import TotalSongsScreen from './screens/TotalSongsScreen';
+import allSongPlayScreen from './screens/AllSongsPlayScreen';
+import HistoriesSongsListScreen from './screens/HistoriesSongsListScreen';
+
+
 
 const Stack = createStackNavigator();
 
@@ -29,7 +33,9 @@ const App = () => {
         <Stack.Screen name="LegendsScreen" component={LegendsScreens} options={{ headerShown: false }}/>
         <Stack.Screen name="DitesScreen" component={DitesScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="CanConsScreen" component={CanConsScreen}  options={{ headerShown: false }}/>
-        <Stack.Screen name="TotalSongsScreen" component={TotalSongsScreen} options={{ headerShown: false }}/>      
+        <Stack.Screen name="TotalSongsScreen" component={TotalSongsScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="allSongPlayScreen" component={allSongPlayScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name='HistoriesSongsListScreen' component={HistoriesSongsListScreen} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

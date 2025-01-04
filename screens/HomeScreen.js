@@ -12,22 +12,47 @@ import {
   StatusBar,
   SafeAreaView,
   Pressable,
+  Alert,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 
-const HomeScreen = ({ navigation }) => {
-  return (
+import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-    <SafeAreaView style={{ flex: 1 , backgroundColor:'#d9d600'}}>
+
+
+
+
+const HomeScreen = ({ navigation }) => {
+  
+  const onLogout = async () => {
+    try {
+      await auth().signOut();
+      await AsyncStorage.removeItem('userToken');  // Ensure session token is removed
+      Alert.alert("Has tancat la sessió correctament.");
+      setTimeout(() => navigation.navigate('Login'), 500);  // Navigate to Login after logout
+    } catch (error) {
+      console.log('error', error);
+      Alert.alert("No s'ha pogut tancar la sessió. No has iniciat sessió.");
+    }
+  };
+  
+  
+
+
+
+  return (
+    <LinearGradient colors={["#d9d600", "#760075"]} style={styles.container}>
+    <SafeAreaView style={{ flex: 1 }}>
       
-      <LinearGradient colors={["#d9d600", "#760075"]} style={styles.container}>
-        <StatusBar translucent backgroundColor={"transparent"} />
+     
+        <StatusBar translucent backgroundColor={"transparent"} barStyle='light-content' />
                   
         <View style={styles.headerContainer}>
           <Text style={{ fontSize: 22, color: "#ffffff", fontWeight: "500" }}>
             Medistoris.cat
           </Text>
-          <Pressable onPress={()=> navigation.navigate("Login")}>
+          <Pressable onPress={onLogout}>
             <Text style={{ fontSize: 16, color: "#ffffff", fontWeight: "500" }}>
               Tancar sessió
             </Text>
@@ -38,10 +63,13 @@ const HomeScreen = ({ navigation }) => {
           <Image
             source={require("../images/logo-medi.webp")}
             style={styles.logoImg}
-            resizeMode={"contain"}/>
+            resizeMode={"contain"}
+            />
         </View>
+
+
         <View style={styles.boxContainer}>
-        <TouchableOpacity onPress={()=> navigation.navigate("HistoriesScreen")}
+        <TouchableOpacity onPress={()=> navigation.navigate("HistoriesSongsListScreen")}
             activeOpacity={0.6}
             style={[styles.box, { backgroundColor: "#ba7900" }]}>
             <View style={[styles.imageContainer, styles.shadowProp]}>
@@ -106,9 +134,9 @@ const HomeScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-      </LinearGradient>    
-    </SafeAreaView>
     
+    </SafeAreaView>
+    </LinearGradient>    
   );
 };
 
@@ -127,6 +155,12 @@ const styles = StyleSheet.create({
     height: 100,
     justifyContent: "center",
     alignItems: "center",
+
+  },
+  logoImg: {
+    width: 260,  // Set the width as needed
+    height: 100,
+    marginTop:10,
   },
   totalContainer: {
     marginTop: 10,
@@ -147,10 +181,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
-  logoImg: {
-    flex: 1,
-    height: "100%",
-  },
+
   playPauseBtn: {
     flex: 1,
     position: "absolute",

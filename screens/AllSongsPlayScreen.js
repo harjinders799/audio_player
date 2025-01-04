@@ -8,7 +8,7 @@ import LinearGradient from "react-native-linear-gradient";
 //import { AllsongsList } from '../ScreenSongs/AllSongs';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
-import { LegendsongsList } from '../ScreenSongs/LegendsongsList'; 
+import { AllsongsList } from '../ScreenSongs/AllSongs';
 
 
 
@@ -25,7 +25,7 @@ import TrackPlayer, {
 
 const setupPlayer = async () => {
   await TrackPlayer.setupPlayer();
-  await TrackPlayer.add(LegendsongsList);
+  await TrackPlayer.add(AllsongsList);
   
 };
 
@@ -86,7 +86,7 @@ const allSongPlayScreen = ({ navigation }) => {
     scrollX.addListener(({ value }) => {
       const index = Math.round(value / width);
       
-      if (index >= LegendsongsList.length) {
+      if (index >= AllsongsList.length) {
         setSongIndex(0);
         songSlider.current.scrollToOffset({ offset: 0, animated: true });
       } else {
@@ -150,7 +150,7 @@ const allSongPlayScreen = ({ navigation }) => {
             <View style={{ width: width }}>
               <Animated.FlatList
                 ref={songSlider}
-                data={LegendsongsList}
+                data={AllsongsList}
                 renderItem={renderSongs}
                 keyExtractor={(item) => item.id.toString()}
                 horizontal
@@ -165,8 +165,8 @@ const allSongPlayScreen = ({ navigation }) => {
             </View>
 
             <View style={{ marginLeft: 0, marginTop: 5, width: width, marginLeft: 70 }}>
-              <Text style={[styles.title, { marginBottom: 10 }]}>{LegendsongsList[songIndex].title}</Text>
-              <Text style={styles.artist}>{LegendsongsList[songIndex].artist}</Text>
+              <Text style={[styles.title, { marginBottom: 10 }]}>{AllsongsList[songIndex].title}</Text>
+              <Text style={styles.artist}>{AllsongsList[songIndex].artist}</Text>
             </View>
 
             <View style={{ marginTop: 25 }}>

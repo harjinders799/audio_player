@@ -1,192 +1,288 @@
-import React, { useEffect, useState, useCallback } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StatusBar,
-  TouchableOpacity,
-  FlatList,
-  Platform,
-  StyleSheet,
-} from "react-native";
+import { Dimensions, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View, FlatList, Animated } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+const { width, height } = Dimensions.get('window');
+import Slider from '@react-native-community/slider';
 import LinearGradient from "react-native-linear-gradient";
-import { DitesSongsList } from "../ScreenSongs/DitesSongList";
+//import { AllsongsList } from '../ScreenSongs/AllSongs';
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+
+import { DitesSongsList } from '../ScreenSongs/DitesSongList'; 
 
 
 
 
-const flag333 = require("../images/flag-333.webp");
-const flag777 = require("../images/flag-777.webp");
+import TrackPlayer, {
+  Capability,
+  Event,
+  RepeatMode,
+  State,
+  usePlaybackState,
+  useProgress,
+  useTrackPlayerEvents,
+} from 'react-native-track-player';
 
-const LesDites = ({ navigation }) => {
+const setupPlayer = async () => {
+  await TrackPlayer.setupPlayer();
+  await TrackPlayer.add(DitesSongsList);
   
+};
+
+const togglePlayback = async (playbackState) => {
+  const currentTrack = await TrackPlayer.getCurrentTrack();
+
+  if (currentTrack !== null) {
+    if (playbackState === State.Paused) {
+      await TrackPlayer.play();
+    } else {
+      await TrackPlayer.pause();
+    }
+  }
+};
+
+const allSongPlayScreen = ({ navigation }) => {
+  const playbackState = usePlaybackState();
+  const progress = useProgress();
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const [songIndex, setSongIndex] = useState(0);
+  const songSlider = useRef(null);
+
+  // Skip to the specified track
+  const skipTo = async (trackId) => {
+    await TrackPlayer.skip(trackId);
+  };
+
+  useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
+    if (event.type === Event.PlaybackTrackChanged) {
+      const currentTrack = event.nextTrack;
+  
+      if (currentTrack !== null) {
+        setSongIndex(currentTrack);
+  
+        // Scroll to the new track smoothly
+        songSlider.current.scrollToOffset({
+          offset: currentTrack * width,
+          animated: true,
+        });
+      } else {
+        // If track is null (looped to first track), reset scroll and song index
+        setSongIndex(0);
+        songSlider.current.scrollToOffset({
+          offset: 0,
+          animated: true,
+        });
+      }
+    }
+  });
+  
+
+
+
+
+  useEffect(() => {
+    setupPlayer();
+  
+    scrollX.addListener(({ value }) => {
+      const index = Math.round(value / width);
+      
+      if (index >= DitesSongsList.length) {
+        setSongIndex(0);
+        songSlider.current.scrollToOffset({ offset: 0, animated: true });
+      } else {
+        setSongIndex(index);
+      }
+    });
+  
+    return () => {
+      scrollX.removeAllListeners();
+    };
+  }, []);
+  
+  
+
+  const skipToNext = async () => {
+    try {
+      await TrackPlayer.skipToNext();  // Skip to next track in TrackPlayer
+      songSlider.current.scrollToOffset({
+        offset: (songIndex + 1) * width,
+        animated: true,
+      });
+    } catch (error) {
+      console.log("No next track available.");
+    }
+  };
+  
+
+  const skipToPrevious = async () => {
+    try {
+      await TrackPlayer.skipToPrevious();  // Skip to previous track in TrackPlayer
+      songSlider.current.scrollToOffset({
+        offset: (songIndex - 1) * width,
+        animated: true,
+      });
+    } catch (error) {
+      console.log("No previous track available.");
+    }
+  };
+
+  const renderSongs = ({ index, item }) => {
+    return (
+      <Animated.View style={{ width: width, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={styles.artworkWrapper}>
+          <Image source={item.artwork} style={styles.artworkimage} />
+        </View>
+      </Animated.View>
+    );
+  };
+
   return (
-    <LinearGradient
-      colors={["#9840a9", "#24056f", "#532cab"]}
-      style={{ flex: 1 }}
-    >
-      <StatusBar translucent backgroundColor={"transparent"} />
+    <LinearGradient colors={["#d9d600", "#760075"]} style={{ flex: 1, paddingBottom: 20 }}>
+      <View style={styles.container}>
+        <StatusBar barStyle='light-content' />
 
-      <View
-        style={{
-          flexDirection: "row",
-          marginTop: Platform.OS === "ios" ? 70 : 50,
-          paddingHorizontal: 10,
-          borderBottomWidth: 0.2,
-          paddingBottom: 10,
-        }}
-      >
-        <TouchableOpacity
-          style={{ flexDirection: "row" }}
-          onPress={() => navigation.goBack()}
-        >
-          <Image
-            source={require("../images/back-white.webp")}
-            style={{ height: 50, width: 50, marginRight: 6 }}
-          />
-          {/* <Text style={{ fontSize: 19, color: "#ffffff",marginTop:10 }}>Medistoris.cat</Text> */}
-        </TouchableOpacity>
+        <SafeAreaView style={{ flex: 1 }}>
+          <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => navigation.goBack()}>
+            <Image source={require("../images/back-white.webp")} style={{ height: 50, width: 50, marginLeft: 15, tintColor: 'black' }} />
+          </TouchableOpacity>
+          <View style={styles.mainContainer}>
 
-        <Text
-          style={{
-            fontSize: 18,
-            color: "#ffffff",
-            fontWeight: "500",
-            marginLeft: "20%",
-            marginTop: 10,
-          }}
-        >
-          {/* Cultura Catalana */}
-          Medistoris.cat
-        </Text>
-      </View>
+            <View style={{ width: width }}>
+              <Animated.FlatList
+                ref={songSlider}
+                data={DitesSongsList}
+                renderItem={renderSongs}
+                keyExtractor={(item) => item.id.toString()}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                scrollEventThrottle={16}
+                onScroll={Animated.event(
+                  [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                  { useNativeDriver: true }
+                )}
+              />
+            </View>
 
-      <View style={{ flexDirection: "row", paddingLeft: 20, marginTop: 20 }}>
-        <Text style={{ color: "white", fontSize: 24, marginLeft: 0 }}>
-          Dites
-        </Text>
-      </View>
+            <View style={{ marginLeft: 0, marginTop: 5, width: width, marginLeft: 70 }}>
+              <Text style={[styles.title, { marginBottom: 10 }]}>{DitesSongsList[songIndex].title}</Text>
+              <Text style={styles.artist}>{DitesSongsList[songIndex].artist}</Text>
+            </View>
 
-      <View
-        style={{
-          flexDirection: "row",
-          width: "90%",
-          marginTop: 10,
-          justifyContent: "space-between",
-          alignSelf: "center",
-        }}
-      ></View>
-
-      <FlatList
-        data={DitesSongsList}
-        scrollEnabled={true}
-        keyExtractor={(item, index) => index}
-        ItemSeparatorComponent={<View style={{ height: 1 }}></View>}
-        renderItem={({ item, index }) => {
-          return (
-            <TouchableOpacity
-              style={{
-                width: "100%",
-                height: 110,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: 10,
-                paddingBottom: 10,
-              }}
-              activeOpacity={1}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingLeft: 20,
-                  paddingRight: 20,
+            <View style={{ marginTop: 25 }}>
+              <Slider
+                style={styles.progressContainer}
+                value={progress.position}
+                minimumValue={0}
+                maximumValue={progress.duration}
+                minimumTrackTintColor="black"
+                thumbTintColor="green"
+                onSlidingComplete={async (value) => {
+                  await TrackPlayer.seekTo(value);
                 }}
-              >
-                <View style={[styles.imageContainer, styles.shadowProp]}>
-                  <Image source={item.artwork} style={styles.image} />
-                </View>
-                <View style={{ paddingLeft: 10, paddingRight: 10 }}>
-                  <Text
-                    style={{ color: "white", fontSize: 16, width: "100%" }}
-                    adjustsFontSizeToFit={true}
-                    numberOfLines={1}
-                  >
-                    {item.title}
-                  </Text>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 5,
-                    }}
-                  >
-                
-                      <Image
-                        source={item.flag === "333" ? flag333 : flag777}
-                        style={styles.flag}
-                      />
-               
-                    <Text
-                      style={{
-                        color: "white",
-                        fontSize: 13,
-                        verticalAlign: "middle",
-                        // marginLeft: 5,
-                      }}
-                    >
-                      {item.artist}
-                    </Text>
-                  </View>
-                </View>
-             
-                  <Image
-                    source={require("../images/playing.webp")}
-                    style={{
-                      width: 18,
-                      height: 18,
-                      tintColor: "white",
-                      marginLeft: 20,
-                    }}
-                  />
-            
+              />
+              <View style={styles.progressLabelContainer}>
+                <Text style={styles.progressLebelText}>{new Date(progress.position * 1000).toISOString().substr(14, 5)}</Text>
+                <Text style={styles.progressLebelText}>{new Date((progress.duration - progress.position) * 1000).toISOString().substr(14, 5)}</Text>
               </View>
-            </TouchableOpacity>
-          );
-        }}
-      />
+            </View>       
+         
+            <View style={styles.musicControls}>
+  <TouchableOpacity onPress={skipToPrevious} style={styles.skipButton}>
+    <Ionicons name="play-skip-back-outline" size={35} color="black" />
+  </TouchableOpacity>
+
+  <TouchableOpacity onPress={() => togglePlayback(playbackState)} style={styles.playButton}>
+    <Ionicons name={playbackState === State.Playing ? "pause-circle" : "play-circle"} size={75} color="black" />
+  </TouchableOpacity>
+
+  <TouchableOpacity onPress={skipToNext} style={styles.skipButton}>
+    <Ionicons name="play-skip-forward-outline" size={35} color="black" />
+  </TouchableOpacity>      
+
+  <TouchableOpacity style={styles.queueIconContainer} onPress={()=>navigation.navigate('TotalSongsScreen')}>
+    <MaterialIcons name={"queue-music"} size={35} color={"#000000"} />
+  </TouchableOpacity>
+</View>
+
+          </View>
+
+        </SafeAreaView>
+
+      </View>
     </LinearGradient>
   );
 };
 
+export default allSongPlayScreen;
+
 const styles = StyleSheet.create({
-  imageContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-    width: 100,
-    height: 100,
-    paddingBottom: 3,
-  },
-  image: {
-    aspectRatio: 1, // Set aspectRatio to 1 to make height the same as width
+  container: {
     flex: 1,
-    height: "100%",
-    borderRadius: 10,
   },
-  shadowProp: {
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    backgroundColor: "rgba(0,0,0,0)",
-    elevation: 2,
+  mainContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  flag: {
-    width: 20,
-    height: 20,
-    marginLeft: 5,
-    borderRadius: 100,
+  artworkWrapper: {
+    width: 350,
+    height: 340,
+    marginBottom: 25,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 5,
+      height: 5,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84
+  },
+  artworkimage: {
+    height: '100%',
+    width: '100%',
+    borderRadius: 15,
+  },
+  title: {
+    fontSize: 25,
+    fontWidth: '700',
+    color: '#EEEEEEE',
+  },
+  artist: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#EEEEEEE',
+  },
+  progressContainer: {
+    width: 350,
+    height: 40,
+    marginTop: 25,
+  },
+  progressLabelContainer: {
+    width: 340,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  progressLebelText: {
+    color: 'black',
+  },
+  musicControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    marginTop: 15,
+    position: 'relative',
+  },
+  skipButton: {
+    marginHorizontal: 20,  // Increase spacing for skip buttons
+  },
+  playButton: {
+    marginHorizontal: 10,  // Center play button with more spacing
+  },
+  queueIconContainer: {
+    position: 'absolute',
+    right: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
-
-export default LesDites;

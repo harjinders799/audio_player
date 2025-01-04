@@ -263,13 +263,14 @@ const PrivacyScreen = ({navigation, route})=> {
 
                 <TouchableOpacity
                 onPress={() => navigation.goBack()}
+                disabled={!isChecked} 
                 style={{ backgroundColor: '#5c10b2',
                     borderRadius: 8,
                     paddingVertical: 13,
                     alignItems: 'center',
                     marginBottom: 20,
                     marginTop: 20}}>
-                    <Text style={{color :'white'}}>Register</Text>
+                    <Text style={{color :'white'}}>Registra't</Text>
                 </TouchableOpacity>
 
             </ScrollView>

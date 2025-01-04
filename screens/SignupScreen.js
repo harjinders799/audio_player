@@ -9,25 +9,112 @@ import {
   TouchableOpacity,
   Platform,
   Button,
-  width
+  width,Alert
 } from "react-native";
 import Checkbox from "@react-native-community/checkbox";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
+import firebase from '@react-native-firebase/app';  
+import firestore from '@react-native-firebase/firestore'; 
+
+import { FIREBASE_API_KEY,FIREBASE_PROJECT_ID , FIREBASE_APP_ID, GOOGLE_SIGNIN_WEB_CLINT_ID} from '@env';
 
 
+
+
+const firebaseConfig = {
+  apiKey: FIREBASE_API_KEY,
+  projectId: FIREBASE_PROJECT_ID,
+  appId: FIREBASE_APP_ID,
+};
+
+// Initialize Firebase (only once)
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+} else {
+  firebase.app();  // If Firebase is already initialized
+}
 
 const SignupScreen = ({ navigation, route }) =>{
+  
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  
+ 
+ 
+  const registerUser = async () => {
+    if (!name || !email || !password) {
+      Alert.alert('Error', 'Tots els camps són obligatoris!');
+      return;
+    }
+
+    try {
+      // Firebase Auth Registration
+      const userCredential = await auth().createUserWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+
+      // Save additional user info (e.g., name) in Firebase Firestore
+      const userRef = firebase.firestore().collection('users').doc(user.uid);
+      await userRef.set({
+        name: name,
+        email: email,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
+
+      // Show success alert
+  Alert.alert('Benvingut!', 'El registre s\'ha completat correctament!', [
+    {
+      text: 'D\'acord',
+      onPress: () => navigation.navigate('HomeScreen'),
+    },
+  ]);
+
+
+
+      
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', error.message);
+    }
+  };
+
+
   const [isChecked, setIsChecked] = useState(false);
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  async function onGoogleButtonPress() {
+    GoogleSignin.configure({
+        webClientId: GOOGLE_SIGNIN_WEB_CLINT_ID,
+      });
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      const response = await GoogleSignin.signIn();
+      const googleCredential = auth.GoogleAuthProvider.credential(
+        response?.data?.idToken,
+      );
+      console.log(auth().signInWithCredential(googleCredential));
+      return auth().signInWithCredential(googleCredential);
+  }
+  
+    async function _signInWithGoogle() {
+      const user = await onGoogleButtonPress();
+      console.log(user);
+      navigation.navigate("HomeScreen");
+    }
+
+
+
+
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
+   
+   
         <View style={{ marginVertical: 22 }}>
           <Text
             style={{
@@ -91,9 +178,6 @@ const SignupScreen = ({ navigation, route }) =>{
           </View>
         </View>
 
-
-
-
         <View style={{ marginBottom: 12, marginTop: 20 }}>
           <View
             style={{
@@ -134,12 +218,6 @@ const SignupScreen = ({ navigation, route }) =>{
           </View>
         </View>
 
-
-
-
-
-
-
         <View
           style={{
             flexDirection: "row",
@@ -151,8 +229,7 @@ const SignupScreen = ({ navigation, route }) =>{
             style={{ marginRight: 5, transform: [{ scaleX: 0.9 }, { scaleY: 0.9 }] }}
             value={isChecked}
             onValueChange={setIsChecked}
-            color={isChecked ? "red" : undefined}
-            
+            color={isChecked ? "red" : undefined}    
           />
 
           <Text
@@ -166,11 +243,7 @@ const SignupScreen = ({ navigation, route }) =>{
           </Text>
         </View>
 
-
-
-
-
-        <TouchableOpacity
+        <TouchableOpacity onPress={registerUser}  disabled={!isChecked}
       style={{
         backgroundColor: '#5c10b2',
         borderRadius: 8,
@@ -182,7 +255,6 @@ const SignupScreen = ({ navigation, route }) =>{
      >
      <Text style={{color:"white"}}>Registra't</Text>
     </TouchableOpacity>
-
         <View
           style={{
             flexDirection: "row",
@@ -218,7 +290,7 @@ const SignupScreen = ({ navigation, route }) =>{
           }}
         >
         
-            <TouchableOpacity
+            <TouchableOpacity  onPress={() => _signInWithGoogle()}
               style={{
                 flex: 1,
                 alignItems: "center",

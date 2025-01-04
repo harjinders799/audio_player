@@ -13,13 +13,59 @@ import {
   Pressable,
   Image,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LoginScreen = ({navigation}) => {
+
+
+
+
+
+
+
+
+const LoginScreen =  ({navigation}) => {
+  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isPasswordShown, setIsPasswordShown] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Tots dos, el correu electrònic i la contrasenya, són obligatoris!');
+      return;
+    }
+  
+    try {
+      const userCredential = await auth().signInWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+  
+      if (user) {
+        // Store user token or UID
+        await AsyncStorage.setItem('userToken', user.uid);  // Store UID or token
+        navigation.navigate('HomeScreen');  // Navigate to home screen
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Inici de sessió fallit! Si us plau, introdueix les dades correctes.');
+    }
+  };
+  
+
+
+
+
+
+
+
+
+
+
+
 
 
   async function onGoogleButtonPress() {
@@ -35,11 +81,16 @@ const LoginScreen = ({navigation}) => {
     return auth().signInWithCredential(googleCredential);
 }
 
-  async function _signInWithGoogle() {
-    const user = await onGoogleButtonPress();
+async function _signInWithGoogle() {
+  const user = await onGoogleButtonPress();
+  
+  if (user) {
+    await AsyncStorage.setItem('userToken', user.user.uid);  // Store UID or token
     console.log(user);
     navigation.navigate("HomeScreen");
   }
+}
+
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
@@ -78,10 +129,9 @@ const LoginScreen = ({navigation}) => {
             }}>
             <TextInput
               placeholder="Correu Electrònic"
-              //placeholderTextColor={COLORS.black}
               keyboardType="email-address"
-              //value={email}
-              //onChangeText={(text) => setEmail(text.toLowerCase())}
+              value={email}
+              onChangeText={setEmail}
               style={{
                 width: '100%',
               }}
@@ -104,6 +154,8 @@ const LoginScreen = ({navigation}) => {
             <TextInput
               placeholder="Contrasenya"
               secureTextEntry={!isPasswordShown}
+              value={password}
+        onChangeText={setPassword}
               style={{
                 width: '100%',
               }}
@@ -143,7 +195,7 @@ const LoginScreen = ({navigation}) => {
         </View>
 
     <View style={{ justifyContent: 'center',alignItems: 'center',}}>
-                <TouchableOpacity style={styles.Button} onPress={()=>navigation.navigate("HomeScreen")} >
+                <TouchableOpacity style={styles.Button} onPress={handleLogin} >
                     <Text style={{color:'white'}}>Inicia sessió</Text>
                 </TouchableOpacity>
     </View>
