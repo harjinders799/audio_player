@@ -111,7 +111,7 @@ const HomeScreen = ({ navigation }) => {
             <Text style={styles.boxText}>Dites</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity    onPress={()=> navigation.navigate("CanConsScreen")}
+          <TouchableOpacity    onPress={()=> navigation.navigate("CanconsSongsListScreen")}
           activeOpacity={0.6}   
           style={[styles.box, { backgroundColor: "#8d00b4" }]}>
             <View style={[styles.imageContainer, styles.shadowProp]}>
@@ -125,7 +125,7 @@ const HomeScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.totalContainer}>
-          <TouchableOpacity activeOpacity={0.5} onPress={()=> navigation.navigate("TotalSongsScreen")}>
+          <TouchableOpacity activeOpacity={0.5} onPress={()=> navigation.navigate("AllSongsListScreen")}>
             <View style={styles.totalButton}>
               <Text style={styles.totalBtnText}>
                 Escolta tots els àudios

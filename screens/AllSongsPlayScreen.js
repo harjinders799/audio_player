@@ -41,7 +41,7 @@ const togglePlayback = async (playbackState) => {
   }
 };
 
-const allSongPlayScreen = ({ navigation }) => {
+const AllSongsPlayScreen = ({ navigation }) => {
   const playbackState = usePlaybackState();
   const progress = useProgress();
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -214,7 +214,7 @@ const allSongPlayScreen = ({ navigation }) => {
   );
 };
 
-export default allSongPlayScreen;
+export default AllSongsPlayScreen;
 
 const styles = StyleSheet.create({
   container: {

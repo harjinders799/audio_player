@@ -10,7 +10,7 @@ import {
 import LinearGradient from "react-native-linear-gradient";
 import { AllsongsList } from "../ScreenSongs/AllSongs";
 
-const TotalSongsScreen = ({ navigation }) => {
+const AllSongsListScreen = ({ navigation }) => {
   return (
     <LinearGradient
       colors={["#b88c08", "#60045f"]}
@@ -66,7 +66,7 @@ const TotalSongsScreen = ({ navigation }) => {
             paddingRight: 20,
             marginTop: 10,
           }}
-        onPress={()=>navigation.navigate('allSongPlayScreen')}
+        onPress={()=>navigation.navigate('AllSongsPlayScreen')}
           activeOpacity={1}
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -132,4 +132,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TotalSongsScreen;
+export default AllSongsListScreen;
