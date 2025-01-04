@@ -13,22 +13,23 @@ const ResetPassword = ({navigation}) => {
       Alert.alert('Error', 'Please enter your email address!');
       return;
     }
-
     try {
+      auth().languageCode = 'ca'; 
       // Send password reset email
       await auth().sendPasswordResetEmail(email);
-      Alert.alert('Success', 'A password reset email has been sent to your email address.');
+      Alert.alert('ha enviat un correu electrònic per restablir la contrasenya a la teva adreça de correu electrònic.');
       navigation.navigate('Login'); // Redirect back to login screen after requesting password reset
     } catch (error) {
       console.error(error);
-      Alert.alert('Error', 'Failed to send password reset email. Please try again later.');
+      Alert.alert('Error, no s ha pogut enviar l email de restabliment de contrasenya. Si us plau, intenta-ho més tard');
     }
   };
 
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: "white"}}>
+    <SafeAreaView style={styles.SafeAreaView}>
       <View style={styles.container}>
+       
         <Text style={styles.title}>Restablir Contrasenya</Text>
         <Text style={styles.description}>
          Introdueix el teu correu electrònic i rebràs instruccions 
@@ -46,12 +47,11 @@ const ResetPassword = ({navigation}) => {
           />
         </View>
 
-    <View style={{justifyContent: 'center', // Center the button vertically
-    alignItems: 'center',  }}>
-    <TouchableOpacity style={styles.Button} onPress={handlePasswordReset}>
-        <Text style={{color: 'white'}}>Continuar</Text>
-      </TouchableOpacity>
-    </View>
+      <View style={{justifyContent: 'center',alignItems: 'center',  }}>
+          <TouchableOpacity style={styles.Button} onPress={handlePasswordReset}>
+            <Text style={{color: 'white'}}>Continuar</Text>
+          </TouchableOpacity>
+      </View>
     
       </View>
     </SafeAreaView>
@@ -59,11 +59,14 @@ const ResetPassword = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  SafeAreaView:{
+    flex: 1, 
+    backgroundColor: "white"
+  },
   container: {
     flex: 1,
     marginHorizontal: 22,
     marginVertical: 22,
-    
   },
   title: {
     fontSize: 22,
@@ -96,10 +99,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     marginTop: 20,
-    width:350,
-    //marginTop: 18,
-    //marginBottom: 4,
-   
+    width:350, 
   },
 });
 

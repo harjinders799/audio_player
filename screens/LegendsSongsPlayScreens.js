@@ -17,7 +17,6 @@ const setupPlayer = async () => {
 
 const togglePlayback = async (playbackState) => {
   const currentTrack = await TrackPlayer.getCurrentTrack();
-
   if (currentTrack !== null) {
     if (playbackState === State.Paused) {
       await TrackPlayer.play();
@@ -61,17 +60,12 @@ const LegendsSongsPlayScreens = ({ navigation }) => {
       }
     }
   });
-  
-
-
-
 
   useEffect(() => {
     setupPlayer();
   
     scrollX.addListener(({ value }) => {
       const index = Math.round(value / width);
-      
       if (index >= LegendsongsList.length) {
         setSongIndex(0);
         songSlider.current.scrollToOffset({ offset: 0, animated: true });
@@ -79,14 +73,12 @@ const LegendsSongsPlayScreens = ({ navigation }) => {
         setSongIndex(index);
       }
     });
-  
     return () => {
       scrollX.removeAllListeners();
     };
   }, []);
   
   
-
   const skipToNext = async () => {
     try {
       await TrackPlayer.skipToNext();  // Skip to next track in TrackPlayer
@@ -99,7 +91,6 @@ const LegendsSongsPlayScreens = ({ navigation }) => {
     }
   };
   
-
   const skipToPrevious = async () => {
     try {
       await TrackPlayer.skipToPrevious();  // Skip to previous track in TrackPlayer
@@ -114,7 +105,7 @@ const LegendsSongsPlayScreens = ({ navigation }) => {
 
   const renderSongs = ({ index, item }) => {
     return (
-      <Animated.View style={{ width: width, justifyContent: 'center', alignItems: 'center' }}>
+      <Animated.View style={styles.animatedview}>
         <View style={styles.artworkWrapper}>
           <Image source={item.artwork} style={styles.artworkimage} />
         </View>
@@ -150,7 +141,7 @@ const LegendsSongsPlayScreens = ({ navigation }) => {
               />
             </View>
 
-            <View style={{ marginLeft: 0, marginTop: 5, width: width, marginLeft: 70 }}>
+            <View style={styles.titleView}>
               <Text style={[styles.title, { marginBottom: 10 }]}>{LegendsongsList[songIndex].title}</Text>
               <Text style={styles.artist}>{LegendsongsList[songIndex].artist}</Text>
             </View>
@@ -173,28 +164,26 @@ const LegendsSongsPlayScreens = ({ navigation }) => {
               </View>
             </View>       
          
-            <View style={styles.musicControls}>
-  <TouchableOpacity onPress={skipToPrevious} style={styles.skipButton}>
-    <Ionicons name="play-skip-back-outline" size={35} color="black" />
-  </TouchableOpacity>
+                <View style={styles.musicControls}>
+                    <TouchableOpacity onPress={skipToPrevious} style={styles.skipButton}>
+                      <Ionicons name="play-skip-back-outline" size={35} color="black" />
+                    </TouchableOpacity>
 
-  <TouchableOpacity onPress={() => togglePlayback(playbackState)} style={styles.playButton}>
-    <Ionicons name={playbackState === State.Playing ? "pause-circle" : "play-circle"} size={75} color="black" />
-  </TouchableOpacity>
+                    <TouchableOpacity onPress={() => togglePlayback(playbackState)} style={styles.playButton}>
+                      <Ionicons name={playbackState === State.Playing ? "pause-circle" : "play-circle"} size={75} color="black" />
+                    </TouchableOpacity>
 
-  <TouchableOpacity onPress={skipToNext} style={styles.skipButton}>
-    <Ionicons name="play-skip-forward-outline" size={35} color="black" />
-  </TouchableOpacity>      
+                    <TouchableOpacity onPress={skipToNext} style={styles.skipButton}>
+                      <Ionicons name="play-skip-forward-outline" size={35} color="black" />
+                    </TouchableOpacity>      
 
-  <TouchableOpacity style={styles.queueIconContainer} onPress={()=>navigation.navigate('AllSongsListScreen')}>
-    <MaterialIcons name={"queue-music"} size={35} color={"#000000"} />
-  </TouchableOpacity>
-</View>
+                    <TouchableOpacity style={styles.queueIconContainer} onPress={()=>navigation.navigate('AllSongsListScreen')}>
+                      <MaterialIcons name={"queue-music"} size={35} color={"#000000"} />
+                    </TouchableOpacity>
+                </View>
 
           </View>
-
         </SafeAreaView>
-
       </View>
     </LinearGradient>
   );
@@ -260,10 +249,10 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   skipButton: {
-    marginHorizontal: 20,  // Increase spacing for skip buttons
+    marginHorizontal: 20,  
   },
   playButton: {
-    marginHorizontal: 10,  // Center play button with more spacing
+    marginHorizontal: 10,  
   },
   queueIconContainer: {
     position: 'absolute',
@@ -271,4 +260,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  titleView:{ 
+    marginLeft: 0, 
+    marginTop: 5, 
+    width: width, 
+    marginLeft: 70 },
+    animatedview:{ 
+    width: width, 
+    justifyContent: 'center', 
+    alignItems: 'center' 
+  }
 });

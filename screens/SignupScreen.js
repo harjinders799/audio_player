@@ -52,6 +52,7 @@ const SignupScreen = ({ navigation, route }) =>{
     }
 
     try {
+      auth().languageCode = 'ca'; 
       // Firebase Auth Registration
       const userCredential = await auth().createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
@@ -251,9 +252,12 @@ const SignupScreen = ({ navigation, route }) =>{
         alignItems: 'center',
         marginBottom: 20,
         marginTop: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height:52,
       }}
      >
-     <Text style={{color:"white"}}>Registra't</Text>
+     <Text style={{color:"white", fontSize: 18}}>Registra't</Text>
     </TouchableOpacity>
         <View
           style={{
@@ -303,7 +307,7 @@ const SignupScreen = ({ navigation, route }) =>{
                 borderRadius: 10,
                 backgroundColor: "white",
               }}
-            >
+           >
               <Image
                 source={{
                     uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/480px-Google_%22G%22_logo.svg.png',

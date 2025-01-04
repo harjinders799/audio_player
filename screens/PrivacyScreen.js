@@ -9,12 +9,12 @@ import {
     ScrollView,
     TouchableOpacity,
 } from 'react-native';
-
 import CheckBox from '@react-native-community/checkbox';
 
-const PrivacyScreen = ({navigation, route})=> {
-    const [isChecked, setIsChecked] = useState(false);
 
+
+const PrivacyScreen = ({navigation})=> {
+    const [isChecked, setIsChecked] = useState(false);
     return (
         <SafeAreaView>
             <StatusBar translucent={false} barStyle={'dark-content'}/>
@@ -247,7 +247,6 @@ const PrivacyScreen = ({navigation, route})=> {
                     divergències derivades de la interpretació o aplicació d’aquest conjunt de clàusules són els
                     espanyols, i es sotmet, renunciant expressament a qualsevol altra jurisdicció, als jutjats i
                     tribunals més propers a la ciutat de Mataró.
-
                 </Text>
                 <View style={{flexDirection: 'row', marginVertical: 6, alignItems: 'center', width: '100%'}}>
                     <CheckBox
@@ -257,10 +256,6 @@ const PrivacyScreen = ({navigation, route})=> {
                     />
                     <Text numberOfLines={2} style={{display: 'flex', flex: 1}}>He llegit i accepto les condicions d’ús de l’APLICACIÓ.</Text>
                 </View>
-
-
-
-
                 <TouchableOpacity
                 onPress={() => navigation.goBack()}
                 disabled={!isChecked} 

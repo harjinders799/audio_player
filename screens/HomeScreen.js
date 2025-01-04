@@ -2,6 +2,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable quotes */
 /* eslint-disable no-trailing-spaces */
+
 import React, { useEffect } from "react";
 import {
   View,
@@ -15,16 +16,11 @@ import {
   Alert,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-
-
-
 const HomeScreen = ({ navigation }) => {
-  
   const onLogout = async () => {
     try {
       await auth().signOut();
@@ -37,15 +33,10 @@ const HomeScreen = ({ navigation }) => {
     }
   };
   
-  
-
-
 
   return (
     <LinearGradient colors={["#d9d600", "#760075"]} style={styles.container}>
     <SafeAreaView style={{ flex: 1 }}>
-      
-     
         <StatusBar translucent backgroundColor={"transparent"} barStyle='light-content' />
                   
         <View style={styles.headerContainer}>
@@ -60,23 +51,14 @@ const HomeScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.logoContainer}>
-          <Image
-            source={require("../images/logo-medi.webp")}
-            style={styles.logoImg}
-            resizeMode={"contain"}
-            />
+          <Image source={require("../images/logo-medi.webp")} style={styles.logoImg} resizeMode={"contain"}/>
         </View>
 
 
         <View style={styles.boxContainer}>
-        <TouchableOpacity onPress={()=> navigation.navigate("HistoriesSongsListScreen")}
-            activeOpacity={0.6}
-            style={[styles.box, { backgroundColor: "#ba7900" }]}>
+        <TouchableOpacity onPress={()=> navigation.navigate("HistoriesSongsListScreen")} activeOpacity={0.6} style={[styles.box, { backgroundColor: "#ba7900" }]}>
             <View style={[styles.imageContainer, styles.shadowProp]}>
-              <Image
-                source={require("../images/Mataro_foto.webp")}
-                style={styles.image}
-              />
+              <Image source={require("../images/Mataro_foto.webp")}  style={styles.image}/>
             </View>
             <View>
               <Text style={styles.boxText}>Històries immersives</Text>
@@ -89,36 +71,23 @@ const HomeScreen = ({ navigation }) => {
             activeOpacity={0.6}
             style={[styles.box, { backgroundColor: "#bd008a" }]}>
             <View style={[styles.imageContainer, styles.shadowProp]}>
-              <Image
-                source={require("../images/timbaler4.webp")}
-                style={styles.image}
-              />
+              <Image source={require("../images/timbaler4.webp")} style={styles.image}/>
             </View>
             <View>
               <Text style={styles.boxText}>Llegendes immersives</Text>
             </View>
         </TouchableOpacity>
 
-          <TouchableOpacity onPress={()=> navigation.navigate("DitesSongsListScreen")}
-            activeOpacity={0.6}
-            style={[styles.box, { backgroundColor: "#001d9a" }]}  >
+          <TouchableOpacity onPress={()=> navigation.navigate("DitesSongsListScreen")}  activeOpacity={0.6} style={[styles.box, { backgroundColor: "#001d9a" }]}  >
             <View style={[styles.imageContainer, styles.shadowProp]}>
-              <Image
-                source={require("../images/Dites.jpeg")}
-                style={styles.image}
-              />
+              <Image source={require("../images/Dites.jpeg")}  style={styles.image} />
             </View>
             <Text style={styles.boxText}>Dites</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity    onPress={()=> navigation.navigate("CanconsSongsListScreen")}
-          activeOpacity={0.6}   
-          style={[styles.box, { backgroundColor: "#8d00b4" }]}>
+          <TouchableOpacity onPress={()=> navigation.navigate("CanconsSongsListScreen")} activeOpacity={0.6} style={[styles.box, { backgroundColor: "#8d00b4" }]}>
             <View style={[styles.imageContainer, styles.shadowProp]}>
-              <Image
-                source={require("../images/ocells.webp")}
-                style={styles.image}
-              />
+              <Image source={require("../images/ocells.webp")} style={styles.image}/>
             </View>
             <Text style={styles.boxText}>Cançons populars Catalanes</Text>
           </TouchableOpacity>
@@ -158,7 +127,7 @@ const styles = StyleSheet.create({
 
   },
   logoImg: {
-    width: 260,  // Set the width as needed
+    width: 260,  
     height: 100,
     marginTop:10,
   },

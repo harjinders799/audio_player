@@ -12,45 +12,17 @@ import LinearGradient from "react-native-linear-gradient";
 import { LegendsongsList } from "../ScreenSongs/LegendsongsList";
 
 
-
-
-
 const LegendsSongsListScreen = ({navigation}) => {
   return (
     <LinearGradient
     colors={["rgba(189,0,138,0.49)", "#bd008a"]}
       style={{ flex: 1, paddingBottom: 20 }}
     >
-      <View
-        style={{
-          flexDirection: "row",
-          marginTop: Platform.OS === "ios" ? 50 : 50,
-          paddingHorizontal: 10,
-          borderBottomWidth: 0.2,
-          paddingBottom: 10,
-        }}
-      >
-        <TouchableOpacity
-          style={{ flexDirection: "row" }}
-          onPress={() => navigation.goBack()}
-        >
-          <Image
-            source={require("../images/back-white.webp")}
-            style={{ height: 50, width: 50, marginRight: 6 }}
-          />
-          {/* <Text style={{ fontSize: 19, color: "#ffffff",marginTop:10 }}>Medistoris.cat</Text> */}
+      <View style={styles.firstView}>
+        <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => navigation.goBack()}>
+          <Image source={require("../images/back-white.webp")}  style={{ height: 50, width: 50, marginRight: 6 }}/>
         </TouchableOpacity>
-
-        <Text
-          style={{
-            fontSize: 18,
-            color: "#ffffff",
-            fontWeight: "500",
-            marginLeft: "20%",
-            marginTop: 10,
-          }}
-        >
-          {/* Cultura Catalana */}
+        <Text style={styles.medistories_cat}>
           Medistoris.cat
         </Text>
       </View>
@@ -79,59 +51,22 @@ const LegendsSongsListScreen = ({navigation}) => {
         ItemSeparatorComponent={<View style={{ height: 1 }}></View>}
         renderItem={({ item, index }) => {
           return (
-            <TouchableOpacity onPress={()=>navigation.navigate('LegendsSongsPlayScreens')}
-              style={{
-                width: "100%",
-                height: 110,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: 10,
-                paddingBottom: 10,
-              }}
-              activeOpacity={1}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingLeft: 20,
-                  paddingRight: 20,
-                }}
-              >
+            <TouchableOpacity onPress={()=>navigation.navigate('LegendsSongsPlayScreens')} style={styles.FirstTouchebleopacity} activeOpacity={1}>
+              <View style={styles.firstView}>
+                
                 <View style={[styles.imageContainer, styles.shadowProp]}>
                   <Image source={item.artwork} style={styles.image} />
                 </View>
-                <View style={{ paddingLeft: 10, paddingRight: 10 }}>
-                  <Text
-                    style={{ color: "white", fontSize: 16, width: "100%" }}
-                    adjustsFontSizeToFit={true}
-                    numberOfLines={1}
-                  >
-                    {item.title}
-                  </Text>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 5,
-                    }}
-                  >
-                  
-                    <Text
-                      style={{
-                        color: "white",
-                        fontSize: 13,
-                        verticalAlign: "middle",
-                        // marginLeft: 5,
-                      }}
-                    >
-                      {item.artist}
+
+                <View style={{ paddingLeft: 10, paddingRight: 10 }}>    
+                    <Text  style={{ color: "white", fontSize: 16, width: "100%" }}  adjustsFontSizeToFit={true}  numberOfLines={1}>
+                      {item.title}
                     </Text>
-                  </View>
+                    <View  style={styles.artistView}>
+                      <Text style={styles.itemartist}> {item.artist}</Text>
+                    </View>
                 </View>
-            
-              
-           
+
               </View>
             </TouchableOpacity>
           );
@@ -154,7 +89,7 @@ const styles = StyleSheet.create({
         paddingBottom: 3,
       },
       image: {
-        aspectRatio: 1, // Set aspectRatio to 1 to make height the same as width
+        aspectRatio: 1, 
         flex: 1,
         height: "100%",
         borderRadius: 10,
@@ -178,4 +113,43 @@ const styles = StyleSheet.create({
         fontWidth: '700',
         color: '#EEEEEEE',
       },
+      firstView:{
+        flexDirection: "row",
+        marginTop: Platform.OS === "ios" ? 50 : 50,
+        paddingHorizontal: 10,
+        borderBottomWidth: 0.2,
+        paddingBottom: 10,
+      },
+      itemartist:{
+        color: "white",
+        fontSize: 13,
+        verticalAlign: "middle",
+      },
+      artistView:{
+        flexDirection: "row",
+        alignItems: "center",
+        marginTop: 5,
+      },
+      FirstTouchebleopacity:{
+        width: "100%",
+        height: 110,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginTop: 10,
+        paddingBottom: 10,
+      }, 
+      medistories_cat:
+      {
+        fontSize: 18,
+        color: "#ffffff",
+        fontWeight: "500",
+        marginLeft: "20%",
+        marginTop: 10,
+      }, 
+      firstView:{
+        flexDirection: "row",
+        alignItems: "center",
+        paddingLeft: 20,
+        paddingRight: 20,
+      }
 })

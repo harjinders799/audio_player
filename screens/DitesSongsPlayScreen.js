@@ -10,8 +10,6 @@ import { DitesSongsList } from '../ScreenSongs/DitesSongList';
 import TrackPlayer, { Capability, Event, RepeatMode,State, usePlaybackState,useProgress,useTrackPlayerEvents,} from 'react-native-track-player';
 
 
-
-
 const setupPlayer = async () => {
   await TrackPlayer.setupPlayer();
   await TrackPlayer.add(DitesSongsList);
@@ -48,7 +46,6 @@ const DitesSongsPlayScreen = ({ navigation }) => {
   
       if (currentTrack !== null) {
         setSongIndex(currentTrack);
-  
         // Scroll to the new track smoothly
         songSlider.current.scrollToOffset({
           offset: currentTrack * width,
@@ -171,29 +168,27 @@ const DitesSongsPlayScreen = ({ navigation }) => {
                 <Text style={styles.progressLebelText}>{new Date((progress.duration - progress.position) * 1000).toISOString().substr(14, 5)}</Text>
               </View>
             </View>       
-         
-            <View style={styles.musicControls}>
-  <TouchableOpacity onPress={skipToPrevious} style={styles.skipButton}>
-    <Ionicons name="play-skip-back-outline" size={35} color="black" />
-  </TouchableOpacity>
+            
+                <View style={styles.musicControls}>
+                      <TouchableOpacity onPress={skipToPrevious} style={styles.skipButton}>
+                        <Ionicons name="play-skip-back-outline" size={35} color="black" />
+                      </TouchableOpacity>
 
-  <TouchableOpacity onPress={() => togglePlayback(playbackState)} style={styles.playButton}>
-    <Ionicons name={playbackState === State.Playing ? "pause-circle" : "play-circle"} size={75} color="black" />
-  </TouchableOpacity>
+                      <TouchableOpacity onPress={() => togglePlayback(playbackState)} style={styles.playButton}>
+                        <Ionicons name={playbackState === State.Playing ? "pause-circle" : "play-circle"} size={75} color="black" />
+                      </TouchableOpacity>
 
-  <TouchableOpacity onPress={skipToNext} style={styles.skipButton}>
-    <Ionicons name="play-skip-forward-outline" size={35} color="black" />
-  </TouchableOpacity>      
+                      <TouchableOpacity onPress={skipToNext} style={styles.skipButton}>
+                        <Ionicons name="play-skip-forward-outline" size={35} color="black" />
+                      </TouchableOpacity>      
 
-  <TouchableOpacity style={styles.queueIconContainer} onPress={()=>navigation.navigate('AllSongsListScreen')}>
-    <MaterialIcons name={"queue-music"} size={35} color={"#000000"} />
-  </TouchableOpacity>
-</View>
+                      <TouchableOpacity style={styles.queueIconContainer} onPress={()=>navigation.navigate('AllSongsListScreen')}>
+                        <MaterialIcons name={"queue-music"} size={35} color={"#000000"} />
+                      </TouchableOpacity>
+                  </View>
 
           </View>
-
         </SafeAreaView>
-
       </View>
     </LinearGradient>
   );
@@ -259,10 +254,10 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   skipButton: {
-    marginHorizontal: 20,  // Increase spacing for skip buttons
+    marginHorizontal: 20,  
   },
   playButton: {
-    marginHorizontal: 10,  // Center play button with more spacing
+    marginHorizontal: 10,  
   },
   queueIconContainer: {
     position: 'absolute',

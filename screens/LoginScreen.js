@@ -23,11 +23,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
-
-
-
-
-
 const LoginScreen =  ({navigation}) => {
   
   const [email, setEmail] = useState("");
@@ -41,6 +36,7 @@ const LoginScreen =  ({navigation}) => {
     }
   
     try {
+      
       const userCredential = await auth().signInWithEmailAndPassword(email, password);
       const user = userCredential.user;
   
@@ -56,40 +52,28 @@ const LoginScreen =  ({navigation}) => {
   };
   
 
-
-
-
-
-
-
-
-
-
-
-
-
   async function onGoogleButtonPress() {
-  GoogleSignin.configure({
-      webClientId: '964940426884-e18dsdv6f6j6cafgohnoi9lcmkvcln02.apps.googleusercontent.com',
-    });
-  await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    const response = await GoogleSignin.signIn();
-    const googleCredential = auth.GoogleAuthProvider.credential(
-      response?.data?.idToken,
-    );
-    console.log(auth().signInWithCredential(googleCredential));
-    return auth().signInWithCredential(googleCredential);
-}
+      GoogleSignin.configure({
+          webClientId: '964940426884-e18dsdv6f6j6cafgohnoi9lcmkvcln02.apps.googleusercontent.com',
+        });
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+        const response = await GoogleSignin.signIn();
+        const googleCredential = auth.GoogleAuthProvider.credential(
+          response?.data?.idToken,
+        );
+        console.log(auth().signInWithCredential(googleCredential));
+        return auth().signInWithCredential(googleCredential);
+    }
 
-async function _signInWithGoogle() {
-  const user = await onGoogleButtonPress();
+      async function _signInWithGoogle() {
+        const user = await onGoogleButtonPress();
   
-  if (user) {
-    await AsyncStorage.setItem('userToken', user.user.uid);  // Store UID or token
-    console.log(user);
-    navigation.navigate("HomeScreen");
-  }
-}
+      if (user) {
+        await AsyncStorage.setItem('userToken', user.user.uid);  // Store UID or token
+        console.log(user);
+        navigation.navigate("HomeScreen");
+      }
+    }
 
 
   return (
@@ -155,7 +139,7 @@ async function _signInWithGoogle() {
               placeholder="Contrasenya"
               secureTextEntry={!isPasswordShown}
               value={password}
-        onChangeText={setPassword}
+              onChangeText={setPassword}
               style={{
                 width: '100%',
               }}
@@ -195,9 +179,9 @@ async function _signInWithGoogle() {
         </View>
 
     <View style={{ justifyContent: 'center',alignItems: 'center',}}>
-                <TouchableOpacity style={styles.Button} onPress={handleLogin} >
-                    <Text style={{color:'white'}}>Inicia sessió</Text>
-                </TouchableOpacity>
+              <TouchableOpacity style={styles.Button} onPress={handleLogin} >
+                    <Text style={{color:'white',justifyContent: 'center',alignItems: 'center',fontSize: 18}}>Inicia sessió</Text>
+              </TouchableOpacity>
     </View>
 
         <View
@@ -206,7 +190,6 @@ async function _signInWithGoogle() {
             alignItems: 'center',
             marginVertical: 20,
           }}>
-
           <View
             style={{
               flex: 1,
@@ -304,6 +287,8 @@ const styles = StyleSheet.create({
     width:350,
     marginTop: 18,
     marginBottom: 4,
+    height:52,
+    justifyContent: 'center',alignItems: 'center',
    
   },
 });

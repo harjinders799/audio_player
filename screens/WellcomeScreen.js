@@ -7,8 +7,8 @@ const WellcomeScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
 
   const handlePress = async () => {
-    setLoading(true);  // Show loading indicator during the check
 
+    setLoading(true);  // Show loading indicator during the check
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       
@@ -18,11 +18,12 @@ const WellcomeScreen = ({ navigation }) => {
         navigation.replace('Login');  // Navigate to Login if not logged in
       }
     } catch (error) {
-      console.error('Error checking login status:', error);
+      console.error('Error comprovant l estat de la sessió.', error);
       navigation.replace('Login');  // Fallback to Login on error
     } finally {
       setLoading(false);  // Stop loading indicator
     }
+
   };
 
   return (
@@ -38,6 +39,7 @@ const WellcomeScreen = ({ navigation }) => {
             <Text style={{ color: 'white' }}>Entra</Text>
           )}
         </TouchableOpacity>
+        
       </View>
     </LinearGradient>
   );

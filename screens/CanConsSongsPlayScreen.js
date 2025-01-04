@@ -107,7 +107,7 @@ const CanConsSongsPlayScreen = ({ navigation }) => {
         animated: true,
       });
     } catch (error) {
-      console.log("No next track available.");
+      console.log("No hi ha cap pista següent disponible.");
     }
   };
   
@@ -120,7 +120,7 @@ const CanConsSongsPlayScreen = ({ navigation }) => {
         animated: true,
       });
     } catch (error) {
-      console.log("No previous track available.");
+      console.log("No hi ha cap pista prèvia disponible.");
     }
   };
 
@@ -162,7 +162,7 @@ const CanConsSongsPlayScreen = ({ navigation }) => {
               />
             </View>
 
-            <View style={{ marginLeft: 0, marginTop: 5, width: width, marginLeft: 70 }}>
+            <View style={styles.titleView}>
               <Text style={[styles.title, { marginBottom: 10 }]}>{CanconsSongList[songIndex].title}</Text>
               <Text style={styles.artist}>{CanconsSongList[songIndex].artist}</Text>
             </View>
@@ -184,29 +184,27 @@ const CanConsSongsPlayScreen = ({ navigation }) => {
                 <Text style={styles.progressLebelText}>{new Date((progress.duration - progress.position) * 1000).toISOString().substr(14, 5)}</Text>
               </View>
             </View>       
-         
-            <View style={styles.musicControls}>
-  <TouchableOpacity onPress={skipToPrevious} style={styles.skipButton}>
-    <Ionicons name="play-skip-back-outline" size={35} color="black" />
-  </TouchableOpacity>
+            
+                <View style={styles.musicControls}>
+                      <TouchableOpacity onPress={skipToPrevious} style={styles.skipButton}>
+                        <Ionicons name="play-skip-back-outline" size={35} color="black" />
+                      </TouchableOpacity>
 
-  <TouchableOpacity onPress={() => togglePlayback(playbackState)} style={styles.playButton}>
-    <Ionicons name={playbackState === State.Playing ? "pause-circle" : "play-circle"} size={75} color="black" />
-  </TouchableOpacity>
+                      <TouchableOpacity onPress={() => togglePlayback(playbackState)} style={styles.playButton}>
+                        <Ionicons name={playbackState === State.Playing ? "pause-circle" : "play-circle"} size={75} color="black" />
+                      </TouchableOpacity>
 
-  <TouchableOpacity onPress={skipToNext} style={styles.skipButton}>
-    <Ionicons name="play-skip-forward-outline" size={35} color="black" />
-  </TouchableOpacity>      
+                      <TouchableOpacity onPress={skipToNext} style={styles.skipButton}>
+                        <Ionicons name="play-skip-forward-outline" size={35} color="black" />
+                      </TouchableOpacity>      
 
-  <TouchableOpacity style={styles.queueIconContainer} onPress={()=>navigation.navigate('AllSongsListScreen')}>
-    <MaterialIcons name={"queue-music"} size={35} color={"#000000"} />
-  </TouchableOpacity>
-</View>
+                      <TouchableOpacity style={styles.queueIconContainer} onPress={()=>navigation.navigate('AllSongsListScreen')}>
+                        <MaterialIcons name={"queue-music"} size={35} color={"#000000"} />
+                      </TouchableOpacity>
+                  </View>
 
           </View>
-
         </SafeAreaView>
-
       </View>
     </LinearGradient>
   );
@@ -283,4 +281,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  titleView:{ marginLeft: 0, marginTop: 5, width: width, marginLeft: 70 }
 });

@@ -7,12 +7,7 @@ import Slider from '@react-native-community/slider';
 import LinearGradient from "react-native-linear-gradient";
 //import { AllsongsList } from '../ScreenSongs/AllSongs';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-
 import { AllsongsList } from '../ScreenSongs/AllSongs';
-
-
-
-
 import TrackPlayer, {
   Capability,
   Event,
@@ -23,6 +18,10 @@ import TrackPlayer, {
   useTrackPlayerEvents,
 } from 'react-native-track-player';
 
+
+
+
+
 const setupPlayer = async () => {
   await TrackPlayer.setupPlayer();
   await TrackPlayer.add(AllsongsList);
@@ -31,7 +30,6 @@ const setupPlayer = async () => {
 
 const togglePlayback = async (playbackState) => {
   const currentTrack = await TrackPlayer.getCurrentTrack();
-
   if (currentTrack !== null) {
     if (playbackState === State.Paused) {
       await TrackPlayer.play();
@@ -82,10 +80,8 @@ const AllSongsPlayScreen = ({ navigation }) => {
 
   useEffect(() => {
     setupPlayer();
-  
     scrollX.addListener(({ value }) => {
       const index = Math.round(value / width);
-      
       if (index >= AllsongsList.length) {
         setSongIndex(0);
         songSlider.current.scrollToOffset({ offset: 0, animated: true });
@@ -93,7 +89,6 @@ const AllSongsPlayScreen = ({ navigation }) => {
         setSongIndex(index);
       }
     });
-  
     return () => {
       scrollX.removeAllListeners();
     };
@@ -188,22 +183,24 @@ const AllSongsPlayScreen = ({ navigation }) => {
             </View>       
          
             <View style={styles.musicControls}>
-  <TouchableOpacity onPress={skipToPrevious} style={styles.skipButton}>
-    <Ionicons name="play-skip-back-outline" size={35} color="black" />
-  </TouchableOpacity>
 
-  <TouchableOpacity onPress={() => togglePlayback(playbackState)} style={styles.playButton}>
-    <Ionicons name={playbackState === State.Playing ? "pause-circle" : "play-circle"} size={75} color="black" />
-  </TouchableOpacity>
+                <TouchableOpacity onPress={skipToPrevious} style={styles.skipButton}>
+                  <Ionicons name="play-skip-back-outline" size={35} color="black" />
+                </TouchableOpacity>
 
-  <TouchableOpacity onPress={skipToNext} style={styles.skipButton}>
-    <Ionicons name="play-skip-forward-outline" size={35} color="black" />
-  </TouchableOpacity>      
+                <TouchableOpacity onPress={() => togglePlayback(playbackState)} style={styles.playButton}>
+                  <Ionicons name={playbackState === State.Playing ? "pause-circle" : "play-circle"} size={75} color="black" />
+                </TouchableOpacity>
 
-  <TouchableOpacity style={styles.queueIconContainer} onPress={()=>navigation.navigate('AllSongsListScreen')}>
-    <MaterialIcons name={"queue-music"} size={35} color={"#000000"} />
-  </TouchableOpacity>
-</View>
+                <TouchableOpacity onPress={skipToNext} style={styles.skipButton}>
+                  <Ionicons name="play-skip-forward-outline" size={35} color="black" />
+                </TouchableOpacity>      
+
+                <TouchableOpacity style={styles.queueIconContainer} onPress={()=>navigation.navigate('AllSongsListScreen')}>
+                  <MaterialIcons name={"queue-music"} size={35} color={"#000000"} />
+                </TouchableOpacity>
+                
+             </View>
 
           </View>
 
