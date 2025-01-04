@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './screens/LoginScreen';
@@ -7,12 +7,6 @@ import SignupScreen from './screens/SignupScreen';
 import ResetPassword from './screens/ResetPassword';
 import HomeScreen from './screens/HomeScreen';
 import PrivacyScreen from './screens/PrivacyScreen';
-import LegendsScreens from './screens/LegendsSongsPlayScreens';
-import DitesScreen from './screens/DitesSongsPlayScreen';
-import CanConsScreen from './screens/CanConsSongsPlayScreen';
-import TotalSongsScreen from './screens/AllSongsListScreen';
-import allSongPlayScreen from './screens/AllSongsPlayScreen';
-
 import HistoriesSongsListScreen from './screens/HistoriesSongsListScreen';
 import HistoriesSongPlayScreen from './screens/HistoriesSongPlayScreen';
 import LegendsSongsListScreen from './screens/LegendsSongsListScreen';
@@ -31,13 +25,13 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="HomeScreen">
+      <Stack.Navigator initialRouteName="Wellcome">
 
-        {/* <Stack.Screen name="Wellcome" component={WellcomeScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Wellcome" component={WellcomeScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="PrivacyScreen" component={PrivacyScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }}/> */}
+        <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }}/>
         
         
         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }}/>
