@@ -5,14 +5,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const { width, height } = Dimensions.get('window');
 import Slider from '@react-native-community/slider';
 import LinearGradient from "react-native-linear-gradient";
-//import { AllsongsList } from '../ScreenSongs/AllSongs';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-
 import { songsList } from '../ScreenSongs/Histories';
-
-
-
-
 import TrackPlayer, {
   Capability,
   Event,
@@ -22,6 +16,7 @@ import TrackPlayer, {
   useProgress,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
+
 
 const setupPlayer = async () => {
   await TrackPlayer.setupPlayer();
@@ -41,7 +36,7 @@ const togglePlayback = async (playbackState) => {
   }
 };
 
-const allSongPlayScreen = ({ navigation }) => {
+const HistoriesSongPlayScreen = ({ navigation }) => {
   const playbackState = usePlaybackState();
   const progress = useProgress();
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -214,7 +209,7 @@ const allSongPlayScreen = ({ navigation }) => {
   );
 };
 
-export default allSongPlayScreen;
+export default HistoriesSongPlayScreen;
 
 const styles = StyleSheet.create({
   container: {

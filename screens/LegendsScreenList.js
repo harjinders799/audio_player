@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import { songsList } from "../ScreenSongs/Histories";
+import { LegendsongsList } from "../ScreenSongs/LegendsongsList";
 
 
 
@@ -72,14 +72,14 @@ const HistoriesSongsListScreen = ({navigation}) => {
       ></View>
 
       <FlatList 
-        data={songsList}
+        data={LegendsongsList}
         style={{ paddingBottom: 50, flex: 1 }}
         scrollEnabled={true}
         keyExtractor={(item, index) => index}
         ItemSeparatorComponent={<View style={{ height: 1 }}></View>}
         renderItem={({ item, index }) => {
           return (
-            <TouchableOpacity onPress={()=>navigation.navigate('HistoriesSongPlayScreen')}
+            <TouchableOpacity onPress={()=>navigation.navigate('HistoriesScreen')}
               style={{
                 width: "100%",
                 height: 110,
@@ -142,7 +142,7 @@ const HistoriesSongsListScreen = ({navigation}) => {
   )
 }
 
-export default HistoriesSongsListScreen
+export default LegendScreen
 
 const styles = StyleSheet.create({
     imageContainer: {
