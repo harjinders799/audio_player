@@ -49,28 +49,28 @@ const LoginScreen =  ({navigation}) => {
   };
   
 
-  async function onGoogleButtonPress() {
-      GoogleSignin.configure({
-          webClientId: '964940426884-e18dsdv6f6j6cafgohnoi9lcmkvcln02.apps.googleusercontent.com',
-        });
-      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-        const response = await GoogleSignin.signIn();
-        const googleCredential = auth.GoogleAuthProvider.credential(
-          response?.data?.idToken,
-        );
-        console.log(auth().signInWithCredential(googleCredential));
-        return auth().signInWithCredential(googleCredential);
-    }
+  // async function onGoogleButtonPress() {
+  //     GoogleSignin.configure({
+  //         webClientId: '964940426884-e18dsdv6f6j6cafgohnoi9lcmkvcln02.apps.googleusercontent.com',
+  //       });
+  //     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+  //       const response = await GoogleSignin.signIn();
+  //       const googleCredential = auth.GoogleAuthProvider.credential(
+  //         response?.data?.idToken,
+  //       );
+  //       console.log(auth().signInWithCredential(googleCredential));
+  //       return auth().signInWithCredential(googleCredential);
+  //   }
 
-      async function _signInWithGoogle() {
-        const user = await onGoogleButtonPress();
+  //     async function _signInWithGoogle() {
+  //       const user = await onGoogleButtonPress();
   
-      if (user) {
-        await AsyncStorage.setItem('userToken', user.user.uid);  // Store UID or token
-        console.log(user);
-        navigation.navigate("HomeScreen");
-      }
-    }
+  //     if (user) {
+  //       await AsyncStorage.setItem('userToken', user.user.uid);  // Store UID or token
+  //       console.log(user);
+  //       navigation.navigate("HomeScreen");
+  //     }
+  //   }
 
 
   return (
@@ -181,7 +181,7 @@ const LoginScreen =  ({navigation}) => {
               </TouchableOpacity>
     </View>
 
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -204,9 +204,9 @@ const LoginScreen =  ({navigation}) => {
               marginHorizontal: 10,
             }}
           />
-        </View>
+        </View> */}
 
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
@@ -247,7 +247,7 @@ const LoginScreen =  ({navigation}) => {
               Entra amb google
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <View
           style={{

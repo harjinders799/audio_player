@@ -18,21 +18,55 @@ import {
 import LinearGradient from "react-native-linear-gradient";
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const HomeScreen = ({ navigation }) => {
-  const onLogout = async () => {
-    try {
-      await auth().signOut();
-      await AsyncStorage.removeItem('userToken');  // Ensure session token is removed
-      Alert.alert("Has tancat la sessió correctament.");
-      setTimeout(() => navigation.navigate('Login'), 500);  // Navigate to Login after logout
-    } catch (error) {
-      console.log('error', error);
-      Alert.alert("No s'ha pogut tancar la sessió. No has iniciat sessió.");
-    }
-  };
+ 
   
+
+
+
+
+const onDeleteAccount = () => {
+  Alert.alert(
+    'Eliminar compte',
+    'Estàs segur que vols eliminar el teu compte permanentment?',
+    [
+      {
+        text: 'Cancel·lar',
+        style: 'cancel',
+      },
+      {
+        text: 'Eliminar',
+        onPress: async () => {
+          try {
+            const user = auth().currentUser;
+            if (user) {
+              await user.delete();
+              Alert.alert('Compte eliminat', 'El teu compte ha estat eliminat correctament.');
+              // Optionally, navigate to login screen after deletion
+              navigation.replace('Login');
+            }
+          } catch (error) {
+            if (error.code === 'auth/requires-recent-login') {
+              Alert.alert(
+                'Error',
+                'Per eliminar el compte, torna a iniciar sessió i prova-ho de nou.'
+              );
+              // Re-authentication logic can go here if needed
+            } else {
+              Alert.alert('Error', 'No s\'ha pogut eliminar el compte. Torna-ho a provar.');
+            }
+          }
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+};
+
+
+
 
   return (
     <LinearGradient colors={["#d9d600", "#760075"]} style={styles.container}>
@@ -43,12 +77,35 @@ const HomeScreen = ({ navigation }) => {
           <Text style={{ fontSize: 22, color: "#ffffff", fontWeight: "500" }}>
             Medistoris.cat
           </Text>
-          <Pressable onPress={onLogout}>
-            <Text style={{ fontSize: 16, color: "#ffffff", fontWeight: "500" }}>
-              Tancar sessió
-            </Text>
-          </Pressable>     
+        
+        
+        
+          <Pressable onPress={ ()=> navigation.navigate('ProfileScreen') }   >
+              <Ionicons name='person-circle-outline' size={40} color='white'/>
+          </Pressable>   
+
+
+
         </View>
+        
+
+
+
+
+        {/* <View style={{ alignItems: 'flex-end', marginTop: 10,marginRight:10, }}>
+            <Pressable onPress={onDeleteAccount}>
+              <Text style={{ fontSize: 16, color: "#ff4d4d", fontWeight: "500" }}>
+                Eliminar compte
+              </Text>
+            </Pressable> 
+        </View> */}
+
+
+
+
+
+
+
 
         <View style={styles.logoContainer}>
           <Image source={require("../images/logo-medi.webp")} style={styles.logoImg} resizeMode={"contain"}/>

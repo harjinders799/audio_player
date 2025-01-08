@@ -259,7 +259,7 @@ const SignupScreen = ({ navigation, route }) =>{
      >
      <Text style={{color:"white", fontSize: 18}}>Registra't</Text>
     </TouchableOpacity>
-        <View
+        {/* <View
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -283,11 +283,11 @@ const SignupScreen = ({ navigation, route }) =>{
               marginHorizontal: 10,
             }}
           />
-        </View>
+        </View> */}
 
     
 
-        <View
+        {/* <View
           style={{
             flexDirection: "row",
             justifyContent: "center",
@@ -332,7 +332,7 @@ const SignupScreen = ({ navigation, route }) =>{
             </TouchableOpacity>
          
 
-        </View>
+        </View> */}
 
         <View
           style={{

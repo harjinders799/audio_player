@@ -17,6 +17,7 @@ import CanConsSongsPlayScreen from './screens/CanConsSongsPlayScreen';
 import CanconsSongsListScreen from './screens/CanconsSongsListScreen';
 import AllSongsListScreen from './screens/AllSongsListScreen';
 import AllSongsPlayScreen from './screens/AllSongsPlayScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 
 
@@ -28,13 +29,16 @@ const App = () => {
       <Stack.Navigator initialRouteName="Wellcome">
 
         <Stack.Screen name="Wellcome" component={WellcomeScreen} options={{ headerShown: false }}/>
+        
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }}/>
+        
         <Stack.Screen name="PrivacyScreen" component={PrivacyScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }}/>
         
         
         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="ProfileScreen" component={ProfileScreen}  options={{ headerShown: false }} />
        
         <Stack.Screen name='HistoriesSongsListScreen' component={HistoriesSongsListScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="HistoriesSongPlayScreen" component={HistoriesSongPlayScreen} options={{ headerShown: false }}/>
