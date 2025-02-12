@@ -1,20 +1,21 @@
-import React, {useState} from 'react';
-import {View, Text, TextInput, StyleSheet, Alert, Button, TouchableOpacity} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, Alert, Button, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import auth from '@react-native-firebase/auth';
+import { getFontSize } from '../utils';
 
-const ResetPassword = ({navigation}) => {
+const ResetPassword = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
-  
+
   const handlePasswordReset = async () => {
     if (!email) {
       Alert.alert('Error', 'Please enter your email address!');
       return;
     }
     try {
-      auth().languageCode = 'ca'; 
+      auth().languageCode = 'ca';
       // Send password reset email
       await auth().sendPasswordResetEmail(email);
       Alert.alert('ha enviat un correu electrònic per restablir la contrasenya a la teva adreça de correu electrònic.');
@@ -29,11 +30,11 @@ const ResetPassword = ({navigation}) => {
   return (
     <SafeAreaView style={styles.SafeAreaView}>
       <View style={styles.container}>
-       
+
         <Text style={styles.title}>Restablir Contrasenya</Text>
         <Text style={styles.description}>
-         Introdueix el teu correu electrònic i rebràs instruccions 
-         per restablir la contrasenya.
+          Introdueix el teu correu electrònic i rebràs instruccions
+          per restablir la contrasenya.
         </Text>
 
         <View style={styles.inputContainer}>
@@ -47,41 +48,41 @@ const ResetPassword = ({navigation}) => {
           />
         </View>
 
-      <View style={{justifyContent: 'center',alignItems: 'center',  }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', }}>
           <TouchableOpacity style={styles.Button} onPress={handlePasswordReset}>
-            <Text style={{color: 'white'}}>Continuar</Text>
+            <Text style={{ color: 'white',    fontSize: getFontSize(18), }}>Continuar</Text>
           </TouchableOpacity>
-      </View>
-    
+        </View>
+
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  SafeAreaView:{
-    flex: 1, 
-    backgroundColor: "white"
+  SafeAreaView: {
+    flex: 1,
+    backgroundColor: 'white', paddingHorizontal: 20, justifyContent: 'center'
   },
   container: {
     flex: 1,
     marginHorizontal: 22,
+    justifyContent: 'center',
     marginVertical: 22,
   },
   title: {
-    fontSize: 22,
+    fontSize: getFontSize(22),
     fontWeight: 'bold',
     marginVertical: 12,
     color: "black",
   },
   description: {
-    fontSize: 16,
     color: "black",
+    fontSize: getFontSize(16),
   },
   inputContainer: {
     width: '100%',
-    height: 48,
-    borderColor: "black",
+    height: getFontSize(50), borderColor: "black",
     borderWidth: 1,
     borderRadius: 8,
     alignItems: 'center',
@@ -90,16 +91,20 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   input: {
+    height: getFontSize(50),
     width: '100%',
+    fontSize: getFontSize(16),
+
   },
-  Button:{
+  Button: {
     backgroundColor: '#5c10b2',
     borderRadius: 8,
     paddingVertical: 13,
     alignItems: 'center',
     marginBottom: 20,
     marginTop: 20,
-    width:350, 
+    width: '100%',
+    fontSize: getFontSize(22),
   },
 });
 

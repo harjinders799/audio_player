@@ -4,26 +4,27 @@ import LinearGradient from "react-native-linear-gradient";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getFontSize } from '../utils';
 
-const ProfileScreen = ({navigation}) => {
+const ProfileScreen = ({ navigation }) => {
 
-     const onLogout = async () => {
-        try {
-          await auth().signOut();
-          await AsyncStorage.removeItem('userToken');  // Ensure session token is removed
-          Alert.alert("Has tancat la sessió correctament.");
-          setTimeout(() => navigation.navigate('Login'), 500);  // Navigate to Login after logout
-        } catch (error) {
-          console.log('error', error);
-          Alert.alert("No s'ha pogut tancar la sessió. No has iniciat sessió.");
-        }
-      };
+  const onLogout = async () => {
+    try {
+      await auth().signOut();
+      await AsyncStorage.removeItem('userToken');  // Ensure session token is removed
+      Alert.alert("Has tancat la sessió correctament.");
+      setTimeout(() => navigation.navigate('Login'), 500);  // Navigate to Login after logout
+    } catch (error) {
+      console.log('error', error);
+      Alert.alert("No s'ha pogut tancar la sessió. No has iniciat sessió.");
+    }
+  };
 
 
-    
-    
 
-const onDeleteAccount = () => {
+
+
+  const onDeleteAccount = () => {
     Alert.alert(
       'Eliminar compte',
       'Estàs segur que vols eliminar el teu compte permanentment?',
@@ -60,58 +61,60 @@ const onDeleteAccount = () => {
       { cancelable: false }
     );
   };
-  
-  
+
+
 
 
 
   return (
-     <LinearGradient colors={["#d9d600", "#760075"]} style={styles.container}>
-             <SafeAreaView style={{ flex: 1 }}>
-                  <StatusBar translucent backgroundColor={"transparent"} barStyle='light-content' />
-                                  
-                    <View style={styles.header}>
-                            <Ionicons name='person-circle-outline' size={70} color='white'/>
-                            <Text style={{fontSize:32,fontWeight:'600',Merginbuttom:6,color:'white', marginTop:10,}}>Perfil</Text>
+    <LinearGradient colors={["#d9d600", "#760075"]} style={styles.container}>
+      <SafeAreaView style={{ flex: 1, paddingHorizontal: 20, justifyContent: 'center' }}>
+        <StatusBar translucent backgroundColor={"transparent"} barStyle='light-content' />
 
-                            <View>
-                                <TouchableOpacity style={styles.Button} onPress={onDeleteAccount} >
-                                                <Text style={{color:'white',justifyContent: 'center',alignItems: 'center',fontSize: 18}}>suprimeix el teu compte</Text>
-                                </TouchableOpacity>
-                            </View>
-                              
+        <View style={styles.header}>
+          <Ionicons name='person-circle-outline' size={70} color='white' />
+          <Text style={{ fontSize: getFontSize(32), fontWeight: '600', Merginbuttom: 6, color: 'white', marginTop: 10, }}>Perfil</Text>
 
-                                <TouchableOpacity style={styles.Button} onPress={onLogout} >
-                                                <Text style={{color:'white',justifyContent: 'center',alignItems: 'center',fontSize: 18}}>tancar sessió</Text>
-                                </TouchableOpacity>
-                    </View>
+          <View>
+            <TouchableOpacity style={styles.Button} onPress={onDeleteAccount} >
+              <Text style={{ color: 'white', justifyContent: 'center', alignItems: 'center', fontSize: getFontSize(18) }}>suprimeix el teu compte</Text>
+            </TouchableOpacity>
+          </View>
 
-            </SafeAreaView>
-     </LinearGradient>
-  
+
+          <TouchableOpacity style={styles.Button} onPress={onLogout} >
+            <Text style={{ color: 'white', justifyContent: 'center', alignItems: 'center', fontSize: getFontSize(18) }}>tancar sessió</Text>
+          </TouchableOpacity>
+        </View>
+
+      </SafeAreaView>
+    </LinearGradient>
+
   )
 }
 
 export default ProfileScreen
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-      },
-      header:{paddingHorizontal:15,marginTop:50,alignItems: 'center',  // Horizontal centering
-        justifyContent: 'center',},
-        Button:{
-            backgroundColor: '#5c10b2',
-            borderRadius: 8,
-            paddingVertical: 13,
-            alignItems: 'center',
-            marginBottom: 20,
-            marginTop: 20,
-            width:350,
-            marginTop: 18,
-            marginBottom: 4,
-            height:52,
-            justifyContent: 'center',alignItems: 'center',
-           
-          },
+  container: {
+    flex: 1,
+  },
+  header: {
+    paddingHorizontal: 15, marginTop: 50, alignItems: 'center',  // Horizontal centering
+    justifyContent: 'center',
+  },
+  Button: {
+    backgroundColor: '#5c10b2',
+    borderRadius: 8,
+    paddingVertical: 13,
+    alignItems: 'center',
+    marginBottom: 20,
+    marginTop: 20,
+    width: getFontSize(350),
+    marginTop: 18,
+    marginBottom: 4,
+    height: 52,
+    justifyContent: 'center', alignItems: 'center',
+
+  },
 })

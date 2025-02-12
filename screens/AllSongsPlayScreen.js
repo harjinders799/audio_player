@@ -25,7 +25,8 @@ import TrackPlayer, {
 const setupPlayer = async () => {
   await TrackPlayer.setupPlayer();
   await TrackPlayer.add(AllsongsList);
-  
+  await TrackPlayer.setRepeatMode(RepeatMode.Track);
+
 };
 
 const togglePlayback = async (playbackState) => {
@@ -96,28 +97,39 @@ const AllSongsPlayScreen = ({ navigation }) => {
   
   
 
+
+
   const skipToNext = async () => {
+    let nextIndex = songIndex + 1;
+    if (nextIndex >= AllsongsList.length) { // If it's the last song, go back to the first
+      nextIndex = 0;
+    }
     try {
-      await TrackPlayer.skipToNext();  // Skip to next track in TrackPlayer
+      await TrackPlayer.skip(nextIndex);
       songSlider.current.scrollToOffset({
-        offset: (songIndex + 1) * width,
+        offset: nextIndex * width,
         animated: true,
       });
+      setSongIndex(nextIndex); // Update the song index
     } catch (error) {
-      console.log("No next track available.");
+      console.log("Error skipping to next track:", error);
     }
   };
-  
 
   const skipToPrevious = async () => {
+    let previousIndex = songIndex - 1;
+    if (previousIndex < 0) { // If it's the first song, go to the last
+      previousIndex = AllsongsList.length - 1;
+    }
     try {
-      await TrackPlayer.skipToPrevious();  // Skip to previous track in TrackPlayer
+      await TrackPlayer.skip(previousIndex);
       songSlider.current.scrollToOffset({
-        offset: (songIndex - 1) * width,
+        offset: previousIndex * width,
         animated: true,
       });
+      setSongIndex(previousIndex); // Update the song index
     } catch (error) {
-      console.log("No previous track available.");
+      console.log("Error skipping to previous track:", error);
     }
   };
 

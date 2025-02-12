@@ -9,17 +9,18 @@ import {
   TouchableOpacity,
   Platform,
   Button,
-  width,Alert
+  width, Alert
 } from "react-native";
 import Checkbox from "@react-native-community/checkbox";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
-import firebase from '@react-native-firebase/app';  
-import firestore from '@react-native-firebase/firestore'; 
+import firebase from '@react-native-firebase/app';
+import firestore from '@react-native-firebase/firestore';
 
-import { FIREBASE_API_KEY,FIREBASE_PROJECT_ID , FIREBASE_APP_ID, GOOGLE_SIGNIN_WEB_CLINT_ID} from '@env';
+import { FIREBASE_API_KEY, FIREBASE_PROJECT_ID, FIREBASE_APP_ID, GOOGLE_SIGNIN_WEB_CLINT_ID } from '@env';
+import { getFontSize } from "../utils";
 
 
 
@@ -37,14 +38,14 @@ if (!firebase.apps.length) {
   firebase.app();  // If Firebase is already initialized
 }
 
-const SignupScreen = ({ navigation, route }) =>{
-  
+const SignupScreen = ({ navigation, route }) => {
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
- 
- 
+
+
+
   const registerUser = async () => {
     if (!name || !email || !password) {
       Alert.alert('Error', 'Tots els camps són obligatoris!');
@@ -52,7 +53,7 @@ const SignupScreen = ({ navigation, route }) =>{
     }
 
     try {
-      auth().languageCode = 'ca'; 
+      auth().languageCode = 'ca';
       // Firebase Auth Registration
       const userCredential = await auth().createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
@@ -67,16 +68,16 @@ const SignupScreen = ({ navigation, route }) =>{
 
 
       // Show success alert
-  Alert.alert('Benvingut!', 'El registre s\'ha completat correctament!', [
-    {
-      text: 'D\'acord',
-      onPress: () => navigation.navigate('HomeScreen'),
-    },
-  ]);
+      Alert.alert('Benvingut!', 'El registre s\'ha completat correctament!', [
+        {
+          text: 'D\'acord',
+          onPress: () => navigation.navigate('HomeScreen'),
+        },
+      ]);
 
 
 
-      
+
     } catch (error) {
       console.error(error);
       Alert.alert('Error', error.message);
@@ -90,36 +91,34 @@ const SignupScreen = ({ navigation, route }) =>{
 
   async function onGoogleButtonPress() {
     GoogleSignin.configure({
-        webClientId: GOOGLE_SIGNIN_WEB_CLINT_ID,
-      });
+      webClientId: GOOGLE_SIGNIN_WEB_CLINT_ID,
+    });
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-      const response = await GoogleSignin.signIn();
-      const googleCredential = auth.GoogleAuthProvider.credential(
-        response?.data?.idToken,
-      );
-      console.log(auth().signInWithCredential(googleCredential));
-      return auth().signInWithCredential(googleCredential);
+    const response = await GoogleSignin.signIn();
+    const googleCredential = auth.GoogleAuthProvider.credential(
+      response?.data?.idToken,
+    );
+    console.log(auth().signInWithCredential(googleCredential));
+    return auth().signInWithCredential(googleCredential);
   }
-  
-    async function _signInWithGoogle() {
-      const user = await onGoogleButtonPress();
-      console.log(user);
-      navigation.navigate("HomeScreen");
-    }
+
+  async function _signInWithGoogle() {
+    const user = await onGoogleButtonPress();
+    console.log(user);
+    navigation.navigate("HomeScreen");
+  }
 
 
 
 
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <View style={{ flex: 1, marginHorizontal: 22 }}>
-   
-   
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white', paddingHorizontal: 20, justifyContent: 'center' }}>
+      <View style={{ flex: 1, marginHorizontal: 22, justifyContent: 'center' }}>
         <View style={{ marginVertical: 22 }}>
           <Text
             style={{
-              fontSize: 22,
+              fontSize: getFontSize(22),
               fontWeight: "bold",
               marginVertical: 12,
               color: "black",
@@ -133,7 +132,7 @@ const SignupScreen = ({ navigation, route }) =>{
           <View
             style={{
               width: "100%",
-              height: 50,
+              height: getFontSize(50),
               borderColor: 'black',
               borderWidth: 1,
               borderRadius: 8,
@@ -149,6 +148,7 @@ const SignupScreen = ({ navigation, route }) =>{
               onChangeText={(text) => setName(text)}
               style={{
                 width: "100%",
+                fontSize: getFontSize(16),
               }}
             />
           </View>
@@ -157,7 +157,7 @@ const SignupScreen = ({ navigation, route }) =>{
           <View
             style={{
               width: "100%",
-              height: 50,
+              height: getFontSize(50),
               borderColor: "black",
               borderWidth: 1,
               borderRadius: 8,
@@ -174,6 +174,8 @@ const SignupScreen = ({ navigation, route }) =>{
               onChangeText={(text) => setEmail(text.toLowerCase())}
               style={{
                 width: "100%",
+                fontSize: getFontSize(16),
+
               }}
             />
           </View>
@@ -183,7 +185,7 @@ const SignupScreen = ({ navigation, route }) =>{
           <View
             style={{
               width: "100%",
-              height: 48,
+              height: getFontSize(50),
               borderColor: "black",
               borderWidth: 1,
               borderRadius: 8,
@@ -200,6 +202,8 @@ const SignupScreen = ({ navigation, route }) =>{
               onChangeText={(text) => setPassword(text)}
               style={{
                 width: "100%",
+                fontSize: getFontSize(16),
+
               }}
             />
 
@@ -211,10 +215,10 @@ const SignupScreen = ({ navigation, route }) =>{
               }}
             >
               <Ionicons
-            name={isPasswordShown ? "eye-off" : "eye"}
-            size={24}
-            color={"black"}
-          />
+                name={isPasswordShown ? "eye-off" : "eye"}
+                size={24}
+                color={"black"}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -230,11 +234,13 @@ const SignupScreen = ({ navigation, route }) =>{
             style={{ marginRight: 5, transform: [{ scaleX: 0.9 }, { scaleY: 0.9 }] }}
             value={isChecked}
             onValueChange={setIsChecked}
-            color={isChecked ? "red" : undefined}    
+            color={isChecked ? "red" : undefined}
           />
 
           <Text
-            style={{ width: 350 }}
+            style={{
+              width: '100%', fontSize: getFontSize(16),
+            }}
             onPress={() =>
               navigation.navigate("PrivacyScreen", { isChecked: isChecked })
             }
@@ -244,21 +250,24 @@ const SignupScreen = ({ navigation, route }) =>{
           </Text>
         </View>
 
-        <TouchableOpacity onPress={registerUser}  disabled={!isChecked}
-      style={{
-        backgroundColor: '#5c10b2',
-        borderRadius: 8,
-        paddingVertical: 13,
-        alignItems: 'center',
-        marginBottom: 20,
-        marginTop: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        height:52,
-      }}
-     >
-     <Text style={{color:"white", fontSize: 18}}>Registra't</Text>
-    </TouchableOpacity>
+        <TouchableOpacity onPress={registerUser} disabled={!isChecked}
+          style={{
+            backgroundColor: '#5c10b2',
+            borderRadius: 8,
+            paddingVertical: 13,
+            alignItems: 'center',
+            marginBottom: 20,
+            marginTop: 20,
+            width: '100%',
+            marginTop: 18,
+            marginBottom: 4,
+            height: 52,
+            justifyContent: 'center', alignItems: 'center',
+
+          }}
+        >
+          <Text style={{ color: "white", fontSize: getFontSize(18) }}>Registra't</Text>
+        </TouchableOpacity>
         {/* <View
           style={{
             flexDirection: "row",
@@ -285,7 +294,7 @@ const SignupScreen = ({ navigation, route }) =>{
           />
         </View> */}
 
-    
+
 
         {/* <View
           style={{
@@ -341,13 +350,13 @@ const SignupScreen = ({ navigation, route }) =>{
             marginVertical: 22,
           }}
         >
-          <Text style={{ fontSize: 16, color: "black" }}>
+          <Text style={{ fontSize: getFontSize(16), color: "black" }}>
             Si tens un compte
           </Text>
           <Pressable onPress={() => navigation.navigate("Login")}>
             <Text
               style={{
-                fontSize: 16,
+                fontSize: getFontSize(16),
                 color: "#007260",
                 fontWeight: "bold",
                 marginLeft: 6,

@@ -15,10 +15,10 @@ import { DitesSongsList } from "../ScreenSongs/DitesSongList";
 
 
 
-const DitesSongsListScreen = ({navigation}) => {
+const DitesSongsListScreen = ({ navigation }) => {
   return (
     <LinearGradient
-    colors={["#9840a9", "#24056f", "#532cab"]}
+      colors={["#9840a9", "#24056f", "#532cab"]}
       style={{ flex: 1, paddingBottom: 20 }}
     >
       <View
@@ -57,7 +57,7 @@ const DitesSongsListScreen = ({navigation}) => {
 
       <View style={{ flexDirection: "row", paddingLeft: 20, marginTop: 20 }}>
         <Text style={{ color: "white", fontSize: 24, marginLeft: 0 }}>
-          Històries \ Historias
+          Dites
         </Text>
       </View>
 
@@ -71,7 +71,7 @@ const DitesSongsListScreen = ({navigation}) => {
         }}
       ></View>
 
-      <FlatList 
+      <FlatList
         data={DitesSongsList}
         style={{ paddingBottom: 50, flex: 1 }}
         scrollEnabled={true}
@@ -79,7 +79,7 @@ const DitesSongsListScreen = ({navigation}) => {
         ItemSeparatorComponent={<View style={{ height: 1 }}></View>}
         renderItem={({ item, index }) => {
           return (
-            <TouchableOpacity onPress={()=>navigation.navigate('DitesSongsPlayScreen')}
+            <TouchableOpacity onPress={() => navigation.navigate('DitesSongsPlayScreen', { selectedIndex: index })}
               style={{
                 width: "100%",
                 height: 110,
@@ -116,28 +116,28 @@ const DitesSongsListScreen = ({navigation}) => {
                       marginTop: 5,
                     }}
                   >
-                  
+
                     <Text
                       style={{
                         color: "white",
                         fontSize: 13,
                         verticalAlign: "middle",
-                      
+
                       }}
                     >
                       {item.artist}
                     </Text>
                   </View>
                 </View>
-            
-              
-           
+
+
+
               </View>
             </TouchableOpacity>
           );
         }}
       />
-   
+
     </LinearGradient>
   )
 }
@@ -145,37 +145,37 @@ const DitesSongsListScreen = ({navigation}) => {
 export default DitesSongsListScreen
 
 const styles = StyleSheet.create({
-    imageContainer: {
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 10,
-        width: 100,
-        height: 100,
-        paddingBottom: 3,
-      },
-      image: {
-        aspectRatio: 1, // Set aspectRatio to 1 to make height the same as width
-        flex: 1,
-        height: "100%",
-        borderRadius: 10,
-      },
-      shadowProp: {
-        shadowColor: "#000000",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 1,
-        backgroundColor: "rgba(0,0,0,0)",
-        elevation: 2,
-      },
-      flag: {
-        width: 20,
-        height: 20,
-        marginLeft: 5,
-        borderRadius: 100,
-      },
-      title: {
-        fontSize: 25,
-        fontWidth: '700',
-        color: '#EEEEEEE',
-      },
+  imageContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    width: 100,
+    height: 100,
+    paddingBottom: 3,
+  },
+  image: {
+    aspectRatio: 1, // Set aspectRatio to 1 to make height the same as width
+    flex: 1,
+    height: "100%",
+    borderRadius: 10,
+  },
+  shadowProp: {
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    backgroundColor: "rgba(0,0,0,0)",
+    elevation: 2,
+  },
+  flag: {
+    width: 20,
+    height: 20,
+    marginLeft: 5,
+    borderRadius: 100,
+  },
+  title: {
+    fontSize: 25,
+    fontWidth: '700',
+    color: '#EEEEEEE',
+  },
 })

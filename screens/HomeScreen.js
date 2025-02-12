@@ -19,75 +19,76 @@ import LinearGradient from "react-native-linear-gradient";
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { getFontSize } from "../utils";
 
 const HomeScreen = ({ navigation }) => {
- 
-  
 
 
 
 
-const onDeleteAccount = () => {
-  Alert.alert(
-    'Eliminar compte',
-    'Estàs segur que vols eliminar el teu compte permanentment?',
-    [
-      {
-        text: 'Cancel·lar',
-        style: 'cancel',
-      },
-      {
-        text: 'Eliminar',
-        onPress: async () => {
-          try {
-            const user = auth().currentUser;
-            if (user) {
-              await user.delete();
-              Alert.alert('Compte eliminat', 'El teu compte ha estat eliminat correctament.');
-              // Optionally, navigate to login screen after deletion
-              navigation.replace('Login');
-            }
-          } catch (error) {
-            if (error.code === 'auth/requires-recent-login') {
-              Alert.alert(
-                'Error',
-                'Per eliminar el compte, torna a iniciar sessió i prova-ho de nou.'
-              );
-              // Re-authentication logic can go here if needed
-            } else {
-              Alert.alert('Error', 'No s\'ha pogut eliminar el compte. Torna-ho a provar.');
-            }
-          }
+
+
+  const onDeleteAccount = () => {
+    Alert.alert(
+      'Eliminar compte',
+      'Estàs segur que vols eliminar el teu compte permanentment?',
+      [
+        {
+          text: 'Cancel·lar',
+          style: 'cancel',
         },
-      },
-    ],
-    { cancelable: false }
-  );
-};
+        {
+          text: 'Eliminar',
+          onPress: async () => {
+            try {
+              const user = auth().currentUser;
+              if (user) {
+                await user.delete();
+                Alert.alert('Compte eliminat', 'El teu compte ha estat eliminat correctament.');
+                // Optionally, navigate to login screen after deletion
+                navigation.replace('Login');
+              }
+            } catch (error) {
+              if (error.code === 'auth/requires-recent-login') {
+                Alert.alert(
+                  'Error',
+                  'Per eliminar el compte, torna a iniciar sessió i prova-ho de nou.'
+                );
+                // Re-authentication logic can go here if needed
+              } else {
+                Alert.alert('Error', 'No s\'ha pogut eliminar el compte. Torna-ho a provar.');
+              }
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
 
 
 
 
   return (
     <LinearGradient colors={["#d9d600", "#760075"]} style={styles.container}>
-    <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1 }}>
         <StatusBar translucent backgroundColor={"transparent"} barStyle='light-content' />
-                  
+
         <View style={styles.headerContainer}>
-          <Text style={{ fontSize: 22, color: "#ffffff", fontWeight: "500" }}>
+          <Text style={{ fontSize: getFontSize(22), color: "#ffffff", fontWeight: "500" }}>
             Medistoris.cat
           </Text>
-        
-        
-        
-          <Pressable onPress={ ()=> navigation.navigate('ProfileScreen') }   >
-              <Ionicons name='person-circle-outline' size={40} color='white'/>
-          </Pressable>   
+
+
+
+          <Pressable onPress={() => navigation.navigate('ProfileScreen')}   >
+            <Ionicons name='person-circle-outline' size={40} color='white' />
+          </Pressable>
 
 
 
         </View>
-        
+
 
 
 
@@ -108,50 +109,50 @@ const onDeleteAccount = () => {
 
 
         <View style={styles.logoContainer}>
-          <Image source={require("../images/logo-medi.webp")} style={styles.logoImg} resizeMode={"contain"}/>
+          <Image source={require("../images/logo-medi.webp")} style={styles.logoImg} resizeMode={"contain"} />
         </View>
 
 
         <View style={styles.boxContainer}>
-        <TouchableOpacity onPress={()=> navigation.navigate("HistoriesSongsListScreen")} activeOpacity={0.6} style={[styles.box, { backgroundColor: "#ba7900" }]}>
+          <TouchableOpacity onPress={() => navigation.navigate("HistoriesSongsListScreen")} activeOpacity={0.6} style={[styles.box, { backgroundColor: "#ba7900" }]}>
             <View style={[styles.imageContainer, styles.shadowProp]}>
-              <Image source={require("../images/Mataro_foto.webp")}  style={styles.image}/>
+              <Image source={require("../images/Mataro_foto.webp")} style={styles.image} />
             </View>
             <View>
               <Text style={styles.boxText}>Històries immersives</Text>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
               </View>
             </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
 
-          <TouchableOpacity onPress={()=>navigation.navigate("LegendsSongsListScreen")}
+          <TouchableOpacity onPress={() => navigation.navigate("LegendsSongsListScreen")}
             activeOpacity={0.6}
             style={[styles.box, { backgroundColor: "#bd008a" }]}>
             <View style={[styles.imageContainer, styles.shadowProp]}>
-              <Image source={require("../images/timbaler4.webp")} style={styles.image}/>
+              <Image source={require("../images/timbaler4.webp")} style={styles.image} />
             </View>
             <View>
               <Text style={styles.boxText}>Llegendes immersives</Text>
             </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
 
-          <TouchableOpacity onPress={()=> navigation.navigate("DitesSongsListScreen")}  activeOpacity={0.6} style={[styles.box, { backgroundColor: "#001d9a" }]}  >
+          <TouchableOpacity onPress={() => navigation.navigate("DitesSongsListScreen")} activeOpacity={0.6} style={[styles.box, { backgroundColor: "#001d9a" }]}  >
             <View style={[styles.imageContainer, styles.shadowProp]}>
-              <Image source={require("../images/Dites.jpeg")}  style={styles.image} />
+              <Image source={require("../images/Dites.jpeg")} style={styles.image} />
             </View>
             <Text style={styles.boxText}>Dites</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={()=> navigation.navigate("CanconsSongsListScreen")} activeOpacity={0.6} style={[styles.box, { backgroundColor: "#8d00b4" }]}>
+          <TouchableOpacity onPress={() => navigation.navigate("CanconsSongsListScreen")} activeOpacity={0.6} style={[styles.box, { backgroundColor: "#8d00b4" }]}>
             <View style={[styles.imageContainer, styles.shadowProp]}>
-              <Image source={require("../images/ocells.webp")} style={styles.image}/>
+              <Image source={require("../images/ocells.webp")} style={styles.image} />
             </View>
             <Text style={styles.boxText}>Cançons populars Catalanes</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.totalContainer}>
-          <TouchableOpacity activeOpacity={0.5} onPress={()=> navigation.navigate("AllSongsListScreen")}>
+          <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate("AllSongsListScreen")}>
             <View style={styles.totalButton}>
               <Text style={styles.totalBtnText}>
                 Escolta tots els àudios
@@ -160,9 +161,9 @@ const onDeleteAccount = () => {
           </TouchableOpacity>
         </View>
 
-    
-    </SafeAreaView>
-    </LinearGradient>    
+
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 
@@ -184,9 +185,9 @@ const styles = StyleSheet.create({
 
   },
   logoImg: {
-    width: 260,  
+    width: 260,
     height: 100,
-    marginTop:10,
+    marginTop: 10,
   },
   totalContainer: {
     marginTop: 10,
@@ -201,9 +202,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#bf00a8",
     borderRadius: 5,
+    fontSize: getFontSize(22),
   },
   totalBtnText: {
-    fontSize: 15,
+    fontSize: getFontSize(15),
     color: "white",
     fontWeight: "bold",
   },
@@ -231,12 +233,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "stretch",
+    padding: 20
   },
   box: {
     flex: 1,
-    backgroundColor: "blue", 
-    marginHorizontal: 0, 
-    marginVertical: 5, 
+    backgroundColor: "blue",
+    marginHorizontal: 0,
+    marginVertical: 5,
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -251,14 +254,13 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
   },
   image: {
-    aspectRatio: 1, 
+    aspectRatio: 1,
     flex: 1,
     height: "100%",
     borderRadius: 10,
   },
   boxText: {
-    fontSize: 15,
-    color: "white",
+    fontSize: getFontSize(16),    color: "white",
     fontWeight: "bold",
   },
   shadowProp: {

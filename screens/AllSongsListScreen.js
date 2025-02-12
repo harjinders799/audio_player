@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { AllsongsList } from "../ScreenSongs/AllSongs";
+import { getFontSize } from "../utils";
 
 const AllSongsListScreen = ({ navigation }) => {
   const renderItem = ({ item }) => (
@@ -24,7 +25,7 @@ const AllSongsListScreen = ({ navigation }) => {
         </View>
         <View style={{ paddingLeft: 10, paddingRight: 10 }}>
           <Text
-            style={{ color: "white", fontSize: 15, width: "100%" }}
+            style={{ color: "white", fontSize: getFontSize(20), width: "100%" }}
             adjustsFontSizeToFit={true}
             numberOfLines={1}
           >
@@ -91,7 +92,8 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
   headerText: {
-    fontSize: 18,
+    fontSize: getFontSize(18),
+
     color: "#ffffff",
     fontWeight: "500",
     marginLeft: "20%",
@@ -104,8 +106,8 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "white",
-    fontSize: 24,
     marginLeft: 5,
+    fontSize: getFontSize(24),
   },
   itemContainer: {
     width: "100%",
@@ -114,14 +116,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingLeft: 20,
     paddingRight: 20,
-    marginTop: 10,
+    marginVertical: 20,
   },
   imageContainer: {
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    width: 100,
-    height: 100,
+    width: getFontSize(100),
+    height: getFontSize(100),
     paddingBottom: 3,
   },
   image: {
@@ -140,7 +142,8 @@ const styles = StyleSheet.create({
   },
   artistText: {
     color: "white",
-    fontSize: 13,
+    fontSize: getFontSize(15),
+
     verticalAlign: "middle",
   },
 });
