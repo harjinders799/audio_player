@@ -14,3 +14,6 @@ export const getFontSize = (size) => {
         return size * 1.25;
     }
 };
+
+
+
