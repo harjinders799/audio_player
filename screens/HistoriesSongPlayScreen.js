@@ -16,13 +16,13 @@ import TrackPlayer, {
   useProgress,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
+import { useNavigation } from '@react-navigation/native';
 
 
 const setupPlayer = async () => {
   await TrackPlayer.setupPlayer();
   await TrackPlayer.add(songsList);
-  await TrackPlayer.setRepeatMode(RepeatMode.Track);
-
+  // await TrackPlayer.setRepeatMode(RepeatMode.Track); 
 };
 
 const togglePlayback = async (playbackState) => {
@@ -38,8 +38,9 @@ const togglePlayback = async (playbackState) => {
 
 const HistoriesSongPlayScreen = ({ navigation, route }) => {
   const { selectedIndex } = route.params;
+  
   const playbackState = usePlaybackState();
-  const progress = useProgress();
+  const { position, duration } = useProgress();
   const scrollX = useRef(new Animated.Value(0)).current;
   const [songIndex, setSongIndex] = useState(0);
   const songSlider = useRef(null);
@@ -48,6 +49,9 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
     await TrackPlayer.skip(trackId);
   };
 
+
+
+  console.log('progress', position)
 
   useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
     if (event.type === Event.PlaybackTrackChanged) {
@@ -70,11 +74,11 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     const startPlayer = async () => {
-      await setupPlayer();  
-      await TrackPlayer.skip(selectedIndex); 
-      setSongIndex(selectedIndex);  
+      await setupPlayer();
+      await TrackPlayer.skip(selectedIndex);
+      setSongIndex(selectedIndex);
       songSlider.current.scrollToOffset({
-        offset: selectedIndex * width,  
+        offset: selectedIndex * width,
         animated: true,
       });
     };
@@ -129,6 +133,19 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
     );
   };
 
+  useEffect(() => {
+    if (duration > 0) {
+      const percentage = new Date((duration - position) * 1000).toISOString().substr(14, 5)
+      if (percentage == '00:00') {
+        // Pause the audio
+        TrackPlayer.pause();
+        // Seek to the beginning of the track (0 seconds)
+        TrackPlayer.seekTo(0);
+      }
+    }
+  }, [position]);
+
+
   return (
     <LinearGradient colors={["#d9d600", "#760075"]} style={{ flex: 1, paddingBottom: 20 }}>
       <View style={styles.container}>
@@ -166,9 +183,9 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
             <View style={{ marginTop: 25 }}>
               <Slider
                 style={styles.progressContainer}
-                value={progress.position}
+                value={position}
                 minimumValue={0}
-                maximumValue={progress.duration}
+                maximumValue={duration}
                 minimumTrackTintColor="black"
                 thumbTintColor="green"
                 onSlidingComplete={async (value) => {
@@ -176,8 +193,8 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
                 }}
               />
               <View style={styles.progressLabelContainer}>
-                <Text style={styles.progressLebelText}>{new Date(progress.position * 1000).toISOString().substr(14, 5)}</Text>
-                <Text style={styles.progressLebelText}>{new Date((progress.duration - progress.position) * 1000).toISOString().substr(14, 5)}</Text>
+                <Text style={styles.progressLebelText}>{new Date(position * 1000).toISOString().substr(14, 5)}</Text>
+                <Text style={styles.progressLebelText}>{new Date((duration - position) * 1000).toISOString().substr(14, 5)}</Text>
               </View>
             </View>
 
