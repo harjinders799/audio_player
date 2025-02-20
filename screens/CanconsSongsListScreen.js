@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -10,11 +10,7 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { CanconsSongList } from "../ScreenSongs/CanconsSongList";
-import { getFontSize } from "../utils";
-
-
-
-
+import { getFontSize } from "../utils"; // Updated import
 
 const CanconsSongsListScreen = ({ navigation }) => {
   return (
@@ -22,6 +18,7 @@ const CanconsSongsListScreen = ({ navigation }) => {
       colors={["#fe01bf", "#ca30df", "#885ce9"]}
       style={{ flex: 1, paddingBottom: 20 }}
     >
+      {/* Header */}
       <View
         style={{
           flexDirection: "row",
@@ -39,10 +36,10 @@ const CanconsSongsListScreen = ({ navigation }) => {
             source={require("../images/back-white.webp")}
             style={{ height: 50, width: 50, marginRight: 6 }}
           />
-          {/* <Text style={{ fontSize: 19, color: "#ffffff",marginTop:10 }}>Medistoris.cat</Text> */}
         </TouchableOpacity>
 
         <Text
+          allowFontScaling={false}
           style={{
             fontSize: getFontSize(18),
             color: "#ffffff",
@@ -51,36 +48,38 @@ const CanconsSongsListScreen = ({ navigation }) => {
             marginTop: 10,
           }}
         >
-          {/* Cultura Catalana */}
           Medistoris.cat
         </Text>
       </View>
 
+      {/* Title */}
       <View style={{ flexDirection: "row", paddingLeft: 20, marginTop: 20 }}>
-        <Text style={{ color: "white", fontSize: getFontSize(18), marginLeft: 0 }}>
+        <Text
+          allowFontScaling={false}
+          style={{
+            color: "white",
+            fontSize: getFontSize(18),
+            marginLeft: 0,
+          }}
+        >
           Cançons populars Catalanes
         </Text>
       </View>
 
-      <View
-        style={{
-          flexDirection: "row",
-          width: "90%",
-          marginTop: 10,
-          justifyContent: "space-between",
-          alignSelf: "center",
-        }}
-      ></View>
-
+      {/* List */}
       <FlatList
         data={CanconsSongList}
         style={{ paddingBottom: 50, flex: 1 }}
-        scrollEnabled={true}
-        keyExtractor={(item, index) => index}
-        ItemSeparatorComponent={<View style={{ height: 1 }}></View>}
+        keyExtractor={(item, index) => String(index)}
+        ItemSeparatorComponent={<View style={{ height: 1 }} />}
         renderItem={({ item, index }) => {
           return (
-            <TouchableOpacity onPress={() => navigation.navigate('CanConsSongsPlayScreen', { selectedIndex: index })}
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("CanConsSongsPlayScreen", {
+                  selectedIndex: index,
+                })
+              }
               style={{
                 width: "100%",
                 flexDirection: "row",
@@ -103,7 +102,12 @@ const CanconsSongsListScreen = ({ navigation }) => {
                 </View>
                 <View style={{ paddingLeft: 10, paddingRight: 10 }}>
                   <Text
-                    style={{ color: "white", fontSize: getFontSize(16), width: "100%" }}
+                    allowFontScaling={false}
+                    style={{
+                      color: "white",
+                      fontSize: getFontSize(16),
+                      width: "100%",
+                    }}
                     adjustsFontSizeToFit={true}
                     numberOfLines={1}
                   >
@@ -116,13 +120,12 @@ const CanconsSongsListScreen = ({ navigation }) => {
                       marginTop: 5,
                     }}
                   >
-
                     <Text
+                      allowFontScaling={false}
                       style={{
                         color: "white",
                         fontSize: getFontSize(16),
                         verticalAlign: "middle",
-                        // marginLeft: 5,
                       }}
                     >
                       {item.artist}
@@ -134,12 +137,11 @@ const CanconsSongsListScreen = ({ navigation }) => {
           );
         }}
       />
-
     </LinearGradient>
-  )
-}
+  );
+};
 
-export default CanconsSongsListScreen
+export default CanconsSongsListScreen;
 
 const styles = StyleSheet.create({
   imageContainer: {
@@ -151,7 +153,7 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
   },
   image: {
-    aspectRatio: 1, // Set aspectRatio to 1 to make height the same as width
+    aspectRatio: 1,
     flex: 1,
     height: "100%",
     borderRadius: 10,
@@ -164,15 +166,4 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0)",
     elevation: 2,
   },
-  flag: {
-    width: 20,
-    height: 20,
-    marginLeft: 5,
-    borderRadius: 100,
-  },
-  title: {
-    fontSize: 25,
-    fontWidth: '700',
-    color: '#EEEEEEE',
-  },
-})
+});

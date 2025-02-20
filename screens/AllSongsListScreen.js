@@ -4,9 +4,9 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  FlatList,
   Platform,
   StyleSheet,
-  FlatList,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { AllsongsList } from "../ScreenSongs/AllSongs";
@@ -16,7 +16,7 @@ const AllSongsListScreen = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.itemContainer}
-      onPress={() => navigation.navigate('AllSongsPlayScreen')}
+      onPress={() => navigation.navigate("AllSongsPlayScreen")}
       activeOpacity={1}
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -25,20 +25,17 @@ const AllSongsListScreen = ({ navigation }) => {
         </View>
         <View style={{ paddingLeft: 10, paddingRight: 10 }}>
           <Text
+            allowFontScaling={false}
             style={{ color: "white", fontSize: getFontSize(20), width: "100%" }}
             adjustsFontSizeToFit={true}
             numberOfLines={1}
           >
             {item.title}
           </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginTop: 5,
-            }}
-          >
-            <Text style={styles.artistText}>{item.artist}</Text>
+          <View style={{ flexDirection: "row", alignItems: "center", marginTop: 5 }}>
+            <Text allowFontScaling={false} style={styles.artistText}>
+              {item.artist}
+            </Text>
           </View>
         </View>
       </View>
@@ -48,21 +45,21 @@ const AllSongsListScreen = ({ navigation }) => {
   return (
     <LinearGradient colors={["#b88c08", "#60045f"]} style={styles.gradient}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity
-          style={{ flexDirection: "row" }}
-          onPress={() => navigation.goBack()}
-        >
+        <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => navigation.goBack()}>
           <Image
             source={require("../images/back-white.webp")}
             style={styles.backImage}
           />
         </TouchableOpacity>
-
-        <Text style={styles.headerText}>Medistoris.cat</Text>
+        <Text allowFontScaling={false} style={styles.headerText}>
+          Medistoris.cat
+        </Text>
       </View>
 
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>Àudios</Text>
+        <Text allowFontScaling={false} style={styles.title}>
+          Àudios
+        </Text>
       </View>
 
       <FlatList
@@ -93,7 +90,6 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: getFontSize(18),
-
     color: "#ffffff",
     fontWeight: "500",
     marginLeft: "20%",
@@ -143,7 +139,6 @@ const styles = StyleSheet.create({
   artistText: {
     color: "white",
     fontSize: getFontSize(15),
-
     verticalAlign: "middle",
   },
 });

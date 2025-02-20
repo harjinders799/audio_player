@@ -1,19 +1,15 @@
-import { Dimensions } from 'react-native';
+// utils.js
+import { Dimensions, PixelRatio } from 'react-native';
 
-const { width } = Dimensions.get('window');
+// Choose a base width (e.g. 375 is common for iPhone 11-ish)
+const BASE_WIDTH = 375;
 
-export const getFontSize = (size) => {
-    if (width < 360) {
-        // Smaller devices
-        return size * 0.95;
-    } else if (width >= 360 && width < 768) {
-        // Medium devices
-        return size;
-    } else {
-        // Larger devices like iPads
-        return size * 1.25;
-    }
-};
+export function getFontSize(fontSize) {
+  const { width } = Dimensions.get('window');
+  // Simple ratio based on base width
+  const scale = width / BASE_WIDTH;
 
-
-
+  // Round to nearest pixel
+  const newSize = fontSize * scale;
+  return Math.round(PixelRatio.roundToNearestPixel(newSize));
+}

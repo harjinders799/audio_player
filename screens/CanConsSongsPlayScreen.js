@@ -1,15 +1,22 @@
-import { Dimensions, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View, FlatList, Animated } from 'react-native';
+import { 
+  Dimensions, 
+  Image, 
+  StatusBar, 
+  StyleSheet, 
+  Text, 
+  TouchableOpacity, 
+  View, 
+  Animated 
+} from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 const { width, height } = Dimensions.get('window');
 import Slider from '@react-native-community/slider';
 import LinearGradient from "react-native-linear-gradient";
-//import { AllsongsList } from '../ScreenSongs/AllSongs';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 import { CanconsSongList } from '../ScreenSongs/CanconsSongList';
-
 
 import TrackPlayer, {
   Capability,
@@ -22,16 +29,16 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import { useNavigation } from '@react-navigation/native';
 
+import { getFontSize } from '../utils';
+
 const setupPlayer = async () => {
   await TrackPlayer.setupPlayer();
   await TrackPlayer.add(CanconsSongList);
   await TrackPlayer.setRepeatMode(RepeatMode.Track);
-
 };
 
 const togglePlayback = async (playbackState) => {
   const currentTrack = await TrackPlayer.getCurrentTrack();
-
   if (currentTrack !== null) {
     if (playbackState === State.Paused) {
       await TrackPlayer.play();
@@ -57,10 +64,8 @@ const CanConsSongsPlayScreen = ({ navigation, route }) => {
   useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
     if (event.type === Event.PlaybackTrackChanged) {
       const currentTrack = event.nextTrack;
-
       if (currentTrack !== null) {
         setSongIndex(currentTrack);
-
         // Scroll to the new track smoothly
         songSlider.current.scrollToOffset({
           offset: currentTrack * width,
@@ -76,10 +81,6 @@ const CanConsSongsPlayScreen = ({ navigation, route }) => {
       }
     }
   });
-
-
-
-
 
   useEffect(() => {
     const startPlayer = async () => {
@@ -97,12 +98,9 @@ const CanConsSongsPlayScreen = ({ navigation, route }) => {
     };
   }, []);
 
-
-
-
   const skipToNext = async () => {
     let nextIndex = songIndex + 1;
-    if (nextIndex >= CanconsSongList.length) { // If it's the last song, go back to the first
+    if (nextIndex >= CanconsSongList.length) {
       nextIndex = 0;
     }
     try {
@@ -111,7 +109,7 @@ const CanConsSongsPlayScreen = ({ navigation, route }) => {
         offset: nextIndex * width,
         animated: true,
       });
-      setSongIndex(nextIndex); // Update the song index
+      setSongIndex(nextIndex);
     } catch (error) {
       console.log("Error skipping to next track:", error);
     }
@@ -119,7 +117,7 @@ const CanConsSongsPlayScreen = ({ navigation, route }) => {
 
   const skipToPrevious = async () => {
     let previousIndex = songIndex - 1;
-    if (previousIndex < 0) { // If it's the first song, go to the last
+    if (previousIndex < 0) {
       previousIndex = CanconsSongList.length - 1;
     }
     try {
@@ -128,7 +126,7 @@ const CanConsSongsPlayScreen = ({ navigation, route }) => {
         offset: previousIndex * width,
         animated: true,
       });
-      setSongIndex(previousIndex); // Update the song index
+      setSongIndex(previousIndex);
     } catch (error) {
       console.log("Error skipping to previous track:", error);
     }
@@ -146,11 +144,12 @@ const CanConsSongsPlayScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (duration > 0) {
-      const percentage = new Date((duration - position) * 1000).toISOString().substr(14, 5)
-      if (percentage == '00:00') {
-        // Pause the audio
+      const percentage = new Date((duration - position) * 1000)
+        .toISOString()
+        .substr(14, 5);
+      if (percentage === '00:00') {
+        // Pause the audio and reset
         TrackPlayer.pause();
-        // Seek to the beginning of the track (0 seconds)
         TrackPlayer.seekTo(0);
       }
     }
@@ -163,7 +162,10 @@ const CanConsSongsPlayScreen = ({ navigation, route }) => {
 
         <SafeAreaView style={{ flex: 1 }}>
           <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => navigation.goBack()}>
-            <Image source={require("../images/back-white.webp")} style={{ height: 50, width: 50, marginLeft: 15, tintColor: 'black' }} />
+            <Image 
+              source={require("../images/back-white.webp")} 
+              style={{ height: 50, width: 50, marginLeft: 15, tintColor: 'black' }} 
+            />
           </TouchableOpacity>
           <View style={styles.mainContainer}>
 
@@ -185,8 +187,18 @@ const CanConsSongsPlayScreen = ({ navigation, route }) => {
             </View>
 
             <View style={styles.titleView}>
-              <Text style={[styles.title, { marginBottom: 10 }]}>{CanconsSongList[songIndex].title}</Text>
-              <Text style={styles.artist}>{CanconsSongList[songIndex].artist}</Text>
+              <Text 
+                allowFontScaling={false} 
+                style={[styles.title, { marginBottom: 10 }]}
+              >
+                {CanconsSongList[songIndex].title}
+              </Text>
+              <Text 
+                allowFontScaling={false} 
+                style={styles.artist}
+              >
+                {CanconsSongList[songIndex].artist}
+              </Text>
             </View>
 
             <View style={{ marginTop: 25 }}>
@@ -202,8 +214,18 @@ const CanConsSongsPlayScreen = ({ navigation, route }) => {
                 }}
               />
               <View style={styles.progressLabelContainer}>
-                <Text style={styles.progressLebelText}>{new Date(position * 1000).toISOString().substr(14, 5)}</Text>
-                <Text style={styles.progressLebelText}>{new Date((duration - position) * 1000).toISOString().substr(14, 5)}</Text>
+                <Text 
+                  allowFontScaling={false} 
+                  style={styles.progressLebelText}
+                >
+                  {new Date(position * 1000).toISOString().substr(14, 5)}
+                </Text>
+                <Text 
+                  allowFontScaling={false} 
+                  style={styles.progressLebelText}
+                >
+                  {new Date((duration - position) * 1000).toISOString().substr(14, 5)}
+                </Text>
               </View>
             </View>
 
@@ -213,7 +235,11 @@ const CanConsSongsPlayScreen = ({ navigation, route }) => {
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => togglePlayback(playbackState)} style={styles.playButton}>
-                <Ionicons name={playbackState === State.Playing ? "pause-circle" : "play-circle"} size={75} color="black" />
+                <Ionicons 
+                  name={playbackState === State.Playing ? "pause-circle" : "play-circle"} 
+                  size={75} 
+                  color="black" 
+                />
               </TouchableOpacity>
 
               <TouchableOpacity onPress={skipToNext} style={styles.skipButton}>
@@ -248,12 +274,9 @@ const styles = StyleSheet.create({
     height: 340,
     marginBottom: 25,
     shadowColor: 'black',
-    shadowOffset: {
-      width: 5,
-      height: 5,
-    },
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.5,
-    shadowRadius: 3.84
+    shadowRadius: 3.84,
   },
   artworkimage: {
     height: '100%',
@@ -261,12 +284,12 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   title: {
-    fontSize: 25,
-    fontWidth: '700',
+    fontSize: getFontSize(25),
+    fontWeight: '700',
     color: '#EEEEEEE',
   },
   artist: {
-    fontSize: 16,
+    fontSize: getFontSize(16),
     fontWeight: '500',
     color: '#EEEEEEE',
   },
@@ -281,6 +304,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   progressLebelText: {
+    fontSize: getFontSize(14),
     color: 'black',
   },
   musicControls: {
@@ -292,10 +316,10 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   skipButton: {
-    marginHorizontal: 20,  // Increase spacing for skip buttons
+    marginHorizontal: 20,
   },
   playButton: {
-    marginHorizontal: 10,  // Center play button with more spacing
+    marginHorizontal: 10,
   },
   queueIconContainer: {
     position: 'absolute',
@@ -303,5 +327,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  titleView: { marginLeft: 0, marginTop: 5, width: width, marginLeft: 70 }
+  titleView: { 
+    width: width, 
+    marginLeft: 70, 
+    marginTop: 5 
+  }
 });

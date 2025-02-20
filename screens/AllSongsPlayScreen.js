@@ -1,11 +1,20 @@
-import { Dimensions, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View, FlatList, Animated } from 'react-native';
+import {
+  Dimensions,
+  Image,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  FlatList,
+  Animated,
+} from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 const { width, height } = Dimensions.get('window');
 import Slider from '@react-native-community/slider';
 import LinearGradient from "react-native-linear-gradient";
-//import { AllsongsList } from '../ScreenSongs/AllSongs';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { AllsongsList } from '../ScreenSongs/AllSongs';
 import TrackPlayer, {
@@ -17,16 +26,12 @@ import TrackPlayer, {
   useProgress,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
-
-
-
-
+import { getFontSize } from '../utils';
 
 const setupPlayer = async () => {
   await TrackPlayer.setupPlayer();
   await TrackPlayer.add(AllsongsList);
   await TrackPlayer.setRepeatMode(RepeatMode.Track);
-
 };
 
 const togglePlayback = async (playbackState) => {
@@ -55,10 +60,8 @@ const AllSongsPlayScreen = ({ navigation }) => {
   useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
     if (event.type === Event.PlaybackTrackChanged) {
       const currentTrack = event.nextTrack;
-  
       if (currentTrack !== null) {
         setSongIndex(currentTrack);
-  
         // Scroll to the new track smoothly
         songSlider.current.scrollToOffset({
           offset: currentTrack * width,
@@ -74,10 +77,6 @@ const AllSongsPlayScreen = ({ navigation }) => {
       }
     }
   });
-  
-
-
-
 
   useEffect(() => {
     setupPlayer();
@@ -94,14 +93,10 @@ const AllSongsPlayScreen = ({ navigation }) => {
       scrollX.removeAllListeners();
     };
   }, []);
-  
-  
-
-
 
   const skipToNext = async () => {
     let nextIndex = songIndex + 1;
-    if (nextIndex >= AllsongsList.length) { // If it's the last song, go back to the first
+    if (nextIndex >= AllsongsList.length) {
       nextIndex = 0;
     }
     try {
@@ -110,7 +105,7 @@ const AllSongsPlayScreen = ({ navigation }) => {
         offset: nextIndex * width,
         animated: true,
       });
-      setSongIndex(nextIndex); // Update the song index
+      setSongIndex(nextIndex);
     } catch (error) {
       console.log("Error skipping to next track:", error);
     }
@@ -118,7 +113,7 @@ const AllSongsPlayScreen = ({ navigation }) => {
 
   const skipToPrevious = async () => {
     let previousIndex = songIndex - 1;
-    if (previousIndex < 0) { // If it's the first song, go to the last
+    if (previousIndex < 0) {
       previousIndex = AllsongsList.length - 1;
     }
     try {
@@ -127,7 +122,7 @@ const AllSongsPlayScreen = ({ navigation }) => {
         offset: previousIndex * width,
         animated: true,
       });
-      setSongIndex(previousIndex); // Update the song index
+      setSongIndex(previousIndex);
     } catch (error) {
       console.log("Error skipping to previous track:", error);
     }
@@ -146,14 +141,15 @@ const AllSongsPlayScreen = ({ navigation }) => {
   return (
     <LinearGradient colors={["#d9d600", "#760075"]} style={{ flex: 1, paddingBottom: 20 }}>
       <View style={styles.container}>
-        <StatusBar barStyle='light-content' />
-
+        <StatusBar barStyle="light-content" />
         <SafeAreaView style={{ flex: 1 }}>
           <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => navigation.goBack()}>
-            <Image source={require("../images/back-white.webp")} style={{ height: 50, width: 50, marginLeft: 15, tintColor: 'black' }} />
+            <Image
+              source={require("../images/back-white.webp")}
+              style={{ height: 50, width: 50, marginLeft: 15, tintColor: 'black' }}
+            />
           </TouchableOpacity>
           <View style={styles.mainContainer}>
-
             <View style={{ width: width }}>
               <Animated.FlatList
                 ref={songSlider}
@@ -171,9 +167,13 @@ const AllSongsPlayScreen = ({ navigation }) => {
               />
             </View>
 
-            <View style={{ marginLeft: 0, marginTop: 5, width: width, marginLeft: 70 }}>
-              <Text style={[styles.title, { marginBottom: 10 }]}>{AllsongsList[songIndex].title}</Text>
-              <Text style={styles.artist}>{AllsongsList[songIndex].artist}</Text>
+            <View style={{ marginTop: 5, width: width, marginLeft: 70 }}>
+              <Text allowFontScaling={false} style={[styles.title, { marginBottom: 10 }]}>
+                {AllsongsList[songIndex].title}
+              </Text>
+              <Text allowFontScaling={false} style={styles.artist}>
+                {AllsongsList[songIndex].artist}
+              </Text>
             </View>
 
             <View style={{ marginTop: 25 }}>
@@ -189,35 +189,38 @@ const AllSongsPlayScreen = ({ navigation }) => {
                 }}
               />
               <View style={styles.progressLabelContainer}>
-                <Text style={styles.progressLebelText}>{new Date(progress.position * 1000).toISOString().substr(14, 5)}</Text>
-                <Text style={styles.progressLebelText}>{new Date((progress.duration - progress.position) * 1000).toISOString().substr(14, 5)}</Text>
+                <Text allowFontScaling={false} style={styles.progressLebelText}>
+                  {new Date(progress.position * 1000).toISOString().substr(14, 5)}
+                </Text>
+                <Text allowFontScaling={false} style={styles.progressLebelText}>
+                  {new Date((progress.duration - progress.position) * 1000).toISOString().substr(14, 5)}
+                </Text>
               </View>
-            </View>       
-         
+            </View>
+
             <View style={styles.musicControls}>
-
-                <TouchableOpacity onPress={skipToPrevious} style={styles.skipButton}>
-                  <Ionicons name="play-skip-back-outline" size={35} color="black" />
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => togglePlayback(playbackState)} style={styles.playButton}>
-                  <Ionicons name={playbackState === State.Playing ? "pause-circle" : "play-circle"} size={75} color="black" />
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={skipToNext} style={styles.skipButton}>
-                  <Ionicons name="play-skip-forward-outline" size={35} color="black" />
-                </TouchableOpacity>      
-
-                <TouchableOpacity style={styles.queueIconContainer} onPress={()=>navigation.navigate('AllSongsListScreen')}>
-                  <MaterialIcons name={"queue-music"} size={35} color={"#000000"} />
-                </TouchableOpacity>
-                
-             </View>
-
+              <TouchableOpacity onPress={skipToPrevious} style={styles.skipButton}>
+                <Ionicons name="play-skip-back-outline" size={35} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => togglePlayback(playbackState)} style={styles.playButton}>
+                <Ionicons
+                  name={playbackState === State.Playing ? "pause-circle" : "play-circle"}
+                  size={75}
+                  color="black"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={skipToNext} style={styles.skipButton}>
+                <Ionicons name="play-skip-forward-outline" size={35} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.queueIconContainer}
+                onPress={() => navigation.navigate('AllSongsListScreen')}
+              >
+                <MaterialIcons name="queue-music" size={35} color="#000000" />
+              </TouchableOpacity>
+            </View>
           </View>
-
         </SafeAreaView>
-
       </View>
     </LinearGradient>
   );
@@ -239,12 +242,9 @@ const styles = StyleSheet.create({
     height: 340,
     marginBottom: 25,
     shadowColor: 'black',
-    shadowOffset: {
-      width: 5,
-      height: 5,
-    },
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.5,
-    shadowRadius: 3.84
+    shadowRadius: 3.84,
   },
   artworkimage: {
     height: '100%',
@@ -252,12 +252,12 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   title: {
-    fontSize: 25,
-    fontWidth: '700',
+    fontSize: getFontSize(25),
+    fontWeight: '700',
     color: '#EEEEEEE',
   },
   artist: {
-    fontSize: 16,
+    fontSize: getFontSize(16),
     fontWeight: '500',
     color: '#EEEEEEE',
   },
@@ -272,6 +272,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   progressLebelText: {
+    fontSize: getFontSize(14),
     color: 'black',
   },
   musicControls: {
@@ -283,10 +284,10 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   skipButton: {
-    marginHorizontal: 20,  // Increase spacing for skip buttons
+    marginHorizontal: 20,
   },
   playButton: {
-    marginHorizontal: 10,  // Center play button with more spacing
+    marginHorizontal: 10,
   },
   queueIconContainer: {
     position: 'absolute',
