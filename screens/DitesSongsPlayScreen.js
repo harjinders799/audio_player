@@ -6,7 +6,6 @@ import {
   Text, 
   TouchableOpacity, 
   View, 
-  FlatList, 
   Animated 
 } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
@@ -34,6 +33,12 @@ const setupPlayer = async () => {
   await TrackPlayer.setRepeatMode(RepeatMode.Track);
 };
 
+// Updated skipTo: now auto-plays after skipping to track
+const skipTo = async (trackId) => {
+  await TrackPlayer.skip(trackId);
+  await TrackPlayer.play();
+};
+
 const togglePlayback = async (playbackState) => {
   const currentTrack = await TrackPlayer.getCurrentTrack();
   if (currentTrack !== null) {
@@ -53,25 +58,18 @@ const DitesSongsPlayScreen = ({ navigation, route }) => {
   const [songIndex, setSongIndex] = useState(0);
   const songSlider = useRef(null);
 
-  // Skip to the specified track
-  const skipTo = async (trackId) => {
-    await TrackPlayer.skip(trackId);
-  };
-
   useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
     if (event.type === Event.PlaybackTrackChanged) {
       const currentTrack = event.nextTrack;
       if (currentTrack !== null) {
         setSongIndex(currentTrack);
-        // Smoothly scroll to the new track
-        songSlider.current.scrollToOffset({
+        songSlider.current?.scrollToOffset({
           offset: currentTrack * width,
           animated: true,
         });
       } else {
-        // Reset scroll and song index if track is null (looped to first track)
         setSongIndex(0);
-        songSlider.current.scrollToOffset({
+        songSlider.current?.scrollToOffset({
           offset: 0,
           animated: true,
         });
@@ -83,8 +81,9 @@ const DitesSongsPlayScreen = ({ navigation, route }) => {
     const startPlayer = async () => {
       await setupPlayer();
       await TrackPlayer.skip(selectedIndex);
+      await TrackPlayer.play();
       setSongIndex(selectedIndex);
-      songSlider.current.scrollToOffset({
+      songSlider.current?.scrollToOffset({
         offset: selectedIndex * width,
         animated: true,
       });
@@ -95,14 +94,24 @@ const DitesSongsPlayScreen = ({ navigation, route }) => {
     };
   }, []);
 
+  // Called when the user finishes swiping; calculates new index and plays the track
+  const onScrollEnd = async (event) => {
+    const offset = event.nativeEvent.contentOffset.x;
+    const newIndex = Math.round(offset / width);
+    if (newIndex !== songIndex) {
+      await skipTo(newIndex);
+      setSongIndex(newIndex);
+    }
+  };
+
   const skipToNext = async () => {
     let nextIndex = songIndex + 1;
     if (nextIndex >= DitesSongsList.length) {
       nextIndex = 0;
     }
     try {
-      await TrackPlayer.skip(nextIndex);
-      songSlider.current.scrollToOffset({
+      await skipTo(nextIndex);
+      songSlider.current?.scrollToOffset({
         offset: nextIndex * width,
         animated: true,
       });
@@ -118,8 +127,8 @@ const DitesSongsPlayScreen = ({ navigation, route }) => {
       previousIndex = DitesSongsList.length - 1;
     }
     try {
-      await TrackPlayer.skip(previousIndex);
-      songSlider.current.scrollToOffset({
+      await skipTo(previousIndex);
+      songSlider.current?.scrollToOffset({
         offset: previousIndex * width,
         animated: true,
       });
@@ -178,6 +187,7 @@ const DitesSongsPlayScreen = ({ navigation, route }) => {
                   [{ nativeEvent: { contentOffset: { x: scrollX } } }],
                   { useNativeDriver: true }
                 )}
+                onMomentumScrollEnd={onScrollEnd}
               />
             </View>
 
@@ -246,6 +256,7 @@ export default DitesSongsPlayScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop:50
   },
   mainContainer: {
     flex: 1,

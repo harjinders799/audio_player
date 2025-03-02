@@ -183,17 +183,16 @@ const HomeScreen = ({ navigation }) => {
         {/* "Escolta tots els àudios" Button */}
         <View style={styles.totalContainer}>
           <TouchableOpacity
+          style={styles.totalButton}
             activeOpacity={0.5}
             onPress={() => navigation.navigate("AllSongsListScreen")}
           >
-            <View style={styles.totalButton}>
               <Text
                 allowFontScaling={false}
                 style={styles.totalBtnText}
               >
                 Escolta tots els àudios
               </Text>
-            </View>
           </TouchableOpacity>
         </View>
 
@@ -233,7 +232,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   box: {
-    flex: 1,
     marginHorizontal: 0,
     marginVertical: 5,
     borderRadius: 10,
@@ -241,6 +239,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     position: "relative",
+    height:'22%'
   },
   imageContainer: {
     justifyContent: "center",
@@ -262,17 +261,17 @@ const styles = StyleSheet.create({
   },
   totalContainer: {
     marginTop: 10,
-    height: 60,
     justifyContent: "center",
     alignItems: "center",
   },
   totalButton: {
-    width: 250,
-    height: 50,
+    width: '60%',
     justifyContent: "center",
+    padding:10,
     alignItems: "center",
     backgroundColor: "#bf00a8",
     borderRadius: 5,
+    paddingHorizontal:20,
   },
   totalBtnText: {
     fontSize: getFontSize(15),

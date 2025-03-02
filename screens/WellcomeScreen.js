@@ -35,7 +35,7 @@ const WellcomeScreen = ({ navigation }) => {
           {loading ? (
             <ActivityIndicator size="small" color="#fff" />
           ) : (
-            <Text style={{ color: 'white',fontSize:getFontSize(20) }}>Entra</Text>
+            <Text style={{ color: 'white',fontSize:getFontSize(10) }}>Entra</Text>
           )}
         </TouchableOpacity>
       </View>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     marginBottom: '5%'
   },
   title: {
-    fontSize: getFontSize(20),  // Dynamic font size
+    fontSize: getFontSize(10),  // Dynamic font size
     color: '#ffffff',
     marginBottom: '5%'
   },

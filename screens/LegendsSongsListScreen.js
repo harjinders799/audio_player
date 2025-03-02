@@ -18,7 +18,13 @@ const LegendsSongsListScreen = ({ navigation }) => {
       colors={["rgba(189,0,138,0.49)", "#bd008a"]}
       style={{ flex: 1, paddingBottom: 20 }}
     >
-      <View style={styles.firstView}>
+      <View style={{
+        flexDirection: "row",
+        marginTop: Platform.OS === "ios" ? 50 : 50,
+        paddingHorizontal: 10,
+        borderBottomWidth: 0.2,
+        paddingBottom: 10,
+      }}>
         <TouchableOpacity
           style={{ flexDirection: "row" }}
           onPress={() => navigation.goBack()}

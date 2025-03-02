@@ -53,9 +53,10 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
   const [songIndex, setSongIndex] = useState(0);
   const songSlider = useRef(null);
 
-  // Skip to a specified track
+  // Updated skipTo: auto-plays after skipping to track
   const skipTo = async (trackId) => {
     await TrackPlayer.skip(trackId);
+    await TrackPlayer.play();
   };
 
   useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
@@ -63,13 +64,13 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
       const currentTrack = event.nextTrack;
       if (currentTrack !== null) {
         setSongIndex(currentTrack);
-        songSlider.current.scrollToOffset({
+        songSlider.current?.scrollToOffset({
           offset: currentTrack * width,
           animated: true,
         });
       } else {
         setSongIndex(0);
-        songSlider.current.scrollToOffset({
+        songSlider.current?.scrollToOffset({
           offset: 0,
           animated: true,
         });
@@ -81,8 +82,9 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
     const startPlayer = async () => {
       await setupPlayer();
       await TrackPlayer.skip(selectedIndex);
+      await TrackPlayer.play();
       setSongIndex(selectedIndex);
-      songSlider.current.scrollToOffset({
+      songSlider.current?.scrollToOffset({
         offset: selectedIndex * width,
         animated: true,
       });
@@ -99,8 +101,8 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
       nextIndex = 0;
     }
     try {
-      await TrackPlayer.skip(nextIndex);
-      songSlider.current.scrollToOffset({
+      await skipTo(nextIndex);
+      songSlider.current?.scrollToOffset({
         offset: nextIndex * width,
         animated: true,
       });
@@ -116,14 +118,24 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
       previousIndex = songsList.length - 1;
     }
     try {
-      await TrackPlayer.skip(previousIndex);
-      songSlider.current.scrollToOffset({
+      await skipTo(previousIndex);
+      songSlider.current?.scrollToOffset({
         offset: previousIndex * width,
         animated: true,
       });
       setSongIndex(previousIndex);
     } catch (error) {
       console.log("Error skipping to previous track:", error);
+    }
+  };
+
+  // When user finishes swiping, calculate new index and play corresponding track
+  const onScrollEnd = async (event) => {
+    const offset = event.nativeEvent.contentOffset.x;
+    const newIndex = Math.round(offset / width);
+    if (newIndex !== songIndex) {
+      await skipTo(newIndex);
+      setSongIndex(newIndex);
     }
   };
 
@@ -176,6 +188,7 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
                   [{ nativeEvent: { contentOffset: { x: scrollX } } }],
                   { useNativeDriver: true }
                 )}
+                onMomentumScrollEnd={onScrollEnd}  // Added callback here
               />
             </View>
 
@@ -252,6 +265,7 @@ export default HistoriesSongPlayScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop:50
   },
   mainContainer: {
     flex: 1,
@@ -315,5 +329,10 @@ const styles = StyleSheet.create({
     right: 30,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  titleView: {
+    marginTop: 5,
+    width: width,
+    marginLeft: 70,
   },
 });
