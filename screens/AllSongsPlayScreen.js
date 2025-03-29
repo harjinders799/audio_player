@@ -9,14 +9,14 @@ import {
   FlatList,
   Animated,
 } from 'react-native';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { SafeAreaView } from 'react-native-safe-area-context';
-const { width, height } = Dimensions.get('window');
+import {SafeAreaView} from 'react-native-safe-area-context';
+const {width, height} = Dimensions.get('window');
 import Slider from '@react-native-community/slider';
-import LinearGradient from "react-native-linear-gradient";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { AllsongsList } from '../ScreenSongs/AllSongs';
+import LinearGradient from 'react-native-linear-gradient';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {AllsongsList} from '../ScreenSongs/AllSongs';
 import TrackPlayer, {
   Capability,
   Event,
@@ -26,22 +26,23 @@ import TrackPlayer, {
   useProgress,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
-import { getFontSize } from '../utils';
-import { rh, rs, useResponsiveMethods } from 'react-native-full-responsive';
+import {getFontSize} from '../utils';
+import {rh, rs, useResponsiveMethods} from 'react-native-full-responsive';
+import {useIsFocused} from '@react-navigation/native';
 
 const setupPlayer = async (initialIndex = 0) => {
   try {
     const currentTrack = await TrackPlayer.getCurrentTrack();
     if (currentTrack !== null) {
-      await TrackPlayer.reset();
+      await TrackPlayer.stop();
     }
 
     await TrackPlayer.setupPlayer({
       waitForBuffer: true,
       autoUpdateMetadata: true,
-      minBuffer: 5,
-      maxBuffer: 15,
-      playBuffer: 3
+      // minBuffer: 5,
+      // maxBuffer: 15,
+      // playBuffer: 3,
     });
 
     await TrackPlayer.updateOptions({
@@ -54,7 +55,10 @@ const setupPlayer = async (initialIndex = 0) => {
     });
 
     // await TrackPlayer.add(AllsongsList);
-    await TrackPlayer.add([...AllsongsList.slice(initialIndex), ...AllsongsList.slice(0, initialIndex)]);
+    await TrackPlayer.add([
+      ...AllsongsList.slice(initialIndex),
+      ...AllsongsList.slice(0, initialIndex),
+    ]);
 
     // await new Promise(resolve => setTimeout(resolve, 5000));
     // const validIndex = Math.min(Math.max(0, initialIndex), AllsongsList.length - 1);
@@ -65,10 +69,10 @@ const setupPlayer = async (initialIndex = 0) => {
   }
 };
 
-const togglePlayback = async (playbackState) => {
+const togglePlayback = async playbackState => {
   const currentTrack = await TrackPlayer.getCurrentTrack();
   if (currentTrack !== null) {
-    if (playbackState === State.Paused) {
+    if (playbackState === State.Paused || playbackState === State.Ready) {
       await TrackPlayer.play();
     } else {
       await TrackPlayer.pause();
@@ -76,35 +80,41 @@ const togglePlayback = async (playbackState) => {
   }
 };
 
-const AllSongsPlayScreen = ({ navigation, route }) => {
-  const { selectedIndex = 0 } = route.params || {};
+const AllSongsPlayScreen = ({navigation, route}) => {
+  const {selectedIndex = 0} = route.params || {};
   const playbackState = usePlaybackState();
   const progress = useProgress();
   const scrollX = useRef(new Animated.Value(0)).current;
   const [songIndex, setSongIndex] = useState(0);
   const songSlider = useRef(null);
-  const { rs, rw, rh } = useResponsiveMethods();
+  const {rs, rw, rh} = useResponsiveMethods();
+  const isFocused = useIsFocused();
+  const currentIndex = useRef(songIndex);
 
-  const songs = [...AllsongsList.slice(selectedIndex), ...AllsongsList.slice(0, selectedIndex)]
+  const songs = [
+    ...AllsongsList.slice(selectedIndex),
+    ...AllsongsList.slice(0, selectedIndex),
+  ];
 
   // Skip to the specified track
-  const skipTo = async (trackId) => {
+  const skipTo = async trackId => {
     try {
-      console.log("Skipping to track:", trackId);
+      console.log('Skipping to track:', trackId);
       // Validate track index is within bounds
       if (trackId < 0 || trackId >= songs.length) {
-        console.log("Invalid track index:", trackId);
+        console.log('Invalid track index:', trackId);
         return;
       }
+      await TrackPlayer.pause();
       await TrackPlayer.skip(trackId);
-      await TrackPlayer.play();
+      // await TrackPlayer.play();
       setSongIndex(trackId);
     } catch (error) {
-      console.log("Error in skipTo:", error);
+      console.log('Error in skipTo:', error);
     }
   };
 
-  useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
+  useTrackPlayerEvents([Event.PlaybackTrackChanged], async event => {
     if (event.type === Event.PlaybackTrackChanged) {
       const currentTrack = event.nextTrack;
       if (currentTrack !== null) {
@@ -129,15 +139,21 @@ const AllSongsPlayScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     let isMounted = true;
-
+    if (isFocused && currentIndex.current !== songIndex) {
+      console.log('songIndex', songIndex);
+      console.log('currentIndex', currentIndex.current);
+      setSongIndex(currentIndex.current);
+      TrackPlayer.add(songs);
+      skipTo(currentIndex.current);
+    }
     const startPlayer = async () => {
       try {
-        await TrackPlayer.reset();
+        await TrackPlayer.stop();
         await setupPlayer(selectedIndex);
 
         if (isMounted) {
           // setSongIndex(selectedIndex);
-          await TrackPlayer.play();
+          // await TrackPlayer.play();
 
           setTimeout(() => {
             if (songSlider.current) {
@@ -156,15 +172,13 @@ const AllSongsPlayScreen = ({ navigation, route }) => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
       startPlayer();
-    } else {
-      skipTo(0);
     }
 
     return () => {
       isMounted = false;
       scrollX.removeAllListeners();
     };
-  }, [selectedIndex]);
+  }, [selectedIndex, isFocused]);
 
   const skipToNext = async () => {
     let nextIndex = songIndex + 1;
@@ -179,7 +193,7 @@ const AllSongsPlayScreen = ({ navigation, route }) => {
         });
       }
     } catch (error) {
-      console.log("Error skipping to next track:", error);
+      console.log('Error skipping to next track:', error);
     }
   };
 
@@ -196,15 +210,15 @@ const AllSongsPlayScreen = ({ navigation, route }) => {
         });
       }
     } catch (error) {
-      console.log("Error skipping to previous track:", error);
+      console.log('Error skipping to previous track:', error);
     }
   };
 
   // Called when the user finishes swiping; calculates new index and plays the track
-  const onScrollEnd = async (event) => {
+  const onScrollEnd = async event => {
     const offset = event.nativeEvent.contentOffset.x;
     const newIndex = Math.round(offset / width);
-    console.log('new index', newIndex, songIndex)
+    console.log('new index', newIndex, songIndex);
     // Only change if index is different and valid
     if (newIndex !== songIndex && newIndex >= 0 && newIndex < songs.length) {
       await skipTo(newIndex);
@@ -214,7 +228,7 @@ const AllSongsPlayScreen = ({ navigation, route }) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', async () => {
       try {
-        await TrackPlayer.reset();
+        await TrackPlayer.pause();
       } catch (error) {
         console.log('Error stopping playback:', error);
       }
@@ -223,67 +237,90 @@ const AllSongsPlayScreen = ({ navigation, route }) => {
     return unsubscribe;
   }, [navigation]);
 
- // Modify the back button press handler
- const handleBackPress = async () => {
-  try {
-    await TrackPlayer.reset(); // This will stop and clear the player
-    navigation.goBack();
-  } catch (error) {
-    console.log('Error handling back press:', error);
-    navigation.goBack(); // Navigate back even if there's an error
-  }
-};
+  // Modify the back button press handler
+  const handleBackPress = async () => {
+    try {
+      await TrackPlayer.pause(); // This will stop and clear the player
+      navigation.goBack();
+    } catch (error) {
+      console.log('Error handling back press:', error);
+      navigation.goBack(); // Navigate back even if there's an error
+    }
+  };
 
-  const SongItem = React.memo(({ item }) => (
-    <Animated.View style={{ width: width, justifyContent: 'center', alignItems: 'center' }}>
+  const SongItem = React.memo(({item}) => (
+    <Animated.View
+      style={{width: width, justifyContent: 'center', alignItems: 'center'}}>
       <View style={styles.artworkWrapper}>
-        <Image source={item?.artwork} style={[styles.artworkimage,{height:rh(40)}]} resizeMode='contain' />
+        <Image
+          source={item?.artwork}
+          style={[styles.artworkimage, {height: rh(40)}]}
+          resizeMode="contain"
+        />
       </View>
     </Animated.View>
   ));
 
-  const renderSongs = useCallback(({ item }) => <SongItem item={item} />, []);
+  const renderSongs = useCallback(({item}) => <SongItem item={item} />, []);
 
   return (
-    <LinearGradient colors={["#d9d600", "#760075"]} style={{ flex: 1}}>
+    <LinearGradient colors={['#d9d600', '#760075']} style={{flex: 1}}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
-        <SafeAreaView style={{ flex: 1 }}>
-          <TouchableOpacity style={{ flexDirection: "row" }} onPress={handleBackPress}>
+        <SafeAreaView style={{flex: 1}}>
+          <TouchableOpacity
+            style={{flexDirection: 'row'}}
+            onPress={handleBackPress}>
             <Image
-              source={require("../images/back-white.webp")}
-              style={{ height: rs(20), width: rs(20), marginLeft: rs(15), tintColor: 'black' }}
+              source={require('../images/back-white.webp')}
+              style={{
+                height: rs(20),
+                width: rs(20),
+                marginLeft: rs(15),
+                tintColor: 'black',
+              }}
             />
           </TouchableOpacity>
           <View style={styles.mainContainer}>
-            <View style={{ width: width }}>
+            <View style={{width: width}}>
               <Animated.FlatList
                 ref={songSlider}
                 data={songs}
                 renderItem={renderSongs}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={item => item.id.toString()}
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
                 scrollEventThrottle={16}
                 onScroll={Animated.event(
-                  [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-                  { useNativeDriver: true }
+                  [{nativeEvent: {contentOffset: {x: scrollX}}}],
+                  {useNativeDriver: true},
                 )}
                 onMomentumScrollEnd={onScrollEnd}
               />
             </View>
 
-            <View style={{ marginTop: 5, width: width, paddingHorizontal:'5%' }}>
-              <Text allowFontScaling={false} style={[styles.title, { marginBottom: rs(10),fontSize:rs(20) }]}>
-                {songs && songIndex >= 0 ? songs[songIndex].title : 'Loading...'}
+            <View style={{marginTop: 5, width: width, paddingHorizontal: '5%'}}>
+              <Text
+                allowFontScaling={false}
+                style={[
+                  styles.title,
+                  {marginBottom: rs(10), fontSize: rs(20)},
+                ]}>
+                {songs && songIndex >= 0
+                  ? songs[songIndex].title
+                  : 'Loading...'}
               </Text>
-              <Text allowFontScaling={false} style={[styles.artist,{fontSize:rs(14)}]}>
-                {songs && songIndex >= 0 ? songs[songIndex].artist : 'Loading...'}
+              <Text
+                allowFontScaling={false}
+                style={[styles.artist, {fontSize: rs(14)}]}>
+                {songs && songIndex >= 0
+                  ? songs[songIndex].artist
+                  : 'Loading...'}
               </Text>
             </View>
 
-            <View style={{ marginTop: 25 }}>
+            <View style={{marginTop: 25}}>
               <Slider
                 style={styles.progressContainer}
                 value={progress.position}
@@ -291,39 +328,69 @@ const AllSongsPlayScreen = ({ navigation, route }) => {
                 maximumValue={progress.duration}
                 minimumTrackTintColor="black"
                 thumbTintColor="green"
-                onSlidingComplete={async (value) => {
+                onSlidingComplete={async value => {
                   await TrackPlayer.seekTo(value);
                 }}
               />
               <View style={styles.progressLabelContainer}>
-                <Text allowFontScaling={false} style={[styles.progressLebelText,{fontSize:rs(12)}]}>
-                  {new Date(progress.position * 1000).toISOString().substr(14, 5)}
+                <Text
+                  allowFontScaling={false}
+                  style={[styles.progressLebelText, {fontSize: rs(12)}]}>
+                  {new Date(progress.position * 1000)
+                    .toISOString()
+                    .substr(14, 5)}
                 </Text>
-                <Text allowFontScaling={false} style={[styles.progressLebelText,{fontSize:rs(12)}]}>
-                  {new Date((progress.duration - progress.position) * 1000).toISOString().substr(14, 5)}
+                <Text
+                  allowFontScaling={false}
+                  style={[styles.progressLebelText, {fontSize: rs(12)}]}>
+                  {new Date((progress.duration - progress.position) * 1000)
+                    .toISOString()
+                    .substr(14, 5)}
                 </Text>
               </View>
             </View>
 
             <View style={styles.musicControls}>
-              <TouchableOpacity onPress={skipToPrevious} style={styles.skipButton}>
-                <Ionicons name="play-skip-back-outline" size={rs(28)} color="black" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => togglePlayback(playbackState)} style={styles.playButton}>
+              <TouchableOpacity
+                onPress={skipToPrevious}
+                style={styles.skipButton}>
                 <Ionicons
-                  name={playbackState === State.Playing ? "pause-circle" : "play-circle"}
+                  name="play-skip-back-outline"
+                  size={rs(28)}
+                  color="black"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => togglePlayback(playbackState)}
+                style={styles.playButton}>
+                <Ionicons
+                  name={
+                    playbackState === State.Playing
+                      ? 'pause-circle'
+                      : 'play-circle'
+                  }
                   size={rs(65)}
                   color="black"
                 />
               </TouchableOpacity>
               <TouchableOpacity onPress={skipToNext} style={styles.skipButton}>
-                <Ionicons name="play-skip-forward-outline" size={rs(28)} color="black" />
+                <Ionicons
+                  name="play-skip-forward-outline"
+                  size={rs(28)}
+                  color="black"
+                />
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.queueIconContainer}
-                onPress={() => navigation.navigate('AllSongsListScreen')}
-              >
-                <MaterialIcons name="queue-music" size={rs(28)} color="#000000" />
+                onPress={async () => {
+                  await TrackPlayer.pause();
+                  navigation.goBack();
+                }}>
+                <MaterialIcons
+                  name="queue-music"
+                  size={rs(28)}
+                  color="#000000"
+                />
               </TouchableOpacity>
             </View>
           </View>
@@ -346,21 +413,21 @@ const styles = StyleSheet.create({
   },
   artworkWrapper: {
     width: '100%',
-    justifyContent:'center',
-    alignItems:'center',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: rh(42),
     marginBottom: rs(25),
     shadowColor: 'black',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: {width: 5, height: 5},
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
     borderRadius: 15,
-    overflow:'hidden'
+    overflow: 'hidden',
   },
   artworkimage: {
     width: '90%',
     borderRadius: 15,
-    overflow:'hidden'
+    overflow: 'hidden',
   },
   title: {
     fontSize: getFontSize(25),
@@ -373,12 +440,12 @@ const styles = StyleSheet.create({
     color: '#EEEEEEE',
   },
   progressContainer: {
-    width: width/1.1,
+    width: width / 1.1,
     height: 40,
     marginTop: 25,
   },
   progressLabelContainer: {
-    width: width/1.1,
+    width: width / 1.1,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

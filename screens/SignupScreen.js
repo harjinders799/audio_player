@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,22 +9,27 @@ import {
   TouchableOpacity,
   Platform,
   Button,
-  width, Alert
-} from "react-native";
-import Checkbox from "@react-native-community/checkbox";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+  width,
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+} from 'react-native';
+import Checkbox from '@react-native-community/checkbox';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
 
-import { FIREBASE_API_KEY, FIREBASE_PROJECT_ID, FIREBASE_APP_ID, GOOGLE_SIGNIN_WEB_CLINT_ID } from '@env';
-import { getFontSize } from "../utils";
-import { useResponsiveMethods } from "react-native-full-responsive";
-
-
-
+import {
+  FIREBASE_API_KEY,
+  FIREBASE_PROJECT_ID,
+  FIREBASE_APP_ID,
+  GOOGLE_SIGNIN_WEB_CLINT_ID,
+} from '@env';
+import {getFontSize} from '../utils';
+import {useResponsiveMethods} from 'react-native-full-responsive';
 
 const firebaseConfig = {
   apiKey: FIREBASE_API_KEY,
@@ -36,17 +41,15 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 } else {
-  firebase.app();  // If Firebase is already initialized
+  firebase.app(); // If Firebase is already initialized
 }
 
-const SignupScreen = ({ navigation, route }) => {
-  const { rs, rw, rh } = useResponsiveMethods();
+const SignupScreen = ({navigation, route}) => {
+  const {rs, rw, rh} = useResponsiveMethods();
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const registerUser = async () => {
     if (!name || !email || !password) {
@@ -57,7 +60,10 @@ const SignupScreen = ({ navigation, route }) => {
     try {
       auth().languageCode = 'ca';
       // Firebase Auth Registration
-      const userCredential = await auth().createUserWithEmailAndPassword(email, password);
+      const userCredential = await auth().createUserWithEmailAndPassword(
+        email,
+        password,
+      );
       const user = userCredential.user;
 
       // Save additional user info (e.g., name) in Firebase Firestore
@@ -68,24 +74,18 @@ const SignupScreen = ({ navigation, route }) => {
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
 
-
       // Show success alert
-      Alert.alert('Benvingut!', 'El registre s\'ha completat correctament!', [
+      Alert.alert('Benvingut!', "El registre s'ha completat correctament!", [
         {
-          text: 'D\'acord',
+          text: "D'acord",
           onPress: () => navigation.navigate('HomeScreen'),
         },
       ]);
-
-
-
-
     } catch (error) {
       console.error(error);
       Alert.alert('Error', error.message);
     }
   };
-
 
   const [isChecked, setIsChecked] = useState(false);
   const [isPasswordShown, setIsPasswordShown] = useState(false);
@@ -95,7 +95,7 @@ const SignupScreen = ({ navigation, route }) => {
     GoogleSignin.configure({
       webClientId: GOOGLE_SIGNIN_WEB_CLINT_ID,
     });
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
     const response = await GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(
       response?.data?.idToken,
@@ -107,170 +107,177 @@ const SignupScreen = ({ navigation, route }) => {
   async function _signInWithGoogle() {
     const user = await onGoogleButtonPress();
     console.log(user);
-    navigation.navigate("HomeScreen");
+    navigation.navigate('HomeScreen');
   }
 
-
-
-
-
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white', paddingHorizontal: 20, justifyContent: 'center' }}>
-      <View style={{ flex: 1, marginHorizontal: 22, justifyContent: 'center' }}>
-        <View style={{ marginVertical: 22 }}>
-          <Text
-            style={{
-              fontSize: rs(22),
-              fontWeight: "bold",
-              marginVertical: 12,
-              color: "black",
-            }}
-          >
-            Registra't
-          </Text>
-        </View>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: 'white',
+        paddingHorizontal: 20,
+        justifyContent: 'center',
+      }}>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <ScrollView
+          style={{flex: 1}}
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: 'center',
+          }}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled">
+          <View style={{flex: 1, justifyContent: 'center'}}>
+            <View style={{marginVertical: 22}}>
+              <Text
+                style={{
+                  fontSize: rs(22),
+                  fontWeight: 'bold',
+                  marginVertical: 12,
+                  color: 'black',
+                }}>
+                Registra't
+              </Text>
+            </View>
 
-        <View style={{ marginBottom: 12 }}>
-          <View
-            style={{
-              width: "100%",
-              height: rs(40),
-              borderColor: 'black',
-              borderWidth: 1,
-              borderRadius: 8,
-              alignItems: "center",
-              justifyContent: "center",
-              paddingLeft: 22,
-            }}
-          >
-            <TextInput
-              placeholder="Nom d'usuari"
-              placeholderTextColor={"black"}
-              value={name}
-              onChangeText={(text) => setName(text)}
+            <View style={{marginBottom: 12}}>
+              <View
+                style={{
+                  width: '100%',
+                  height: rs(40),
+                  borderColor: 'black',
+                  borderWidth: 1,
+                  borderRadius: 8,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  paddingLeft: 22,
+                }}>
+                <TextInput
+                  placeholder="Nom d'usuari"
+                  placeholderTextColor={'black'}
+                  value={name}
+                  onChangeText={text => setName(text)}
+                  style={{
+                    width: '100%',
+                    fontSize: rs(14),
+                  }}
+                />
+              </View>
+            </View>
+            <View style={{marginBottom: 12, marginTop: 20}}>
+              <View
+                style={{
+                  width: '100%',
+                  height: rs(40),
+                  borderColor: 'black',
+                  borderWidth: 1,
+                  borderRadius: 8,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  paddingLeft: 22,
+                }}>
+                <TextInput
+                  placeholder="Correu Electrònic"
+                  placeholderTextColor={'black'}
+                  keyboardType="email-address"
+                  value={email}
+                  onChangeText={text => setEmail(text.toLowerCase())}
+                  style={{
+                    width: '100%',
+                    fontSize: rs(14),
+                  }}
+                />
+              </View>
+            </View>
+
+            <View style={{marginBottom: 12, marginTop: 20}}>
+              <View
+                style={{
+                  width: '100%',
+                  height: rs(40),
+                  borderColor: 'black',
+                  borderWidth: 1,
+                  borderRadius: 8,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  paddingLeft: 22,
+                }}>
+                <TextInput
+                  placeholder="Contrasenya"
+                  placeholderTextColor={'black'}
+                  secureTextEntry={isPasswordShown}
+                  value={password}
+                  onChangeText={text => setPassword(text)}
+                  style={{
+                    width: '100%',
+                    fontSize: rs(14),
+                  }}
+                />
+
+                <TouchableOpacity
+                  onPress={() => setIsPasswordShown(!isPasswordShown)}
+                  style={{
+                    position: 'absolute',
+                    right: 12,
+                  }}>
+                  <Ionicons
+                    name={isPasswordShown ? 'eye-off' : 'eye'}
+                    size={rs(24)}
+                    color={'black'}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View
               style={{
-                width: "100%",
-                fontSize: rs(14),
-              }}
-            />
-          </View>
-        </View>
-        <View style={{ marginBottom: 12, marginTop: 20 }}>
-          <View
-            style={{
-              width: "100%",
-              height: rs(40),
-              borderColor: "black",
-              borderWidth: 1,
-              borderRadius: 8,
-              alignItems: "center",
-              justifyContent: "center",
-              paddingLeft: 22,
-            }}
-          >
-            <TextInput
-              placeholder="Correu Electrònic"
-              placeholderTextColor={"black"}
-              keyboardType="email-address"
-              value={email}
-              onChangeText={(text) => setEmail(text.toLowerCase())}
-              style={{
-                width: "100%",
-                fontSize: rs(14),
+                flexDirection: 'row',
+                marginVertical: 6,
+                alignItems: 'center',
+              }}>
+              <Checkbox
+                style={{marginRight: 5, transform: [{scale: 0.8}]}}
+                value={isChecked}
+                onValueChange={setIsChecked}
+                color={isChecked ? 'red' : undefined}
+              />
 
-              }}
-            />
-          </View>
-        </View>
-
-        <View style={{ marginBottom: 12, marginTop: 20 }}>
-          <View
-            style={{
-              width: "100%",
-              height: rs(40),
-              borderColor: "black",
-              borderWidth: 1,
-              borderRadius: 8,
-              alignItems: "center",
-              justifyContent: "center",
-              paddingLeft: 22,
-            }}
-          >
-            <TextInput
-              placeholder="Contrasenya"
-              placeholderTextColor={"black"}
-              secureTextEntry={isPasswordShown}
-              value={password}
-              onChangeText={(text) => setPassword(text)}
-              style={{
-                width: "100%",
-                fontSize: rs(14),
-
-              }}
-            />
+              <Text
+                style={{
+                  width: '88%',
+                  fontSize: rs(14),
+                  // textAlign: 'justify',
+                }}
+                onPress={() =>
+                  navigation.navigate('PrivacyScreen', {isChecked: isChecked})
+                }>
+                {`En fer clic a Registre, accepteu els nostres\ntermes, privadesa i política i acord d'usuari`}
+              </Text>
+            </View>
 
             <TouchableOpacity
-              onPress={() => setIsPasswordShown(!isPasswordShown)}
+              onPress={registerUser}
+              disabled={!isChecked}
               style={{
-                position: "absolute",
-                right: 12,
-              }}
-            >
-              <Ionicons
-                name={isPasswordShown ? "eye-off" : "eye"}
-                size={rs(24)}
-                color={"black"}
-              />
+                backgroundColor: '#5c10b2',
+                borderRadius: 8,
+                paddingVertical: 13,
+                alignItems: 'center',
+                marginBottom: 20,
+                marginTop: 20,
+                width: '100%',
+                marginTop: 18,
+                marginBottom: 4,
+                // height: 52,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: 'white', fontSize: rs(18)}}>Registra't</Text>
             </TouchableOpacity>
-          </View>
-        </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            marginVertical: 6,
-            alignItems: "center",
-          }}
-        >
-          <Checkbox
-            style={{ marginRight: 5, transform: [{ scaleX: 0.9 }, { scaleY: 0.9 }] }}
-            value={isChecked}
-            onValueChange={setIsChecked}
-            color={isChecked ? "red" : undefined}
-          />
-
-          <Text
-            style={{
-              width: '100%', fontSize: rs(14),
-            }}
-            onPress={() =>
-              navigation.navigate("PrivacyScreen", { isChecked: isChecked })
-            }
-          >
-            En fer clic a Registre, accepteu els nostres termes, privadesa i
-            política i acord d'usuari
-          </Text>
-        </View>
-
-        <TouchableOpacity onPress={registerUser} disabled={!isChecked}
-          style={{
-            backgroundColor: '#5c10b2',
-            borderRadius: 8,
-            paddingVertical: 13,
-            alignItems: 'center',
-            marginBottom: 20,
-            marginTop: 20,
-            width: '100%',
-            marginTop: 18,
-            marginBottom: 4,
-            // height: 52,
-            justifyContent: 'center', alignItems: 'center',
-
-          }}
-        >
-          <Text style={{ color: "white", fontSize: rs(18) }}>Registra't</Text>
-        </TouchableOpacity>
-        {/* <View
+            {/* <View
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -296,9 +303,7 @@ const SignupScreen = ({ navigation, route }) => {
           />
         </View> */}
 
-
-
-        {/* <View
+            {/* <View
           style={{
             flexDirection: "row",
             justifyContent: "center",
@@ -345,32 +350,32 @@ const SignupScreen = ({ navigation, route }) => {
 
         </View> */}
 
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            marginVertical: 22,
-          }}
-        >
-          <Text style={{ fontSize: rs(14), color: "black" }}>
-            Si tens un compte
-          </Text>
-          <Pressable onPress={() => navigation.navigate("Login")}>
-            <Text
+            <View
               style={{
-                fontSize: rs(14),
-                color: "#007260",
-                fontWeight: "bold",
-                marginLeft: 6,
-              }}
-            >
-              Inicia sessió
-            </Text>
-          </Pressable>
-        </View>
-      </View>
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginVertical: 22,
+              }}>
+              <Text style={{fontSize: rs(14), color: 'black'}}>
+                Si tens un compte
+              </Text>
+              <Pressable onPress={() => navigation.navigate('Login')}>
+                <Text
+                  style={{
+                    fontSize: rs(14),
+                    color: '#007260',
+                    fontWeight: 'bold',
+                    marginLeft: 6,
+                  }}>
+                  Inicia sessió
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
-}
+};
 
 export default SignupScreen;

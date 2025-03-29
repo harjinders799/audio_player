@@ -6,16 +6,16 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Animated
+  Animated,
 } from 'react-native';
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { SafeAreaView } from 'react-native-safe-area-context';
-const { width, height } = Dimensions.get('window');
+import {SafeAreaView} from 'react-native-safe-area-context';
+const {width, height} = Dimensions.get('window');
 import Slider from '@react-native-community/slider';
-import LinearGradient from "react-native-linear-gradient";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { songsList } from '../ScreenSongs/Histories';
+import LinearGradient from 'react-native-linear-gradient';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {songsList} from '../ScreenSongs/Histories';
 import TrackPlayer, {
   Capability,
   Event,
@@ -25,9 +25,9 @@ import TrackPlayer, {
   useProgress,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
-import { useNavigation } from '@react-navigation/native';
-import { getFontSize } from '../utils'; // Responsive font utility
-import { rh, rs, useResponsiveMethods } from 'react-native-full-responsive';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {getFontSize} from '../utils'; // Responsive font utility
+import {rh, rs, useResponsiveMethods} from 'react-native-full-responsive';
 
 // Modify the setupPlayer function to accept an index parameter
 const setupPlayer = async (initialIndex = 0) => {
@@ -44,7 +44,7 @@ const setupPlayer = async (initialIndex = 0) => {
       autoUpdateMetadata: true,
       minBuffer: 5, // Increase buffer size
       maxBuffer: 15,
-      playBuffer: 3
+      playBuffer: 3,
     });
 
     // Add capabilities to the player
@@ -58,18 +58,20 @@ const setupPlayer = async (initialIndex = 0) => {
     });
 
     // Add tracks and ensure they're fully loaded
-    await TrackPlayer.add([...songsList.slice(initialIndex), ...songsList.slice(0, initialIndex)]);
-
+    await TrackPlayer.add([
+      ...songsList.slice(initialIndex),
+      ...songsList.slice(0, initialIndex),
+    ]);
   } catch (error) {
     console.log('Error setting up player:', error);
     return 0; // Return default index on error
   }
 };
 
-const togglePlayback = async (playbackState) => {
+const togglePlayback = async playbackState => {
   const currentTrack = await TrackPlayer.getCurrentTrack();
   if (currentTrack !== null) {
-    if (playbackState === State.Paused) {
+    if (playbackState === State.Paused || playbackState === State.Ready) {
       await TrackPlayer.play();
     } else {
       await TrackPlayer.pause();
@@ -77,32 +79,38 @@ const togglePlayback = async (playbackState) => {
   }
 };
 
-const HistoriesSongPlayScreen = ({ navigation, route }) => {
-  const { rs, rw, rh } = useResponsiveMethods();
+const HistoriesSongPlayScreen = ({navigation, route}) => {
+  const {rs, rw, rh} = useResponsiveMethods();
 
   // Make sure selectedIndex has a default value of 0 if not provided
-  const { selectedIndex = 0 } = route.params || {};
+  const {selectedIndex = 0} = route.params || {};
   const playbackState = usePlaybackState();
-  const { position, duration } = useProgress();
+  const {position, duration} = useProgress();
   const scrollX = useRef(new Animated.Value(0)).current;
   const [songIndex, setSongIndex] = useState(0);
   const songSlider = useRef(null);
   const isInitialMount = useRef(true);
-  const songs = [...songsList.slice(selectedIndex), ...songsList.slice(0, selectedIndex)]
+  const isFocused = useIsFocused();
+  const currentIndex = useRef(songIndex);
+  const songs = [
+    ...songsList.slice(selectedIndex),
+    ...songsList.slice(0, selectedIndex),
+  ];
 
   // Updated skipTo: auto-plays after skipping to track
-  const skipTo = async (trackId) => {
+  const skipTo = async trackId => {
     try {
+      await TrackPlayer.pause();
       await TrackPlayer.skip(trackId);
-      await TrackPlayer.play();
+      // await TrackPlayer.play();
       setSongIndex(trackId);
     } catch (error) {
-      console.log("Error in skipTo:", error);
+      console.log('Error in skipTo:', error);
     }
   };
 
   // Listen for track changes from the player
-  useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
+  useTrackPlayerEvents([Event.PlaybackTrackChanged], async event => {
     if (event.type === Event.PlaybackTrackChanged) {
       const currentTrack = event.nextTrack;
       if (currentTrack !== null) {
@@ -124,18 +132,21 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
   // Setup player on initial mount and when selectedIndex changes
   useEffect(() => {
     let isMounted = true;
-
+    if (isFocused && currentIndex.current !== songIndex) {
+      console.log('songIndex', songIndex);
+      console.log('currentIndex', currentIndex.current);
+      setSongIndex(currentIndex.current);
+      TrackPlayer.add(songs);
+      skipTo(currentIndex.current);
+    }
     const startPlayer = async () => {
       try {
         // Reset player completely on component mount
-        await TrackPlayer.reset();
-
-        // Setup player with the selected index and get the actual index used
-        const actualIndex = await setupPlayer(selectedIndex);
+        await TrackPlayer.stop();
 
         // Only update state if component is still mounted
         if (isMounted) {
-          await TrackPlayer.play();
+          // await TrackPlayer.play();
 
           setTimeout(() => {
             if (songSlider.current) {
@@ -155,17 +166,14 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
       startPlayer();
-    } else {
-      skipTo(0);
     }
-
     // Cleanup function
     return () => {
       isMounted = false;
       // Don't pause on unmount - this allows music to continue when navigating away
       scrollX.removeAllListeners();
     };
-  }, [selectedIndex]);
+  }, [selectedIndex, isFocused]);
 
   const skipToNext = async () => {
     let nextIndex = songIndex + 1;
@@ -180,7 +188,7 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
         });
       }
     } catch (error) {
-      console.log("Error skipping to next track:", error);
+      console.log('Error skipping to next track:', error);
     }
   };
 
@@ -197,26 +205,31 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
         });
       }
     } catch (error) {
-      console.log("Error skipping to previous track:", error);
+      console.log('Error skipping to previous track:', error);
     }
   };
 
   // When user finishes swiping, calculate new index and play corresponding track
-  const onScrollEnd = async (event) => {
+  const onScrollEnd = async event => {
     const offset = event.nativeEvent.contentOffset.x;
     const newIndex = Math.round(offset / width);
-    console.log('new index', newIndex, songIndex)
+    console.log('new index', newIndex, songIndex);
     // Only change if index is different and valid
     if (newIndex !== songIndex && newIndex >= 0 && newIndex < songs.length) {
       await skipTo(newIndex);
     }
   };
 
-  const renderSongs = ({ index, item }) => {
+  const renderSongs = ({index, item}) => {
     return (
-      <Animated.View style={{ width: width, justifyContent: 'center', alignItems: 'center' }}>
+      <Animated.View
+        style={{width: width, justifyContent: 'center', alignItems: 'center'}}>
         <View style={styles.artworkWrapper}>
-        <Image source={item?.artwork} style={[styles.artworkimage,{height:rh(40)}]} resizeMode='contain' />
+          <Image
+            source={item?.artwork}
+            style={[styles.artworkimage, {height: rh(40)}]}
+            resizeMode="contain"
+          />
         </View>
       </Animated.View>
     );
@@ -235,11 +248,10 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
     }
   }, [position]);
 
-
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', async () => {
       try {
-        await TrackPlayer.reset();
+        await TrackPlayer.pause();
       } catch (error) {
         console.log('Error stopping playback:', error);
       }
@@ -248,57 +260,75 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
     return unsubscribe;
   }, [navigation]);
 
- // Modify the back button press handler
- const handleBackPress = async () => {
-  try {
-    await TrackPlayer.reset(); // This will stop and clear the player
-    navigation.goBack();
-  } catch (error) {
-    console.log('Error handling back press:', error);
-    navigation.goBack(); // Navigate back even if there's an error
-  }
-};
+  // Modify the back button press handler
+  const handleBackPress = async () => {
+    try {
+      await TrackPlayer.pause(); // This will stop and clear the player
+      navigation.goBack();
+    } catch (error) {
+      console.log('Error handling back press:', error);
+      navigation.goBack(); // Navigate back even if there's an error
+    }
+  };
 
   return (
-    <LinearGradient colors={["#d9d600", "#760075"]} style={{ flex: 1 }}>
+    <LinearGradient colors={['#d9d600', '#760075']} style={{flex: 1}}>
       <View style={styles.container}>
-        <StatusBar barStyle='light-content' />
-        <SafeAreaView style={{ flex: 1 }}>
-        <TouchableOpacity style={{ flexDirection: "row" }} onPress={handleBackPress}>
-        <Image
-              source={require("../images/back-white.webp")}
-              style={{ height: rs(20), width: rs(20), marginLeft: rs(15), tintColor: 'black' }}
+        <StatusBar barStyle="light-content" />
+        <SafeAreaView style={{flex: 1}}>
+          <TouchableOpacity
+            style={{flexDirection: 'row'}}
+            onPress={handleBackPress}>
+            <Image
+              source={require('../images/back-white.webp')}
+              style={{
+                height: rs(20),
+                width: rs(20),
+                marginLeft: rs(15),
+                tintColor: 'black',
+              }}
             />
           </TouchableOpacity>
           <View style={styles.mainContainer}>
-            <View style={{ width: width }}>
+            <View style={{width: width}}>
               <Animated.FlatList
                 ref={songSlider}
                 data={songs}
                 renderItem={renderSongs}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={item => item.id.toString()}
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
                 scrollEventThrottle={16}
                 onScroll={Animated.event(
-                  [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-                  { useNativeDriver: true }
+                  [{nativeEvent: {contentOffset: {x: scrollX}}}],
+                  {useNativeDriver: true},
                 )}
-                onMomentumScrollEnd={onScrollEnd}  // Added callback here
+                onMomentumScrollEnd={onScrollEnd} // Added callback here
               />
             </View>
 
-            <View style={{ marginTop: 5, width: width, paddingHorizontal:'5%' }}>
-              <Text allowFontScaling={false} style={[styles.title, { marginBottom: rs(10),fontSize:rs(20) }]}>
-                {songs && songIndex >= 0 ? songs[songIndex].title : 'Loading...'}
+            <View style={{marginTop: 5, width: width, paddingHorizontal: '5%'}}>
+              <Text
+                allowFontScaling={false}
+                style={[
+                  styles.title,
+                  {marginBottom: rs(10), fontSize: rs(20)},
+                ]}>
+                {songs && songIndex >= 0
+                  ? songs[songIndex].title
+                  : 'Loading...'}
               </Text>
-              <Text allowFontScaling={false} style={[styles.artist,{fontSize:rs(14)}]}>
-                {songs && songIndex >= 0 ? songs[songIndex].artist : 'Loading...'}
+              <Text
+                allowFontScaling={false}
+                style={[styles.artist, {fontSize: rs(14)}]}>
+                {songs && songIndex >= 0
+                  ? songs[songIndex].artist
+                  : 'Loading...'}
               </Text>
             </View>
 
-            <View style={{ marginTop: 25 }}>
+            <View style={{marginTop: 25}}>
               <Slider
                 style={styles.progressContainer}
                 value={position}
@@ -306,41 +336,67 @@ const HistoriesSongPlayScreen = ({ navigation, route }) => {
                 maximumValue={duration}
                 minimumTrackTintColor="black"
                 thumbTintColor="green"
-                onSlidingComplete={async (value) => {
+                onSlidingComplete={async value => {
                   await TrackPlayer.seekTo(value);
                 }}
               />
               <View style={styles.progressLabelContainer}>
-              <Text allowFontScaling={false} style={[styles.progressLebelText,{fontSize:rs(12)}]}>
-
+                <Text
+                  allowFontScaling={false}
+                  style={[styles.progressLebelText, {fontSize: rs(12)}]}>
                   {new Date(position * 1000).toISOString().substr(14, 5)}
                 </Text>
-                <Text allowFontScaling={false} style={[styles.progressLebelText,{fontSize:rs(12)}]}>
-
-                  {new Date((duration - position) * 1000).toISOString().substr(14, 5)}
+                <Text
+                  allowFontScaling={false}
+                  style={[styles.progressLebelText, {fontSize: rs(12)}]}>
+                  {new Date((duration - position) * 1000)
+                    .toISOString()
+                    .substr(14, 5)}
                 </Text>
               </View>
             </View>
 
             <View style={styles.musicControls}>
-              <TouchableOpacity onPress={skipToPrevious} style={styles.skipButton}>
-                <Ionicons name="play-skip-back-outline" size={rs(28)} color="black" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => togglePlayback(playbackState)} style={styles.playButton}>
+              <TouchableOpacity
+                onPress={skipToPrevious}
+                style={styles.skipButton}>
                 <Ionicons
-                  name={playbackState === State.Playing ? "pause-circle" : "play-circle"}
+                  name="play-skip-back-outline"
+                  size={rs(28)}
+                  color="black"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => togglePlayback(playbackState)}
+                style={styles.playButton}>
+                <Ionicons
+                  name={
+                    playbackState === State.Playing
+                      ? 'pause-circle'
+                      : 'play-circle'
+                  }
                   size={rs(65)}
                   color="black"
                 />
               </TouchableOpacity>
               <TouchableOpacity onPress={skipToNext} style={styles.skipButton}>
-                <Ionicons name="play-skip-forward-outline" size={rs(28)} color="black" />
+                <Ionicons
+                  name="play-skip-forward-outline"
+                  size={rs(28)}
+                  color="black"
+                />
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.queueIconContainer}
-                onPress={() => navigation.navigate('AllSongsListScreen')}
-              >
-                <MaterialIcons name="queue-music" size={rs(28)} color="#000000" />
+                onPress={async () => {
+                  await TrackPlayer.pause();
+                  navigation.navigate('AllSongsListScreen');
+                }}>
+                <MaterialIcons
+                  name="queue-music"
+                  size={rs(28)}
+                  color="#000000"
+                />
               </TouchableOpacity>
             </View>
           </View>
@@ -355,7 +411,7 @@ export default HistoriesSongPlayScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 50
+    marginTop: 50,
   },
   mainContainer: {
     flex: 1,
@@ -364,21 +420,21 @@ const styles = StyleSheet.create({
   },
   artworkWrapper: {
     width: '100%',
-    justifyContent:'center',
-    alignItems:'center',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: rh(42),
     marginBottom: rs(25),
     shadowColor: 'black',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: {width: 5, height: 5},
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
     borderRadius: 15,
-    overflow:'hidden'
+    overflow: 'hidden',
   },
   artworkimage: {
     width: '90%',
     borderRadius: 15,
-    overflow:'hidden'
+    overflow: 'hidden',
   },
   title: {
     fontSize: getFontSize(25),
@@ -391,12 +447,12 @@ const styles = StyleSheet.create({
     color: '#EEEEEEE',
   },
   progressContainer: {
-    width: width/1.1,
+    width: width / 1.1,
     height: 40,
     marginTop: 25,
   },
   progressLabelContainer: {
-    width: width/1.1,
+    width: width / 1.1,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

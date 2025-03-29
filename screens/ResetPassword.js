@@ -1,16 +1,27 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert, Button, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Alert,
+  Button,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+  Image,
+} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import auth from '@react-native-firebase/auth';
-import { getFontSize } from '../utils';
-import { useResponsiveMethods } from 'react-native-full-responsive';
+import {getFontSize} from '../utils';
+import {useResponsiveMethods} from 'react-native-full-responsive';
 
-const ResetPassword = ({ navigation }) => {
-  const { rs, rw, rh } = useResponsiveMethods();
+const ResetPassword = ({navigation}) => {
+  const {rs, rw, rh} = useResponsiveMethods();
 
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-
 
   const handlePasswordReset = async () => {
     if (!email) {
@@ -21,43 +32,77 @@ const ResetPassword = ({ navigation }) => {
       auth().languageCode = 'ca';
       // Send password reset email
       await auth().sendPasswordResetEmail(email);
-      Alert.alert('ha enviat un correu electrònic per restablir la contrasenya a la teva adreça de correu electrònic.');
+      Alert.alert(
+        'ha enviat un correu electrònic per restablir la contrasenya a la teva adreça de correu electrònic.',
+      );
       navigation.navigate('Login'); // Redirect back to login screen after requesting password reset
     } catch (error) {
       console.error(error);
-      Alert.alert('Error, no s ha pogut enviar l email de restabliment de contrasenya. Si us plau, intenta-ho més tard');
+      Alert.alert(
+        'Error, no s ha pogut enviar l email de restabliment de contrasenya. Si us plau, intenta-ho més tard',
+      );
     }
   };
 
-
   return (
     <SafeAreaView style={styles.SafeAreaView}>
-      <View style={styles.container}>
+      <TouchableOpacity
+        style={{position: 'absolute', top: 70, left: 10, zIndex: 9}}
+        onPress={() => navigation.goBack()}>
+        <Image
+          source={require('../images/back-white.webp')}
+          style={{
+            height: rs(20),
+            width: rs(20),
+            marginLeft: rs(15),
+            tintColor: 'black',
+          }}
+        />
+      </TouchableOpacity>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <ScrollView
+          style={{flex: 1}}
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: 'center',
+          }}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled">
+          <View style={styles.container}>
+            <Text style={[styles.title, {fontSize: rs(20)}]}>
+              Restablir Contrasenya
+            </Text>
+            <Text style={[styles.description, {fontSize: rs(14)}]}>
+              Introdueix el teu correu electrònic i rebràs instruccions per
+              restablir la contrasenya.
+            </Text>
 
-        <Text style={[styles.title,{fontSize:rs(20)}]}>Restablir Contrasenya</Text>
-        <Text style={[styles.description,{fontSize:rs(14)}]}>
-          Introdueix el teu correu electrònic i rebràs instruccions
-          per restablir la contrasenya.
-        </Text>
+            <View style={[styles.inputContainer, {height: rs(40)}]}>
+              <TextInput
+                placeholder="Email"
+                placeholderTextColor={'black'}
+                keyboardType="email-address"
+                style={[styles.input, {fontSize: rs(14)}]}
+                value={email}
+                onChangeText={text => setEmail(text.toLowerCase())}
+              />
+            </View>
 
-        <View style={[styles.inputContainer,{height:rs(40)}]}>
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor={"black"}
-            keyboardType="email-address"
-            style={[styles.input,{fontSize:rs(14)}]}
-            value={email}
-            onChangeText={text => setEmail(text.toLowerCase())}
-          />
-        </View>
-
-        <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-          <TouchableOpacity style={styles.Button} onPress={handlePasswordReset}>
-            <Text style={{ color: 'white',    fontSize: rs(18), }}>Continuar</Text>
-          </TouchableOpacity>
-        </View>
-
-      </View>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <TouchableOpacity
+                style={styles.Button}
+                onPress={handlePasswordReset}>
+                <Text style={{color: 'white', fontSize: rs(18)}}>
+                  Continuar
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -65,7 +110,9 @@ const ResetPassword = ({ navigation }) => {
 const styles = StyleSheet.create({
   SafeAreaView: {
     flex: 1,
-    backgroundColor: 'white', paddingHorizontal: 20, justifyContent: 'center'
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    justifyContent: 'center',
   },
   container: {
     flex: 1,
@@ -77,15 +124,15 @@ const styles = StyleSheet.create({
     fontSize: getFontSize(22),
     fontWeight: 'bold',
     marginVertical: 12,
-    color: "black",
+    color: 'black',
   },
   description: {
-    color: "black",
+    color: 'black',
     fontSize: getFontSize(16),
   },
   inputContainer: {
     width: '100%',
-    borderColor: "black",
+    borderColor: 'black',
     borderWidth: 1,
     borderRadius: 8,
     alignItems: 'center',
@@ -97,7 +144,6 @@ const styles = StyleSheet.create({
     height: getFontSize(50),
     width: '100%',
     fontSize: getFontSize(16),
-
   },
   Button: {
     backgroundColor: '#5c10b2',
