@@ -35,16 +35,16 @@ const setupPlayer = async (initialIndex = 0) => {
     // Check if player is already set up
     const currentTrack = await TrackPlayer.getCurrentTrack();
     if (currentTrack !== null) {
-      await TrackPlayer.reset();
+      await TrackPlayer.stop();
     }
 
     // Setup player with more explicit options
     await TrackPlayer.setupPlayer({
       waitForBuffer: true,
       autoUpdateMetadata: true,
-      minBuffer: 5, // Increase buffer size
-      maxBuffer: 15,
-      playBuffer: 3,
+      // minBuffer: 5, // Increase buffer size
+      // maxBuffer: 15,
+      // playBuffer: 3,
     });
 
     // Add capabilities to the player
@@ -143,6 +143,7 @@ const HistoriesSongPlayScreen = ({navigation, route}) => {
       try {
         // Reset player completely on component mount
         await TrackPlayer.stop();
+        await setupPlayer(selectedIndex);
 
         // Only update state if component is still mounted
         if (isMounted) {

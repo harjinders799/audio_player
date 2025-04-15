@@ -117,6 +117,7 @@ const LoginScreen = ({navigation}) => {
                 <TextInput
                   placeholder="Correu Electrònic"
                   keyboardType="email-address"
+                  placeholderTextColor={'black'}
                   value={email}
                   onChangeText={setEmail}
                   style={{
@@ -145,6 +146,7 @@ const LoginScreen = ({navigation}) => {
                   secureTextEntry={!isPasswordShown}
                   value={password}
                   onChangeText={setPassword}
+                  placeholderTextColor={'black'}
                   style={{
                     width: '100%',
                     fontSize: rs(14),
