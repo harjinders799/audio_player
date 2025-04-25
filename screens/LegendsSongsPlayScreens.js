@@ -33,15 +33,15 @@ const setupPlayer = async (initialIndex = 0) => {
   try {
     const currentTrack = await TrackPlayer.getCurrentTrack();
     if (currentTrack !== null) {
-      await TrackPlayer.reset();
+      await TrackPlayer.stop();
     }
 
     await TrackPlayer.setupPlayer({
       waitForBuffer: true,
       autoUpdateMetadata: true,
-      minBuffer: 5, // Increase buffer size
-      maxBuffer: 15,
-      playBuffer: 3,
+      // minBuffer: 5, // Increase buffer size
+      // maxBuffer: 15,
+      // playBuffer: 3,
     });
 
     await TrackPlayer.updateOptions({
@@ -75,6 +75,7 @@ const togglePlayback = async playbackState => {
 
 const LegendsSongsPlayScreens = ({navigation, route}) => {
   const {rs, rw, rh} = useResponsiveMethods();
+
   const {selectedIndex = 0} = route.params || {};
   const playbackState = usePlaybackState();
   const {position, duration} = useProgress();
@@ -294,8 +295,11 @@ const LegendsSongsPlayScreens = ({navigation, route}) => {
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
                 scrollEventThrottle={16}
-                onScroll={onScrollEnd}
-                // onMomentumScrollEnd={onScrollEnd}
+                onScroll={Animated.event(
+                  [{nativeEvent: {contentOffset: {x: scrollX}}}],
+                  {useNativeDriver: true},
+                )}
+                onMomentumScrollEnd={onScrollEnd} // Added callback here
               />
             </View>
 
