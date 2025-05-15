@@ -62,10 +62,10 @@ const setupPlayer = async (initialIndex = 0) => {
 
     // await new Promise(resolve => setTimeout(resolve, 5000));
     // const validIndex = Math.min(Math.max(0, initialIndex), AllsongsList.length - 1);
-    //  console.log("Setting up player with index:", validIndex);
+    //  // console.log("Setting up player with index:", validIndex);
     // await TrackPlayer.skip(validIndex);
   } catch (error) {
-    console.log('Error setting up player:', error);
+    // console.log('Error setting up player:', error);
   }
 };
 
@@ -99,10 +99,10 @@ const AllSongsPlayScreen = ({navigation, route}) => {
   // Skip to the specified track
   const skipTo = async trackId => {
     try {
-      console.log('Skipping to track:', trackId);
+      // console.log('Skipping to track:', trackId);
       // Validate track index is within bounds
       if (trackId < 0 || trackId >= songs.length) {
-        console.log('Invalid track index:', trackId);
+        // console.log('Invalid track index:', trackId);
         return;
       }
       await TrackPlayer.pause();
@@ -110,7 +110,7 @@ const AllSongsPlayScreen = ({navigation, route}) => {
       // await TrackPlayer.play();
       setSongIndex(trackId);
     } catch (error) {
-      console.log('Error in skipTo:', error);
+      // console.log('Error in skipTo:', error);
     }
   };
 
@@ -140,8 +140,8 @@ const AllSongsPlayScreen = ({navigation, route}) => {
   useEffect(() => {
     let isMounted = true;
     if (isFocused && currentIndex.current !== songIndex) {
-      console.log('songIndex', songIndex);
-      console.log('currentIndex', currentIndex.current);
+      // console.log('songIndex', songIndex);
+      // console.log('currentIndex', currentIndex.current);
       setSongIndex(currentIndex.current);
       TrackPlayer.add(songs);
       skipTo(currentIndex.current);
@@ -165,7 +165,7 @@ const AllSongsPlayScreen = ({navigation, route}) => {
           }, 200);
         }
       } catch (error) {
-        console.log('Error starting player:', error);
+        // console.log('Error starting player:', error);
       }
     };
 
@@ -193,7 +193,7 @@ const AllSongsPlayScreen = ({navigation, route}) => {
         });
       }
     } catch (error) {
-      console.log('Error skipping to next track:', error);
+      // console.log('Error skipping to next track:', error);
     }
   };
 
@@ -210,7 +210,7 @@ const AllSongsPlayScreen = ({navigation, route}) => {
         });
       }
     } catch (error) {
-      console.log('Error skipping to previous track:', error);
+      // console.log('Error skipping to previous track:', error);
     }
   };
 
@@ -218,7 +218,7 @@ const AllSongsPlayScreen = ({navigation, route}) => {
   const onScrollEnd = async event => {
     const offset = event.nativeEvent.contentOffset.x;
     const newIndex = Math.round(offset / width);
-    console.log('new index', newIndex, songIndex);
+    // console.log('new index', newIndex, songIndex);
     // Only change if index is different and valid
     if (newIndex !== songIndex && newIndex >= 0 && newIndex < songs.length) {
       await skipTo(newIndex);
@@ -230,7 +230,7 @@ const AllSongsPlayScreen = ({navigation, route}) => {
       try {
         await TrackPlayer.pause();
       } catch (error) {
-        console.log('Error stopping playback:', error);
+        // console.log('Error stopping playback:', error);
       }
     });
 
@@ -243,7 +243,7 @@ const AllSongsPlayScreen = ({navigation, route}) => {
       await TrackPlayer.pause(); // This will stop and clear the player
       navigation.goBack();
     } catch (error) {
-      console.log('Error handling back press:', error);
+      // console.log('Error handling back press:', error);
       navigation.goBack(); // Navigate back even if there's an error
     }
   };
@@ -255,7 +255,7 @@ const AllSongsPlayScreen = ({navigation, route}) => {
         <Image
           source={item?.artwork}
           style={[styles.artworkimage, {height: rh(40)}]}
-          resizeMode="contain"
+          resizeMode="cover"
         />
       </View>
     </Animated.View>
@@ -308,14 +308,14 @@ const AllSongsPlayScreen = ({navigation, route}) => {
                   {marginBottom: rs(10), fontSize: rs(20)},
                 ]}>
                 {songs && songIndex >= 0
-                  ? songs[songIndex].title
+                  ? songs[songIndex]?.title
                   : 'Loading...'}
               </Text>
               <Text
                 allowFontScaling={false}
                 style={[styles.artist, {fontSize: rs(14)}]}>
                 {songs && songIndex >= 0
-                  ? songs[songIndex].artist
+                  ? songs[songIndex]?.artist
                   : 'Loading...'}
               </Text>
             </View>

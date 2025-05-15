@@ -100,13 +100,13 @@ const SignupScreen = ({navigation, route}) => {
     const googleCredential = auth.GoogleAuthProvider.credential(
       response?.data?.idToken,
     );
-    console.log(auth().signInWithCredential(googleCredential));
+    // console.log(auth().signInWithCredential(googleCredential));
     return auth().signInWithCredential(googleCredential);
   }
 
   async function _signInWithGoogle() {
     const user = await onGoogleButtonPress();
-    console.log(user);
+    // console.log(user);
     navigation.navigate('HomeScreen');
   }
 

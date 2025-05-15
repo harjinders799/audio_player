@@ -61,7 +61,7 @@ const setupPlayer = async (initialIndex = 0) => {
       ...CanconsSongList.slice(0, initialIndex),
     ]);
   } catch (error) {
-    console.log('Error setting up player:', error);
+    // console.log('Error setting up player:', error);
   }
 };
 
@@ -119,8 +119,8 @@ const CanConsSongsPlayScreen = ({navigation, route}) => {
   useEffect(() => {
     let isMounted = true;
     if (isFocused && currentIndex.current !== songIndex) {
-      console.log('songIndex', songIndex);
-      console.log('currentIndex', currentIndex.current);
+      // console.log('songIndex', songIndex);
+      // console.log('currentIndex', currentIndex.current);
       setSongIndex(currentIndex.current);
       TrackPlayer.add(songs);
       skipTo(currentIndex.current);
@@ -147,7 +147,7 @@ const CanConsSongsPlayScreen = ({navigation, route}) => {
           }, 200);
         }
       } catch (error) {
-        console.log('Error starting player:', error);
+        // console.log('Error starting player:', error);
       }
     };
 
@@ -164,14 +164,14 @@ const CanConsSongsPlayScreen = ({navigation, route}) => {
 
   const skipTo = async trackId => {
     try {
-      console.log('Skipping to track:', trackId);
+      // console.log('Skipping to track:', trackId);
       await TrackPlayer.pause();
       await TrackPlayer.skip(trackId);
       // await TrackPlayer.play();
       setSongIndex(trackId);
       currentIndex.current = trackId;
     } catch (error) {
-      console.log('Error in skipTo:', error);
+      // console.log('Error in skipTo:', error);
     }
   };
 
@@ -188,7 +188,7 @@ const CanConsSongsPlayScreen = ({navigation, route}) => {
         });
       }
     } catch (error) {
-      console.log('Error skipping to next track:', error);
+      // console.log('Error skipping to next track:', error);
     }
   };
 
@@ -205,7 +205,7 @@ const CanConsSongsPlayScreen = ({navigation, route}) => {
         });
       }
     } catch (error) {
-      console.log('Error skipping to previous track:', error);
+      // console.log('Error skipping to previous track:', error);
     }
   };
 
@@ -217,7 +217,7 @@ const CanConsSongsPlayScreen = ({navigation, route}) => {
           <Image
             source={item?.artwork}
             style={[styles.artworkimage, {height: rh(40)}]}
-            resizeMode="contain"
+            resizeMode="cover"
           />
         </View>
       </Animated.View>
@@ -242,7 +242,7 @@ const CanConsSongsPlayScreen = ({navigation, route}) => {
       try {
         await TrackPlayer.pause();
       } catch (error) {
-        console.log('Error stopping playback:', error);
+        // console.log('Error stopping playback:', error);
       }
     });
 
@@ -255,7 +255,7 @@ const CanConsSongsPlayScreen = ({navigation, route}) => {
       await TrackPlayer.stop(); // This will stop and clear the player
       navigation.goBack();
     } catch (error) {
-      console.log('Error handling back press:', error);
+      // console.log('Error handling back press:', error);
       navigation.goBack(); // Navigate back even if there's an error
     }
   };
@@ -264,7 +264,7 @@ const CanConsSongsPlayScreen = ({navigation, route}) => {
   const onScrollEnd = async event => {
     const offset = event.nativeEvent.contentOffset.x;
     const newIndex = Math.round(offset / width);
-    console.log('new index', newIndex, songIndex);
+    // console.log('new index', newIndex, songIndex);
     // Only change if index is different and valid
     if (
       newIndex !== songIndex &&
@@ -324,14 +324,14 @@ const CanConsSongsPlayScreen = ({navigation, route}) => {
                   {marginBottom: rs(10), fontSize: rs(20)},
                 ]}>
                 {songs && songIndex >= 0
-                  ? songs[songIndex].title
+                  ? songs[songIndex]?.title
                   : 'Loading...'}
               </Text>
               <Text
                 allowFontScaling={false}
                 style={[styles.artist, {fontSize: rs(14)}]}>
                 {songs && songIndex >= 0
-                  ? songs[songIndex].artist
+                  ? songs[songIndex]?.artist
                   : 'Loading...'}
               </Text>
             </View>
