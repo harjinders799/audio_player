@@ -48,14 +48,7 @@ const setupPlayer = async (initialIndex = 0) => {
     });
 
     // Add capabilities to the player
-    await TrackPlayer.updateOptions({
-      capabilities: [
-        Capability.Play,
-        Capability.Pause,
-        Capability.SkipToNext,
-        Capability.SkipToPrevious,
-      ],
-    });
+    //  await TrackPlayer.updateOptions({
 
     // Add tracks and ensure they're fully loaded
     await TrackPlayer.add([

@@ -45,14 +45,7 @@ const setupPlayer = async (initialIndex = 0) => {
       // playBuffer: 3,
     });
 
-    await TrackPlayer.updateOptions({
-      capabilities: [
-        Capability.Play,
-        Capability.Pause,
-        Capability.SkipToNext,
-        Capability.SkipToPrevious,
-      ],
-    });
+    //  await TrackPlayer.updateOptions({
 
     // await TrackPlayer.add(AllsongsList);
     await TrackPlayer.add([
